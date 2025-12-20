@@ -16,10 +16,10 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex w-screen h-screen min-h-[900px] bg-white items-center justify-center p-4 md:p-0">
-      <div className="flex w-full max-w-[1440px] h-full max-h-[900px] items-center justify-center gap-0">
+    <div className="signup-container">
+      <div className="signup-wrapper">
         {/* Left Panel - Logo */}
-        <div className="hidden md:flex w-[624px] h-[772px] items-center justify-center" style={{ opacity: 0.5, backgroundColor: "#E6E1D6" }}>
+        <div className="logo-section">
           <svg width="370" height="124" viewBox="0 0 370 124" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clipPath="url(#clip0_1_11)">
               <path d="M252.632 123.663V105.461H259.184C264.261 105.461 267.08 108.975 267.08 114.6C267.08 120.226 264.212 123.663 259.134 123.663H252.636H252.632ZM254.487 107.092V122.036H259.134C263.679 122.036 265.153 118.626 265.153 114.605C265.153 110.584 263.733 107.097 259.184 107.097H254.487V107.092Z" fill="#5A5253"/>
@@ -48,17 +48,17 @@ export default function SignUp() {
         </div>
 
         {/* Right Panel - Form */}
-        <div className="w-full md:w-[624px] h-auto md:h-[772px] flex items-center justify-center px-6 md:px-0" style={{ backgroundColor: "rgba(230, 225, 214, 0.09)" }}>
-          <div className="w-full max-w-[406px]">
+        <div className="form-section">
+          <div className="form-content">
             <form onSubmit={handleContinue}>
               {/* Sign up */}
-              <h1 className="mb-28" style={{ color: "#5A5253", fontFamily: "PP Neue Montreal", fontSize: "20px", fontWeight: 375 }}>
+              <h1 className="signup-title">
                 Sign up
               </h1>
 
               {/* Email */}
-              <div className="mb-16">
-                <label htmlFor="email" className="block mb-2" style={{ color: "#5A5253", fontFamily: "Arial", fontSize: "16px", fontWeight: 400 }}>
+              <div className="input-group">
+                <label htmlFor="email" className="input-label">
                   Your Email
                 </label>
                 <input
@@ -66,20 +66,14 @@ export default function SignUp() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-transparent border-0 border-b pb-2 outline-none transition-all"
-                  style={{ 
-                    borderColor: "rgba(90, 82, 83, 0.5)",
-                    color: "#5A5253",
-                    fontFamily: "Arial",
-                    fontSize: "16px"
-                  }}
+                  className="input-field"
                   required
                 />
               </div>
 
               {/* Password */}
-              <div className="mb-16">
-                <label htmlFor="password" className="block mb-2" style={{ color: "#5A5253", fontFamily: "Arial", fontSize: "16px", fontWeight: 400 }}>
+              <div className="input-group">
+                <label htmlFor="password" className="input-label">
                   Password
                 </label>
                 <input
@@ -87,66 +81,44 @@ export default function SignUp() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-transparent border-0 border-b pb-2 outline-none transition-all"
-                  style={{ 
-                    borderColor: "rgba(90, 82, 83, 0.5)",
-                    color: "#5A5253",
-                    fontFamily: "Arial",
-                    fontSize: "16px"
-                  }}
+                  className="input-field"
                   required
                 />
               </div>
 
               {/* Continue Button */}
-              <div className="flex justify-center mb-14">
+              <div className="button-wrapper">
                 <button
                   type="submit"
-                  className="w-[216px] h-16 rounded-full border-none cursor-pointer transition-all hover:opacity-90"
-                  style={{
-                    backgroundColor: "#FAFAF8",
-                    color: "rgba(90, 82, 83, 0.50)",
-                    fontFamily: "PP Neue Montreal",
-                    fontSize: "20px",
-                    fontWeight: 375,
-                    boxShadow: "-5px -5px 10px 0 rgba(255, 255, 255, 0.60), 5px 5px 10px 0 rgba(217, 217, 217, 0.15), 10px 10px 20px 0 rgba(139, 138, 138, 0.20), -10px -10px 20px 0 #FFF"
-                  }}
+                  className="auth-button"
                 >
                   Continue
                 </button>
               </div>
 
               {/* Or sign up with social account */}
-              <p className="text-center mb-10" style={{ color: "rgba(90, 82, 83, 0.85)", fontFamily: "Arial", fontSize: "16px" }}>
+              <p className="body-text social-text">
                 Or sign up with social account
               </p>
 
               {/* Google Button */}
-              <div className="flex justify-center mb-14">
+              <div className="button-wrapper">
                 <button
                   type="button"
                   onClick={handleGoogleSignUp}
-                  className="w-[216px] h-16 rounded-full border-none cursor-pointer transition-all hover:opacity-90 flex items-center justify-center gap-3"
-                  style={{
-                    backgroundColor: "#FAFAF8",
-                    color: "rgba(90, 82, 83, 0.50)",
-                    fontFamily: "PP Neue Montreal",
-                    fontSize: "20px",
-                    fontWeight: 375,
-                    boxShadow: "-5px -5px 10px 0 rgba(255, 255, 255, 0.60), 5px 5px 10px 0 rgba(217, 217, 217, 0.15), 10px 10px 20px 0 rgba(139, 138, 138, 0.20), -10px -10px 20px 0 #FFF"
-                  }}
+                  className="auth-button google-button"
                 >
                   <img
                     src="https://api.builder.io/api/v1/image/assets/TEMP/edcd41d473e900ee59ff77f19c11898110e7c1eb?width=69"
                     alt="Google"
-                    className="w-[34px] h-[35px] opacity-80"
+                    className="google-icon"
                   />
                   Google
                 </button>
               </div>
 
               {/* Privacy Policy */}
-              <p className="text-center" style={{ color: "rgba(90, 82, 83, 0.85)", fontFamily: "Arial", fontSize: "16px" }}>
+              <p className="body-text privacy-text">
                 By continuing, you agree to our Privacy Policy and Terms
               </p>
             </form>
