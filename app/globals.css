@@ -44,12 +44,6 @@ pre, code {
   background-color: var(--background);
 }
 
-@media (max-width: 1440px) {
-  .signup-container {
-    min-height: 100vh;
-  }
-}
-
 .signup-wrapper {
   width: 100%;
   max-width: var(--canvas-width);
