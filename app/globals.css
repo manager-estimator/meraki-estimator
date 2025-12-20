@@ -105,10 +105,22 @@ pre, code {
   height: 100%;
   flex-grow: 1;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   padding: 0;
   background-color: transparent;
+}
+
+@media (max-width: 991px) {
+  .form-section {
+    display: flex;
+  }
+}
+
+@media (max-width: 640px) {
+  .form-section {
+    display: flex;
+  }
 }
 
 @media (max-width: 1024px) {
