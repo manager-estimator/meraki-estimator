@@ -57,36 +57,23 @@ pre, code {
   display: flex;
   align-items: stretch;
   justify-content: stretch;
-  gap: 0;
+  gap: 2px;
   background-color: #ffffff;
-  padding: 1rem;
-  flex-direction: column;
+  padding: 4rem 5.8rem;
+  flex-direction: row;
   box-sizing: border-box;
 }
 
-@media (min-width: 640px) {
+@media (max-width: 1440px) {
+  .signup-wrapper {
+    padding: 2rem 1.5rem;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 1024px) {
   .signup-wrapper {
     padding: 1.5rem;
-  }
-}
-
-@media (min-width: 768px) {
-  .signup-wrapper {
-    flex-direction: row;
-    padding: 2rem 1.5rem;
-    min-height: var(--canvas-height);
-  }
-}
-
-@media (min-width: 1024px) {
-  .signup-wrapper {
-    padding: 3rem 2rem;
-  }
-}
-
-@media (min-width: 1440px) {
-  .signup-wrapper {
-    padding: 4rem 3rem;
   }
 }
 
