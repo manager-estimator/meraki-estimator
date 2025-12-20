@@ -291,10 +291,17 @@ pre, code {
 }
 
 .google-icon {
-  width: 2.125rem;
-  height: 2.1875rem;
+  width: 1.8rem;
+  height: 1.8rem;
   opacity: 0.8;
   flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .google-icon {
+    width: 2.125rem;
+    height: 2.1875rem;
+  }
 }
 
 .social-text {
