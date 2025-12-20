@@ -1,12 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=PP+Neue+Montreal:ital,wght@0,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arial:ital,wght@0,400&display=swap');
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --Principal: #5A5253;
-  --Fondo: #FAFAF8;
-  --Boton: rgba(90, 82, 83, 0.50);
-  --Body: rgba(90, 82, 83, 0.85);
-  --canvas-width: 1440px;
-  --canvas-height: 900px;
+  /* Color */
+  --color-dimgray-100: #5a5253;
+  --color-dimgray-200: rgba(90, 82, 83, 0.85);
+  --color-dimgray-300: rgba(90, 82, 83, 0.5);
+  --color-linen-100: #e6e1d6;
+  --color-linen-200: rgba(230, 225, 214, 0.09);
+  --color-white: #fff;
+  --color-whitesmoke: #fafaf8;
+
+  /* BorderRadius */
+  --br-32: 32px;
+
+  /* Font */
+  --font-arial: Arial;
+  --font-pp-neue-montreal: "PP Neue Montreal";
+
+  /* Shadows */
+  --shadow-drop: -5px -5px 10px rgba(255, 255, 255, 0.6), 5px 5px 10px rgba(217, 217, 217, 0.15), 10px 10px 20px rgba(139, 138, 138, 0.2), -10px -10px 20px var(--color-white);
+
+  /* WidthHeights */
+  --height-2: 2px;
+  --height-64: 64px;
 }
 
 @media (prefers-color-scheme: dark) {
