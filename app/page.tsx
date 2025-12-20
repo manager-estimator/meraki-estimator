@@ -16,83 +16,140 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex w-screen h-screen bg-white items-center justify-center overflow-hidden">
-      <div className="flex w-full max-w-[1440px] h-full max-h-[900px] relative">
-        {/* Background Image - Full Design */}
-        <img
-          src="https://api.builder.io/api/v1/image/assets/TEMP/1dc35600c66828abf3a0b630139326b4948b7a68?width=2880"
-          alt="Meraki Sign Up Design"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+    <div className="flex w-screen h-screen min-h-[900px] bg-white items-center justify-center p-4 md:p-0">
+      <div className="flex w-full max-w-[1440px] h-full max-h-[900px] items-center justify-center gap-0">
+        {/* Left Panel - Logo */}
+        <div className="hidden md:flex w-[624px] h-[772px] items-center justify-center" style={{ opacity: 0.5, backgroundColor: "#E6E1D6" }}>
+          <svg width="370" height="124" viewBox="0 0 370 124" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clipPath="url(#clip0_1_11)">
+              <path d="M252.632 123.663V105.461H259.184C264.261 105.461 267.08 108.975 267.08 114.6C267.08 120.226 264.212 123.663 259.134 123.663H252.636H252.632ZM254.487 107.092V122.036H259.134C263.679 122.036 265.153 118.626 265.153 114.605C265.153 110.584 263.733 107.097 259.184 107.097H254.487V107.092Z" fill="#5A5253"/>
+              <path d="M239.003 105.466H240.859V122.036H250.633V123.667H239.003V105.466Z" fill="#5A5253"/>
+              <path d="M233.948 105.466H235.803V123.667H233.948V105.466Z" fill="#5A5253"/>
+              <path d="M230.874 117.53C230.874 121.398 228.79 123.995 224.044 123.995C219.298 123.995 217.214 121.398 217.214 117.53V105.466H219.069V117.53C219.069 120.787 220.696 122.364 224.044 122.364C227.391 122.364 229.023 120.787 229.023 117.53V105.466H230.878V117.53H230.874Z" fill="#5A5253"/>
+              <path d="M201.577 123.663V105.461H208.815C212.396 105.461 214.552 107.191 214.552 110.044C214.552 112.21 213.31 113.329 211.683 113.89V113.94C213.691 114.322 215.287 115.822 215.287 118.446C215.287 121.884 212.898 123.663 209.295 123.663H201.577ZM203.433 113.279H209.169C211.657 113.279 212.625 112.03 212.625 110.224C212.625 108.418 211.509 107.092 209.169 107.092H203.433V113.279ZM203.433 122.036H209.349C212.244 122.036 213.36 120.558 213.36 118.446C213.36 116.335 211.961 114.906 209.806 114.906H203.433V122.032V122.036Z" fill="#5A5253"/>
+              <path d="M191.404 115.036H193.08C192.879 116.766 192.345 118.676 191.404 120.28L194.098 123.663H192.117L190.468 121.601C189.222 123.025 187.496 123.995 185.188 123.995C181.814 123.995 179.779 121.933 179.779 119.183C179.779 116.434 182.015 114.807 184.072 113.634C182.826 112.057 181.912 110.759 181.912 109.101C181.912 107.142 183.234 105.129 185.977 105.129C188.72 105.129 190.091 106.989 190.091 109.123C190.091 111.258 188.617 112.484 186.309 113.886L190.297 118.9C190.88 117.728 191.238 116.38 191.413 115.032L191.404 115.036ZM183.584 109.105C183.584 110.377 184.422 111.55 185.462 112.848C187.29 111.806 188.406 110.813 188.406 109.236C188.406 107.784 187.492 106.688 185.968 106.688C184.444 106.688 183.579 107.861 183.579 109.105H183.584ZM181.451 119.058C181.451 121.016 182.898 122.369 185.211 122.369C187.039 122.369 188.411 121.556 189.423 120.307L184.928 114.708C183.073 115.827 181.451 116.973 181.451 119.062V119.058Z" fill="#5A5253"/>
+              <path d="M162.121 113.356H171.439V114.987H162.121V122.036H172.864V123.667H160.271V105.466H172.586V107.097H162.126V113.36L162.121 113.356Z" fill="#5A5253"/>
+              <path d="M139.646 123.663V105.461H142.187L148.332 121.169H148.381L154.525 105.461H157.066V123.663H155.238V108.085H155.188L149.197 123.663H147.52L141.555 108.085H141.506V123.663H139.651H139.646Z" fill="#5A5253"/>
+              <path d="M128.51 123.995C123.28 123.995 119.802 120.024 119.802 114.551C119.802 109.078 123.28 105.133 128.51 105.133C133.74 105.133 137.244 109.078 137.244 114.551C137.244 120.024 133.74 123.995 128.51 123.995ZM128.51 122.369C133.005 122.369 135.313 118.855 135.313 114.555C135.313 110.256 133 106.764 128.51 106.764C124.019 106.764 121.729 110.251 121.729 114.555C121.729 118.86 124.041 122.369 128.51 122.369Z" fill="#5A5253"/>
+              <path d="M103.453 105.466H105.308V113.333H115.567V105.466H117.422V123.667H115.567V114.96H105.308V123.667H103.453V105.466Z" fill="#5A5253"/>
+              <path d="M5.70954 80.9023C7.16606 74.8681 7.2781 70.2761 7.2781 62.4537V10.8327C7.2781 7.03604 4.81323 3.12257 0 0.777182V0.332367H10.6348L47.6976 69.382L84.1956 0.332367H93.3784V0.777182C87.5568 3.34722 87.4448 6.47441 87.4448 14.4092V65.8055C87.3013 70.8557 87.6375 75.9105 88.4531 80.9023L88.229 81.3381H81.175L80.9509 80.9023C81.8652 75.9239 82.2416 70.8647 82.0713 65.8055V12.2885L46.9133 79.0062H46.4651L11.083 12.8456V62.4537C11.083 70.2761 11.083 75.0927 12.4274 81.1134L12.2034 81.3381H5.93362L5.70954 80.9023Z" fill="#5A5253"/>
+              <path d="M103.637 80.9023C104.448 75.9149 104.789 70.8602 104.645 65.8055V15.9728C104.789 10.9226 104.452 5.87234 103.637 0.889517L103.861 0.444702H144.953V0.889517L141.591 6.36658C131.96 4.13352 124.575 3.35172 110.019 3.35172V37.6519C120.205 37.6519 132.189 37.0947 138.235 36.5331L138.571 36.8701L136.106 41.8978C127.447 40.8824 118.735 40.3972 110.019 40.4466V78.5479C129.164 78.5479 135.994 77.8874 146.521 74.6389L146.857 74.9759L144.271 81.3875H103.852L103.641 80.9068L103.637 80.9023Z" fill="#5A5253"/>
+              <path d="M156.708 80.9023C157.519 75.915 157.86 70.8602 157.716 65.8055V15.9728C157.86 10.9226 157.523 5.87233 156.708 0.889508L156.932 0.444693C163.538 0.444693 170.368 -0.00012207 176.973 -0.00012207C191.642 -0.00012207 203.845 5.80943 203.845 19.9986C203.845 33.4059 192.762 43.3491 178.766 44.9127C182.235 48.8217 184.588 50.6099 188.061 51.2794L198.588 64.1296C204.858 72.0734 211.8 78.777 214.825 80.7765L214.601 81.3336H210.796C205.647 81.3336 203.854 79.779 201.277 76.5395L184.148 55.5209C175.974 45.2407 170.825 44.9082 164.331 44.9082H163.098V65.801C162.955 70.8513 163.291 75.906 164.107 80.8978L163.883 81.3336H156.941L156.717 80.8978L156.708 80.9023ZM197.799 21.8947C197.799 9.93857 189.401 3.23489 173.953 3.23489C170.314 3.22142 166.679 3.52245 163.094 4.12902V41.2239C166.661 41.6597 170.251 41.8844 173.841 41.8933C188.957 41.8933 197.799 34.4528 197.799 21.8947Z" fill="#5A5253"/>
+              <path d="M217.424 80.9023C220.673 75.7038 223.483 70.2447 225.823 64.5789L246.537 14.3014C247.321 12.2885 248.441 9.38592 248.441 8.15482C248.441 5.92176 245.752 2.67776 243.74 0.894003V0.449188H250.794L278.674 63.3523C281.224 69.373 284.142 75.2365 287.409 80.9068V81.3875H277.666C277.666 76.818 277.218 73.3449 273.637 65.1855L269.72 56.4689H233.329L229.749 65.1855C226.051 74.2345 225.72 77.9323 225.608 81.3875H217.433V80.9068L217.424 80.9023ZM268.371 53.2923L250.794 13.852L234.557 53.2923H268.371Z" fill="#5A5253"/>
+              <path d="M316.458 52.5105C307.948 44.2432 304.815 42.0057 300.67 42.0057V65.8055C300.526 70.8557 300.863 75.9104 301.678 80.9023L301.454 81.3381H294.512L294.288 80.9023C295.104 75.9149 295.44 70.8602 295.296 65.8055V15.9728C295.44 10.9405 295.108 5.90378 294.301 0.934439L294.526 0.489624H301.468L301.692 0.934439C300.876 5.91726 300.54 10.972 300.683 16.0177V37.4722L330.58 13.0028C337.298 7.52579 340.543 4.17395 343.119 0.489624H351.966V0.934439C345.584 5.29273 340.771 9.08938 333.941 14.6788L303.82 39.3727C307.034 41.5249 310.722 42.8638 314.567 43.2817L325.986 54.2313C346.028 73.4482 351.177 77.9278 356.107 80.7225L356.555 81.383H346.476L316.458 52.5105Z" fill="#5A5253"/>
+              <path d="M362.596 80.8978C363.417 75.9104 363.757 70.8557 363.614 65.801V15.9728C363.753 10.9405 363.412 5.90378 362.596 0.934439L362.821 0.489624H369.771L369.996 0.934439C369.175 5.91726 368.835 10.9675 368.978 16.0177V65.8504C368.839 70.9052 369.18 75.9554 369.996 80.9472L369.771 81.383H362.821L362.596 80.9023V80.8978Z" fill="#5A5253"/>
+            </g>
+            <defs>
+              <clipPath id="clip0_1_11">
+                <rect width="370" height="123.995" fill="white"/>
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
 
-        {/* Interactive Form Overlay */}
-        <div className="relative z-10 flex w-full h-full">
-          {/* Left side - Logo (no interaction needed, covered by background) */}
-          <div className="w-[624px] h-full" />
+        {/* Right Panel - Form */}
+        <div className="w-full md:w-[624px] h-auto md:h-[772px] flex items-center justify-center px-6 md:px-0" style={{ backgroundColor: "rgba(230, 225, 214, 0.09)" }}>
+          <div className="w-full max-w-[406px]">
+            <form onSubmit={handleContinue}>
+              {/* Sign up */}
+              <h1 className="mb-28" style={{ color: "#5A5253", fontFamily: "PP Neue Montreal", fontSize: "20px", fontWeight: 375 }}>
+                Sign up
+              </h1>
 
-          {/* Right side - Form */}
-          <div className="w-[624px] h-full flex items-center justify-center">
-            <div className="w-[406px] relative" style={{ top: "170px" }}>
-              <form onSubmit={handleContinue}>
-                {/* Sign up title - positioned to match background */}
-                <div className="absolute left-[31px] top-0 opacity-0">
-                  <h1 className="text-[20px]" style={{ fontFamily: "PP Neue Montreal", fontWeight: 375, color: "#5A5253" }}>
-                    Sign up
-                  </h1>
-                </div>
+              {/* Email */}
+              <div className="mb-16">
+                <label htmlFor="email" className="block mb-2" style={{ color: "#5A5253", fontFamily: "Arial", fontSize: "16px", fontWeight: 400 }}>
+                  Your Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-transparent border-0 border-b pb-2 outline-none transition-all"
+                  style={{ 
+                    borderColor: "rgba(90, 82, 83, 0.5)",
+                    color: "#5A5253",
+                    fontFamily: "Arial",
+                    fontSize: "16px"
+                  }}
+                  required
+                />
+              </div>
 
-                {/* Email Input */}
-                <div className="absolute left-[31px] top-[112px] w-[344px]">
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder=""
-                    className="w-full bg-transparent border-none outline-none text-[16px] pb-1"
-                    style={{ 
-                      fontFamily: "Arial",
-                      color: "#5A5253",
-                      caretColor: "#5A5253"
-                    }}
-                    required
-                  />
-                </div>
+              {/* Password */}
+              <div className="mb-16">
+                <label htmlFor="password" className="block mb-2" style={{ color: "#5A5253", fontFamily: "Arial", fontSize: "16px", fontWeight: 400 }}>
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-transparent border-0 border-b pb-2 outline-none transition-all"
+                  style={{ 
+                    borderColor: "rgba(90, 82, 83, 0.5)",
+                    color: "#5A5253",
+                    fontFamily: "Arial",
+                    fontSize: "16px"
+                  }}
+                  required
+                />
+              </div>
 
-                {/* Password Input */}
-                <div className="absolute left-[31px] top-[181px] w-[344px]">
-                  <input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder=""
-                    className="w-full bg-transparent border-none outline-none text-[16px] pb-1"
-                    style={{ 
-                      fontFamily: "Arial",
-                      color: "#5A5253",
-                      caretColor: "#5A5253"
-                    }}
-                    required
-                  />
-                </div>
-
-                {/* Continue Button - Invisible overlay over background button */}
+              {/* Continue Button */}
+              <div className="flex justify-center mb-14">
                 <button
                   type="submit"
-                  className="absolute left-[95px] top-[266px] w-[216px] h-[64px] bg-transparent border-none cursor-pointer opacity-0 hover:opacity-10 transition-opacity"
-                  aria-label="Continue"
-                />
+                  className="w-[216px] h-16 rounded-full border-none cursor-pointer transition-all hover:opacity-90"
+                  style={{
+                    backgroundColor: "#FAFAF8",
+                    color: "rgba(90, 82, 83, 0.50)",
+                    fontFamily: "PP Neue Montreal",
+                    fontSize: "20px",
+                    fontWeight: 375,
+                    boxShadow: "-5px -5px 10px 0 rgba(255, 255, 255, 0.60), 5px 5px 10px 0 rgba(217, 217, 217, 0.15), 10px 10px 20px 0 rgba(139, 138, 138, 0.20), -10px -10px 20px 0 #FFF"
+                  }}
+                >
+                  Continue
+                </button>
+              </div>
 
-                {/* Google Button - Invisible overlay */}
+              {/* Or sign up with social account */}
+              <p className="text-center mb-10" style={{ color: "rgba(90, 82, 83, 0.85)", fontFamily: "Arial", fontSize: "16px" }}>
+                Or sign up with social account
+              </p>
+
+              {/* Google Button */}
+              <div className="flex justify-center mb-14">
                 <button
                   type="button"
                   onClick={handleGoogleSignUp}
-                  className="absolute left-[103px] top-[435px] w-[216px] h-[64px] bg-transparent border-none cursor-pointer opacity-0 hover:opacity-10 transition-opacity"
-                  aria-label="Sign up with Google"
-                />
-              </form>
-            </div>
+                  className="w-[216px] h-16 rounded-full border-none cursor-pointer transition-all hover:opacity-90 flex items-center justify-center gap-3"
+                  style={{
+                    backgroundColor: "#FAFAF8",
+                    color: "rgba(90, 82, 83, 0.50)",
+                    fontFamily: "PP Neue Montreal",
+                    fontSize: "20px",
+                    fontWeight: 375,
+                    boxShadow: "-5px -5px 10px 0 rgba(255, 255, 255, 0.60), 5px 5px 10px 0 rgba(217, 217, 217, 0.15), 10px 10px 20px 0 rgba(139, 138, 138, 0.20), -10px -10px 20px 0 #FFF"
+                  }}
+                >
+                  <img
+                    src="https://api.builder.io/api/v1/image/assets/TEMP/edcd41d473e900ee59ff77f19c11898110e7c1eb?width=69"
+                    alt="Google"
+                    className="w-[34px] h-[35px] opacity-80"
+                  />
+                  Google
+                </button>
+              </div>
+
+              {/* Privacy Policy */}
+              <p className="text-center" style={{ color: "rgba(90, 82, 83, 0.85)", fontFamily: "Arial", fontSize: "16px" }}>
+                By continuing, you agree to our Privacy Policy and Terms
+              </p>
+            </form>
           </div>
         </div>
       </div>
