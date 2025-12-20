@@ -17,17 +17,6 @@
   --Body: rgba(90, 82, 83, 0.85);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-meraki-principal: var(--Principal);
-  --color-meraki-fondo: var(--Fondo);
-  --color-meraki-cream: #E6E1D6;
-  --color-meraki-button: var(--Boton);
-  --color-meraki-body: var(--Body);
-  --font-sans: "PP Neue Montreal", Arial, Helvetica, sans-serif;
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -37,7 +26,8 @@
 
 @layer base {
   body {
-    @apply bg-background text-foreground;
+    background: var(--background);
+    color: var(--foreground);
   }
 
   :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
