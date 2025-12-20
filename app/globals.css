@@ -231,18 +231,25 @@ pre, code {
 .button-wrapper {
   display: flex;
   justify-content: center;
-  margin-bottom: 2.5rem;
-  margin-top: 2rem;
+  margin-bottom: 1.8rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .button-wrapper {
+    margin-bottom: 2.5rem;
+    margin-top: 2rem;
+  }
 }
 
 .auth-button {
-  min-width: 13.5rem;
-  height: 4rem;
+  min-width: 12rem;
+  height: 3.5rem;
   border-radius: 2rem;
   background: var(--Fondo);
   color: var(--Boton);
   font-family: "PP Neue Montreal", sans-serif;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 375;
   line-height: normal;
   box-shadow: -5px -5px 10px 0 rgba(255, 255, 255, 0.60), 5px 5px 10px 0 rgba(217, 217, 217, 0.15), 10px 10px 20px 0 rgba(139, 138, 138, 0.20), -10px -10px 20px 0 #FFF;
@@ -251,6 +258,14 @@ pre, code {
   cursor: pointer;
   padding: 0 1rem;
   white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .auth-button {
+    min-width: 13.5rem;
+    height: 4rem;
+    font-size: 1.25rem;
+  }
 }
 
 .auth-button:hover {
