@@ -98,6 +98,7 @@ pre, code {
   max-height: 85%;
   object-fit: contain;
   margin: auto 0;
+  color: rgba(54, 48, 48, 1);
 }
 
 .form-section {
