@@ -1,12 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
-
-@font-face {
-  font-family: "PP Neue Montreal";
-  src: url("https://cdn.builder.io/o/assets%2Fd94fa6e5f0634242979e8f5a4b8f636a%2F133275572bd4417faa094d60e8405c38?alt=media&token=46a432e0-d75d-4adb-a636-7e3eecc6b7f0&apiKey=d94fa6e5f0634242979e8f5a4b8f636a");
-  font-weight: 375;
-  font-style: normal;
-}
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
