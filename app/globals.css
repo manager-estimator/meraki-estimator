@@ -1,15 +1,32 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("https://cdn.builder.io/o/assets%2Fd94fa6e5f0634242979e8f5a4b8f636a%2F133275572bd4417faa094d60e8405c38?alt=media&token=46a432e0-d75d-4adb-a636-7e3eecc6b7f0&apiKey=d94fa6e5f0634242979e8f5a4b8f636a");
+  font-weight: 400;
+  font-style: normal;
+}
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --meraki-principal: #5A5253;
+  --meraki-fondo: #FAFAF8;
+  --meraki-cream: #E6E1D6;
+  --meraki-button: rgba(90, 82, 83, 0.50);
+  --meraki-body: rgba(90, 82, 83, 0.85);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-meraki-principal: var(--meraki-principal);
+  --color-meraki-fondo: var(--meraki-fondo);
+  --color-meraki-cream: var(--meraki-cream);
+  --color-meraki-button: var(--meraki-button);
+  --color-meraki-body: var(--meraki-body);
+  --font-sans: "PP Neue Montreal", Arial, Helvetica, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,8 +36,39 @@
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  pre,
+  code {
+    overflow-x: auto;
+    white-space: pre;
+  }
+}
+
+@layer components {
+  .meraki-input {
+    @apply w-full bg-transparent border-0 border-b border-meraki-principal border-opacity-50 pb-2 text-meraki-principal transition-all duration-200 outline-none placeholder:text-meraki-principal;
+
+    &:focus {
+      @apply border-opacity-100;
+    }
+  }
+
+  .meraki-button {
+    @apply h-16 rounded-full font-light text-xl transition-all duration-200 hover:shadow-lg active:scale-95;
+    font-family: "PP Neue Montreal", sans-serif;
+    box-shadow: -5px -5px 10px 0 rgba(255, 255, 255, 0.60), 5px 5px 10px 0 rgba(217, 217, 217, 0.15), 10px 10px 20px 0 rgba(139, 138, 138, 0.20), -10px -10px 20px 0 #FFF;
+  }
+
+  .meraki-button-primary {
+    @apply meraki-button w-54 bg-meraki-fondo text-meraki-button;
+  }
 }
