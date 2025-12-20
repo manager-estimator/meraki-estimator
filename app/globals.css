@@ -293,18 +293,33 @@ pre, code {
 
 .social-text {
   text-align: center;
-  margin: 1.5rem 0 2rem 0;
+  margin: 1rem 0 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+@media (min-width: 768px) {
+  .social-text {
+    margin: 1.5rem 0 2rem 0;
+    font-size: 1rem;
+  }
 }
 
 .privacy-text {
   text-align: center;
-  margin: 2rem 0 0 0;
+  margin: 1.5rem 0 0 0;
+  font-size: 0.9rem;
+}
+
+@media (min-width: 768px) {
+  .privacy-text {
+    margin: 2rem 0 0 0;
+    font-size: 1rem;
+  }
 }
 
 .body-text {
   color: var(--Body);
   font-family: Arial, sans-serif;
-  font-size: 1rem;
   font-weight: 400;
   line-height: normal;
 }
