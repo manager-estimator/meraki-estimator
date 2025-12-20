@@ -4,28 +4,27 @@
 @font-face {
   font-family: "PP Neue Montreal";
   src: url("https://cdn.builder.io/o/assets%2Fd94fa6e5f0634242979e8f5a4b8f636a%2F133275572bd4417faa094d60e8405c38?alt=media&token=46a432e0-d75d-4adb-a636-7e3eecc6b7f0&apiKey=d94fa6e5f0634242979e8f5a4b8f636a");
-  font-weight: 400;
+  font-weight: 375;
   font-style: normal;
 }
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --meraki-principal: #5A5253;
-  --meraki-fondo: #FAFAF8;
-  --meraki-cream: #E6E1D6;
-  --meraki-button: rgba(90, 82, 83, 0.50);
-  --meraki-body: rgba(90, 82, 83, 0.85);
+  --Principal: #5A5253;
+  --Fondo: #FAFAF8;
+  --Boton: rgba(90, 82, 83, 0.50);
+  --Body: rgba(90, 82, 83, 0.85);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-meraki-principal: var(--meraki-principal);
-  --color-meraki-fondo: var(--meraki-fondo);
-  --color-meraki-cream: var(--meraki-cream);
-  --color-meraki-button: var(--meraki-button);
-  --color-meraki-body: var(--meraki-body);
+  --color-meraki-principal: var(--Principal);
+  --color-meraki-fondo: var(--Fondo);
+  --color-meraki-cream: #E6E1D6;
+  --color-meraki-button: var(--Boton);
+  --color-meraki-body: var(--Body);
   --font-sans: "PP Neue Montreal", Arial, Helvetica, sans-serif;
 }
 
@@ -54,21 +53,97 @@
 }
 
 @layer components {
-  .meraki-input {
-    @apply w-full bg-transparent border-0 border-b border-meraki-principal border-opacity-50 pb-2 text-meraki-principal transition-all duration-200 outline-none placeholder:text-meraki-principal;
-
-    &:focus {
-      @apply border-opacity-100;
-    }
+  .logo-panel {
+    opacity: 0.5;
+    background: #E6E1D6;
   }
 
-  .meraki-button {
-    @apply h-16 rounded-full font-light text-xl transition-all duration-200 hover:shadow-lg active:scale-95;
-    font-family: "PP Neue Montreal", sans-serif;
-    box-shadow: -5px -5px 10px 0 rgba(255, 255, 255, 0.60), 5px 5px 10px 0 rgba(217, 217, 217, 0.15), 10px 10px 20px 0 rgba(139, 138, 138, 0.20), -10px -10px 20px 0 #FFF;
+  .form-panel {
+    background: rgba(230, 225, 214, 0.09);
   }
 
-  .meraki-button-primary {
-    @apply meraki-button w-54 bg-meraki-fondo text-meraki-button;
+  .signup-title {
+    color: var(--Principal);
+    font-family: 'PP Neue Montreal', sans-serif;
+    font-size: 20px;
+    font-weight: 375;
+    line-height: normal;
+  }
+
+  .input-group {
+    position: relative;
+  }
+
+  .input-label {
+    display: block;
+    color: var(--Principal);
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 8px;
+  }
+
+  .input-field {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 0.5px solid var(--Principal);
+    padding-bottom: 8px;
+    color: var(--Principal);
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-field::placeholder {
+    color: transparent;
+  }
+
+  .input-field:focus {
+    border-bottom-color: var(--Principal);
+    border-bottom-width: 1px;
+  }
+
+  .auth-button {
+    width: 216px;
+    height: 64px;
+    border-radius: 32px;
+    background: var(--Fondo);
+    color: var(--Boton);
+    font-family: 'PP Neue Montreal', sans-serif;
+    font-size: 20px;
+    font-weight: 375;
+    line-height: normal;
+    box-shadow: 
+      -5px -5px 10px 0 rgba(255, 255, 255, 0.60), 
+      5px 5px 10px 0 rgba(217, 217, 217, 0.15), 
+      10px 10px 20px 0 rgba(139, 138, 138, 0.20), 
+      -10px -10px 20px 0 #FFF;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .auth-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 
+      -6px -6px 12px 0 rgba(255, 255, 255, 0.65), 
+      6px 6px 12px 0 rgba(217, 217, 217, 0.20), 
+      12px 12px 24px 0 rgba(139, 138, 138, 0.25), 
+      -12px -12px 24px 0 #FFF;
+  }
+
+  .auth-button:active {
+    transform: scale(0.98);
+  }
+
+  .body-text {
+    color: var(--Body);
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: normal;
   }
 }
