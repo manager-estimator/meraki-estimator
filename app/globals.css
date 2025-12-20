@@ -158,12 +158,12 @@ pre, code {
 
 .input-group {
   position: relative;
-  margin-bottom: 1.8rem;
+  margin-bottom: 2.5rem;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .input-group {
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.8rem;
   }
 }
 
@@ -171,16 +171,16 @@ pre, code {
   display: block;
   color: var(--Principal);
   font-family: Arial, sans-serif;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 400;
   line-height: normal;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.8rem;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .input-label {
-    font-size: 1rem;
-    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
   }
 }
 
