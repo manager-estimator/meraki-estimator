@@ -5,6 +5,8 @@
   --Fondo: #FAFAF8;
   --Boton: rgba(90, 82, 83, 0.50);
   --Body: rgba(90, 82, 83, 0.85);
+  --canvas-width: 1440px;
+  --canvas-height: 900px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,6 +19,8 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  margin: 0;
+  padding: 0;
 }
 
 p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th {
@@ -29,46 +33,149 @@ pre, code {
   white-space: pre;
 }
 
-.logo-panel {
-  opacity: 0.5;
-  background: #E6E1D6;
+.signup-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background);
+  padding: 1rem;
 }
 
-.form-panel {
-  background: rgba(230, 225, 214, 0.09);
+@media (min-width: 768px) {
+  .signup-container {
+    padding: 0;
+  }
+}
+
+.signup-wrapper {
+  width: 100%;
+  max-width: var(--canvas-width);
+  aspect-ratio: 1440 / 900;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  gap: 0;
+  background-color: #ffffff;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .signup-wrapper {
+    flex-direction: row;
+    min-height: var(--canvas-height);
+  }
+}
+
+.logo-section {
+  width: 100%;
+  height: 30%;
+  flex-shrink: 0;
+  background-color: #E6E1D6;
+  opacity: 0.5;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+@media (min-width: 768px) {
+  .logo-section {
+    display: flex;
+    width: 43.33%;
+    height: 100%;
+  }
+}
+
+.logo-section svg {
+  width: auto;
+  height: auto;
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}
+
+.form-section {
+  width: 100%;
+  height: 70%;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  background-color: rgba(230, 225, 214, 0.09);
+}
+
+@media (min-width: 768px) {
+  .form-section {
+    width: 56.67%;
+    height: 100%;
+    padding: 2rem;
+  }
+}
+
+.form-content {
+  width: 100%;
+  max-width: 28.2%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (max-width: 767px) {
+  .form-content {
+    max-width: 100%;
+  }
 }
 
 .signup-title {
   color: var(--Principal);
   font-family: "PP Neue Montreal", sans-serif;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 375;
   line-height: normal;
+  margin-bottom: 1.75rem;
+  margin-top: 0;
+}
+
+@media (min-width: 768px) {
+  .signup-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.75rem;
+  }
 }
 
 .input-group {
   position: relative;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .input-group {
+    margin-bottom: 1rem;
+  }
 }
 
 .input-label {
   display: block;
   color: var(--Principal);
   font-family: Arial, sans-serif;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 400;
   line-height: normal;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
 }
 
 .input-field {
   width: 100%;
   background: transparent;
   border: none;
-  border-bottom: 0.5px solid var(--Principal);
-  padding-bottom: 8px;
+  border-bottom: 0.5px solid rgba(90, 82, 83, 0.5);
+  padding-bottom: 0.5rem;
   color: var(--Principal);
   font-family: Arial, sans-serif;
-  font-size: 16px;
+  font-size: 1rem;
   outline: none;
   transition: border-color 0.2s;
 }
@@ -82,20 +189,34 @@ pre, code {
   border-bottom-width: 1px;
 }
 
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .button-wrapper {
+    margin-bottom: 0.875rem;
+  }
+}
+
 .auth-button {
-  width: 216px;
-  height: 64px;
-  border-radius: 32px;
+  min-width: 13.5rem;
+  height: 4rem;
+  border-radius: 2rem;
   background: var(--Fondo);
   color: var(--Boton);
   font-family: "PP Neue Montreal", sans-serif;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 375;
   line-height: normal;
   box-shadow: -5px -5px 10px 0 rgba(255, 255, 255, 0.60), 5px 5px 10px 0 rgba(217, 217, 217, 0.15), 10px 10px 20px 0 rgba(139, 138, 138, 0.20), -10px -10px 20px 0 #FFF;
   transition: all 0.2s;
   border: none;
   cursor: pointer;
+  padding: 0 1rem;
+  white-space: nowrap;
 }
 
 .auth-button:hover {
@@ -107,10 +228,35 @@ pre, code {
   transform: scale(0.98);
 }
 
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.google-icon {
+  width: 2.125rem;
+  height: 2.1875rem;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+.social-text {
+  text-align: center;
+  margin-bottom: 0.625rem;
+}
+
+.privacy-text {
+  text-align: center;
+  margin-top: 0.875rem;
+  margin-bottom: 0;
+}
+
 .body-text {
   color: var(--Body);
   font-family: Arial, sans-serif;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 400;
   line-height: normal;
 }
