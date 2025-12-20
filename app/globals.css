@@ -94,7 +94,7 @@ pre, code {
   border-radius: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .logo-section {
     display: flex;
     width: 43.33%;
