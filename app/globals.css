@@ -268,42 +268,42 @@ pre, code {
 }
 
 .google-icon {
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 2.125rem;
+  height: 2.1875rem;
   opacity: 0.8;
   flex-shrink: 0;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .google-icon {
-    width: 2.125rem;
-    height: 2.1875rem;
+    width: 1.8rem;
+    height: 1.8rem;
   }
 }
 
 .social-text {
   text-align: center;
-  margin: 1rem 0 1.5rem 0;
-  font-size: 0.95rem;
+  margin: 1.5rem 0 2rem 0;
+  font-size: 1rem;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .social-text {
-    margin: 1.5rem 0 2rem 0;
-    font-size: 1rem;
+    margin: 1rem 0 1.5rem 0;
+    font-size: 0.95rem;
   }
 }
 
 .privacy-text {
   text-align: center;
-  margin: 1.5rem 0 0 0;
-  font-size: 0.9rem;
+  margin: 2rem 0 0 0;
+  font-size: 1rem;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .privacy-text {
-    margin: 2rem 0 0 0;
-    font-size: 1rem;
+    margin: 1.5rem 0 0 0;
+    font-size: 0.9rem;
   }
 }
 
