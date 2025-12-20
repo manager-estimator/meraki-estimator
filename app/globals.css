@@ -192,14 +192,14 @@ pre, code {
   padding: 0.5rem 0;
   color: var(--Principal);
   font-family: Arial, sans-serif;
-  font-size: 0.95rem;
+  font-size: 1rem;
   outline: none;
   transition: border-color 0.2s;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .input-field {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 }
 
