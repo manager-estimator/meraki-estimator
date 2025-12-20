@@ -56,6 +56,7 @@ pre, code {
   padding: 4rem 5.8rem;
   flex-direction: row;
   box-sizing: border-box;
+  margin-bottom: 141px;
 }
 
 @media (max-width: 1440px) {
