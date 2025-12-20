@@ -64,7 +64,7 @@
 
   .signup-title {
     color: var(--Principal);
-    font-family: 'PP Neue Montreal', sans-serif;
+    font-family: "PP Neue Montreal", sans-serif;
     font-size: 20px;
     font-weight: 375;
     line-height: normal;
@@ -112,15 +112,11 @@
     border-radius: 32px;
     background: var(--Fondo);
     color: var(--Boton);
-    font-family: 'PP Neue Montreal', sans-serif;
+    font-family: "PP Neue Montreal", sans-serif;
     font-size: 20px;
     font-weight: 375;
     line-height: normal;
-    box-shadow: 
-      -5px -5px 10px 0 rgba(255, 255, 255, 0.60), 
-      5px 5px 10px 0 rgba(217, 217, 217, 0.15), 
-      10px 10px 20px 0 rgba(139, 138, 138, 0.20), 
-      -10px -10px 20px 0 #FFF;
+    box-shadow: -5px -5px 10px 0 rgba(255, 255, 255, 0.60), 5px 5px 10px 0 rgba(217, 217, 217, 0.15), 10px 10px 20px 0 rgba(139, 138, 138, 0.20), -10px -10px 20px 0 #FFF;
     transition: all 0.2s;
     border: none;
     cursor: pointer;
@@ -128,11 +124,7 @@
 
   .auth-button:hover {
     transform: translateY(-1px);
-    box-shadow: 
-      -6px -6px 12px 0 rgba(255, 255, 255, 0.65), 
-      6px 6px 12px 0 rgba(217, 217, 217, 0.20), 
-      12px 12px 24px 0 rgba(139, 138, 138, 0.25), 
-      -12px -12px 24px 0 #FFF;
+    box-shadow: -6px -6px 12px 0 rgba(255, 255, 255, 0.65), 6px 6px 12px 0 rgba(217, 217, 217, 0.20), 12px 12px 24px 0 rgba(139, 138, 138, 0.25), -12px -12px 24px 0 #FFF;
   }
 
   .auth-button:active {
