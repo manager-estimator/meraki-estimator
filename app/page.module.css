@@ -16,8 +16,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #e6e1d6;
-  opacity: 0.5;
+  background-color: rgba(230, 225, 214, 0.5);
   padding: 4rem 2rem;
   font-family: Arial, sans-serif;
 }
