@@ -111,7 +111,7 @@ const title = useMemo(() => titleFromSlug(safeSlug), [safeSlug]);
                         <input
               className={ad.nameInput}
               value={nameOverrides[i] ?? ""}
-              placeholder={`${displayTitle} ${i + 1}`}}
+              placeholder={`${displayTitle} ${idx + 1}`}
               onChange={(e) =>
                 setNameOverrides((prev) => ({ ...prev, [i]: e.target.value }))
               }
