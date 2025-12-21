@@ -264,7 +264,6 @@
 }
 
 .google {
-  position: absolute;
   height: calc(100% - 40px);
   top: 20px;
   left: calc(50% - 7px);
