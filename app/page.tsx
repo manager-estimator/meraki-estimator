@@ -60,11 +60,11 @@ export default function SignUpPage() {
           <h1 className={styles.title}>Sign up</h1>
 
           <div className={styles.inputGroup}>
-            <label className={styles.label} htmlFor="email">Your Email</label>
             <input
               id="email"
               type="email"
               className={styles.input}
+              placeholder="Your Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -72,11 +72,11 @@ export default function SignUpPage() {
           </div>
 
           <div className={styles.inputGroup}>
-            <label className={styles.label} htmlFor="password">Password</label>
             <input
               id="password"
               type="password"
               className={styles.input}
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
