@@ -1,0 +1,45 @@
+'use client';
+
+import Link from "next/link";
+import styles from "./EmailVerification.module.css";
+import pageStyles from "../page.module.css";
+import { resendVerificationAction } from "../actions/auth";
+
+export default function EmailVerification({
+  email,
+  initialSent,
+}: {
+  email: string;
+  initialSent: boolean;
+}) {
+  return (
+    <div className={styles.authCard}>
+      <h1 className={`${pageStyles.title} ${styles.title}`}>Check your email</h1>
+
+      <div className={styles.infoGroup}>
+        <p className={styles.infoLabel}> We sent a verification link to: </p>
+        {email ? <p className={styles.infoEmail}>{email}</p> : null}
+      </div>
+
+      <form action={resendVerificationAction} className={styles.resendForm}>
+        <input type="hidden" name="email" value={email} />
+        <button
+          type="submit"
+          className={styles.resendButton}
+          disabled={!email || initialSent}
+          aria-disabled={!email || initialSent}
+        >
+          {initialSent ? "Link sent" : "Resend link"}
+        </button>
+      </form>
+
+      <p className={styles.helperText}> Didn’t receive it? Check your spam folder. </p>
+
+      <div className={styles.buttonWrapper}>
+        <Link className={styles.continueButton} href="/login" role="button">
+          Continue
+        </Link>
+      </div>
+    </div>
+  );
+}

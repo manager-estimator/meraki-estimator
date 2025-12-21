@@ -1,35 +1,22 @@
 "use client";
 
-import { useState, FormEvent } from "react";
 import AuthLayout from "./components/AuthLayout";
 import styles from "./page.module.css";
+import { signUpAction } from "./actions/auth";
 
 export default function SignUpPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleContinue = (e: FormEvent) => {
-    e.preventDefault();
-    console.log("Sign up with:", { email, password });
-  };
-
-  const handleGoogleSignUp = () => {
-    console.log("Sign up with Google");
-  };
-
   return (
     <AuthLayout>
-      <form className={styles.authCard} onSubmit={handleContinue}>
+      <form className={styles.authCard} action={signUpAction}>
         <h1 className={styles.title}>Sign up</h1>
 
         <div className={styles.inputGroup}>
           <input
             id="email"
+            name="email"
             type="email"
             className={styles.input}
             placeholder="Your Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
@@ -37,11 +24,10 @@ export default function SignUpPage() {
         <div className={styles.inputGroup}>
           <input
             id="password"
+            name="password"
             type="password"
             className={styles.input}
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
@@ -55,7 +41,7 @@ export default function SignUpPage() {
         <p className={styles.socialText}>Or sign up with social account</p>
 
         <div className={styles.buttonWrapper}>
-          <button type="button" className={styles.googleButton} onClick={handleGoogleSignUp}>
+          <button type="button" className={styles.googleButton}>
             <svg
               className={styles.googleIcon}
               width="35"
