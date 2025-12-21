@@ -1,0 +1,304 @@
+.container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background: #fff;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+  }
+}
+
+.leftPanel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(230, 225, 214, 0.5);
+  padding: 4rem 2rem;
+  font-family: Arial, sans-serif;
+}
+
+@media (max-width: 1024px) {
+  .leftPanel {
+    min-height: 300px;
+    padding: 3rem 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .leftPanel {
+    min-height: 200px;
+    padding: 2rem 1rem;
+  }
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+  max-width: 370px;
+  z-index: 1;
+  display: block;
+}
+
+@media (max-width: 991px) {
+  .logo {
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .logo {
+    max-width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}
+
+.rightPanel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(230, 225, 214, 0.09);
+  padding: 4rem 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 1024px) {
+  .rightPanel {
+    padding: 3rem 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .rightPanel {
+    padding: 2rem 1rem;
+  }
+}
+
+.authCard {
+  width: 100%;
+  max-width: 406px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 5;
+}
+
+.title {
+  color: var(--Principal);
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0 0 3.5rem 0;
+  letter-spacing: -0.5px;
+}
+
+@media (max-width: 640px) {
+  .title {
+    font-size: 18px;
+    margin-bottom: 2.5rem;
+  }
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 640px) {
+  .inputGroup {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.label {
+  color: var(--Principal);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 0.5rem;
+}
+
+.input::placeholder {
+  color: var(--Principal);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .label {
+    font-size: 15px;
+  }
+
+  .input::placeholder {
+    font-size: 15px;
+  }
+}
+
+.input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(90, 82, 83, 0.5);
+  padding: 0.5rem 0;
+  color: var(--Principal);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-bottom-color: var(--Principal);
+}
+
+.input:focus::placeholder {
+  color: transparent;
+}
+
+@media (max-width: 640px) {
+  .input {
+    font-size: 15px;
+    padding: 0.5rem 0;
+  }
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+  position: relative;
+  z-index: 5;
+}
+
+@media (max-width: 640px) {
+  .buttonWrapper {
+    margin: 1rem 0;
+  }
+}
+
+.continueButton,
+.googleButton {
+  width: 216px;
+  height: 64px;
+  border-radius: 32px;
+  background: var(--Fondo);
+  color: var(--Boton);
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.5px;
+  border: none;
+  cursor: pointer;
+  box-shadow: -5px -5px 10px 0 rgba(255, 255, 255, 0.60),
+              5px 5px 10px 0 rgba(217, 217, 217, 0.15),
+              10px 10px 20px 0 rgba(139, 138, 138, 0.20),
+              -10px -10px 20px 0 #fff;
+  transition: all 0.2s;
+  position: relative;
+  z-index: 6;
+}
+
+.continueButton:hover,
+.googleButton:hover {
+  transform: translateY(-2px);
+  box-shadow: -6px -6px 12px 0 rgba(255, 255, 255, 0.65), 
+              6px 6px 12px 0 rgba(217, 217, 217, 0.20), 
+              12px 12px 24px 0 rgba(139, 138, 138, 0.25), 
+              -12px -12px 24px 0 #fff;
+}
+
+.continueButton:active,
+.googleButton:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .continueButton,
+  .googleButton {
+    width: 100%;
+    max-width: 280px;
+    height: 56px;
+    font-size: 18px;
+  }
+}
+
+.googleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.googleIcon {
+  width: 34px;
+  height: 35px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 7;
+}
+
+@media (max-width: 640px) {
+  .googleIcon {
+    width: 28px;
+    height: 29px;
+  }
+}
+
+.socialText {
+  color: var(--Body);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+  margin: 2rem 0 1rem 0;
+}
+
+@media (max-width: 640px) {
+  .socialText {
+    font-size: 15px;
+    margin: 1.5rem 0 0.75rem 0;
+  }
+}
+
+.privacyText {
+  color: var(--Body);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+  margin: 2rem 0 0 0;
+}
+
+@media (max-width: 640px) {
+  .privacyText {
+    font-size: 14px;
+    margin: 1.5rem 0 0 0;
+  }
+}

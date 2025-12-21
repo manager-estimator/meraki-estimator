@@ -1,26 +1,48 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=PP+Neue+Montreal:wght@300;400;500&display=swap');
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('https://cdn.builder.io/o/assets%2Fd94fa6e5f0634242979e8f5a4b8f636a%2Ff7ee239c2b214c41b0eb9659b43a18c9?alt=media&token=e6e57c48-47fb-498a-9594-87dc7a673578&apiKey=d94fa6e5f0634242979e8f5a4b8f636a') format('opentype');
+  font-weight: 400;
+  font-display: swap;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --Principal: #5A5253;
+  --Fondo: #FAFAF8;
+  --Boton: rgba(90, 82, 83, 0.50);
+  --Body: rgba(90, 82, 83, 0.85);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--Principal);
+  background: #fff;
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+pre, code {
+  overflow-x: auto;
+  white-space: pre;
 }

@@ -1,26 +1,26 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import AuthLayout from "./components/AuthLayout";
-import styles from "./page.module.css";
+import AuthLayout from "../components/AuthLayout";
+import styles from "../page.module.css";
 
-export default function SignUpPage() {
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleContinue = (e: FormEvent) => {
+  const handleLogin = (e: FormEvent) => {
     e.preventDefault();
-    console.log("Sign up with:", { email, password });
+    console.log("Login with:", { email, password });
   };
 
-  const handleGoogleSignUp = () => {
-    console.log("Sign up with Google");
+  const handleGoogleLogin = () => {
+    console.log("Login with Google");
   };
 
   return (
     <AuthLayout>
-      <form className={styles.authCard} onSubmit={handleContinue}>
-        <h1 className={styles.title}>Sign up</h1>
+      <form className={styles.authCard} onSubmit={handleLogin}>
+        <h1 className={styles.title}>Login</h1>
 
         <div className={styles.inputGroup}>
           <input
@@ -48,14 +48,14 @@ export default function SignUpPage() {
 
         <div className={styles.buttonWrapper}>
           <button type="submit" className={styles.continueButton}>
-            Continue
+            Login
           </button>
         </div>
 
-        <p className={styles.socialText}>Or sign up with social account</p>
+        <p className={styles.socialText}>Or login with social account</p>
 
         <div className={styles.buttonWrapper}>
-          <button type="button" className={styles.googleButton} onClick={handleGoogleSignUp}>
+          <button type="button" className={styles.googleButton} onClick={handleGoogleLogin}>
             <svg
               className={styles.googleIcon}
               width="35"
