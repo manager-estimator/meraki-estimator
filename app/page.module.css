@@ -1,323 +1,261 @@
-.frameDesktoop {
-  width: 100%;
-  height: 900px;
-  position: relative;
-  background-color: var(--color-white);
-  overflow: hidden;
-  flex-shrink: 0;
+.container {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 64px 93px;
-  box-sizing: border-box;
-  isolation: isolate;
-  gap: 1px;
-  text-align: left;
-  font-size: 20.08px;
-  color: var(--color-dimgray-100);
-  font-family: var(--font-arial);
+  width: 100%;
+  min-height: 100vh;
+  background: #fff;
 }
 
 @media (max-width: 1024px) {
-  .frameDesktoop {
-    height: auto;
+  .container {
     flex-direction: column;
-    padding: 2rem 1rem;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .frameDesktoopChild {
-    width: 100%;
-    height: auto;
-    max-width: 500px;
-    margin-bottom: 2rem;
-  }
-
-  .frameIzquierdoIcon {
-    position: relative;
-    top: 0 !important;
-    left: 0 !important;
-    margin-bottom: 1.5rem;
-  }
-
-  .frameDesktoopItem {
-    width: 100%;
-    height: auto;
-    max-width: 500px;
-  }
-
-  .frameDerecho {
-    position: relative;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100%;
-    max-width: 500px;
-    overflow: visible;
-  }
-
-  .authCard {
-    width: 100%;
-    height: auto;
-    position: relative;
-  }
-
-  .signUp {
-    position: relative;
-    top: 0 !important;
-    left: 0 !important;
-    margin-bottom: 1.5rem;
-  }
-
-  .authCardChild,
-  .authCardItem {
-    position: relative;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100%;
-    margin: 1rem 0;
-  }
-
-  .buttonParent,
-  .buttonGroup {
-    position: relative;
-    top: 0 !important;
-    right: 0 !important;
-    left: 0 !important;
-    width: 100%;
-    margin: 1.5rem 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .button {
-    position: relative;
-    top: 0 !important;
-    right: 0 !important;
-    width: 100%;
-  }
-
-  .continue,
-  .google {
-    position: relative;
-    top: 0 !important;
-    left: 0 !important;
-    height: auto;
-  }
-
-  .password,
-  .yourEmail,
-  .orSignUp,
-  .byContinuingYou {
-    position: relative;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    margin: 0.5rem 0;
-    width: 100%;
-  }
-
-  .groupIcon {
-    position: relative;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    height: auto;
-    width: auto;
-    margin: 0.5rem 0;
   }
 }
 
-.frameDesktoopChild {
-  height: 772px;
-  width: 624px;
-  position: relative;
-  background-color: var(--color-linen-100);
-  opacity: 0.5;
-  z-index: 0;
-}
-
-.frameIzquierdoIcon {
-  height: 124px;
-  width: 372px;
-  margin: 0 !important;
-  position: absolute;
-  top: calc(50% - 62px);
-  left: calc(50% - 498px);
-  z-index: 1;
-}
-
-.frameDesktoopItem {
-  height: 772px;
-  width: 624px;
-  position: relative;
-  background-color: var(--color-linen-200);
-  z-index: 2;
-}
-
-.frameDerecho {
-  margin: 0 !important;
-  position: absolute;
-  top: calc(50% - 280.25px);
-  left: calc(50% + 109px);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  z-index: 3;
-}
-
-.authCard {
-  width: 406px;
-  height: 560.5px;
-  position: relative;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.signUp {
-  position: absolute;
-  top: 0px;
-  left: 31px;
-  font-size: 19.69px;
-  font-family: var(--font-pp-neue-montreal);
-  font-weight: 375;
-}
-
-.authCardChild {
-  position: absolute;
-  top: 201px;
-  left: 30px;
-  border-top: 2px solid var(--color-dimgray-100);
-  box-sizing: border-box;
-  width: 346px;
-  height: var(--height-2);
-  opacity: 0.5;
-}
-
-.authCardItem {
-  position: absolute;
-  top: 132px;
-  left: 30px;
-  border-top: 2px solid var(--color-dimgray-100);
-  box-sizing: border-box;
-  width: 346px;
-  height: var(--height-2);
-  opacity: 0.5;
-}
-
-.buttonParent {
-  position: absolute;
-  top: 266px;
-  right: 95px;
-  width: 216px;
-  height: var(--height-64);
-  color: var(--color-dimgray-300);
-  font-family: var(--font-pp-neue-montreal);
-  font-weight: 375;
-  font-size: 20px;
-}
-
-.button {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  box-shadow: var(--shadow-drop);
-  border-radius: var(--br-32);
-  background-color: var(--color-whitesmoke);
-  width: 216px;
-  height: var(--height-64);
-  overflow: hidden;
-  border: none;
-  cursor: pointer;
+.leftPanel {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-pp-neue-montreal);
-  font-weight: 375;
+  background: #e6e1d6;
+  opacity: 0.5;
+  padding: 4rem 2rem;
+}
+
+@media (max-width: 1024px) {
+  .leftPanel {
+    min-height: 300px;
+    padding: 3rem 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .leftPanel {
+    min-height: 200px;
+    padding: 2rem 1rem;
+  }
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+  max-width: 370px;
+}
+
+@media (max-width: 640px) {
+  .logo {
+    max-width: 280px;
+  }
+}
+
+.rightPanel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(230, 225, 214, 0.09);
+  padding: 4rem 2rem;
+}
+
+@media (max-width: 1024px) {
+  .rightPanel {
+    padding: 3rem 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .rightPanel {
+    padding: 2rem 1rem;
+  }
+}
+
+.authCard {
+  width: 100%;
+  max-width: 406px;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  color: var(--Principal);
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 20px;
-  color: var(--color-dimgray-300);
+  font-weight: 375;
+  line-height: normal;
+  margin: 0 0 3.5rem 0;
 }
 
-.continue {
-  height: calc(100% - 40px);
-  top: 20px;
-  left: calc(50% - 39px);
-  display: inline-block;
-  width: 78px;
+@media (max-width: 640px) {
+  .title {
+    font-size: 18px;
+    margin-bottom: 2.5rem;
+  }
 }
 
-.buttonGroup {
-  position: absolute;
-  top: 435px;
-  right: 87px;
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 640px) {
+  .inputGroup {
+    margin-bottom: 2rem;
+  }
+}
+
+.label {
+  color: var(--Principal);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .label {
+    font-size: 15px;
+  }
+}
+
+.input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(90, 82, 83, 0.5);
+  padding: 0.75rem 0;
+  color: var(--Principal);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-bottom-color: var(--Principal);
+}
+
+@media (max-width: 640px) {
+  .input {
+    font-size: 15px;
+    padding: 0.5rem 0;
+  }
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+@media (max-width: 640px) {
+  .buttonWrapper {
+    margin: 1rem 0;
+  }
+}
+
+.continueButton,
+.googleButton {
   width: 216px;
-  height: var(--height-64);
-  color: var(--color-dimgray-300);
-  font-family: var(--font-pp-neue-montreal);
-  font-weight: 375;
+  height: 64px;
+  border-radius: 32px;
+  background: var(--Fondo);
+  color: var(--Boton);
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 20px;
+  font-weight: 375;
+  line-height: normal;
+  border: none;
+  cursor: pointer;
+  box-shadow: -5px -5px 10px 0 rgba(255, 255, 255, 0.60), 
+              5px 5px 10px 0 rgba(217, 217, 217, 0.15), 
+              10px 10px 20px 0 rgba(139, 138, 138, 0.20), 
+              -10px -10px 20px 0 #fff;
+  transition: all 0.2s;
 }
 
-.google {
-  height: calc(100% - 40px);
-  top: 20px;
-  left: calc(50% - 7px);
-  display: inline-block;
-  width: 63px;
+.continueButton:hover,
+.googleButton:hover {
+  transform: translateY(-2px);
+  box-shadow: -6px -6px 12px 0 rgba(255, 255, 255, 0.65), 
+              6px 6px 12px 0 rgba(217, 217, 217, 0.20), 
+              12px 12px 24px 0 rgba(139, 138, 138, 0.25), 
+              -12px -12px 24px 0 #fff;
 }
 
-.groupIcon {
-  position: absolute;
-  height: 6.24%;
-  width: 8.45%;
-  top: 80.11%;
-  right: 53.37%;
-  bottom: 13.65%;
-  left: 38.18%;
-  max-width: 100%;
-  overflow: hidden;
-  max-height: 100%;
+.continueButton:active,
+.googleButton:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .continueButton,
+  .googleButton {
+    width: 100%;
+    max-width: 280px;
+    height: 56px;
+    font-size: 18px;
+  }
+}
+
+.googleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.googleIcon {
+  width: 34px;
+  height: 35px;
   opacity: 0.8;
 }
 
-.password {
-  position: absolute;
-  top: 181px;
-  left: 31px;
-  font-size: 16.27px;
-  color: var(--color-dimgray-100);
-  font-family: var(--font-arial);
+@media (max-width: 640px) {
+  .googleIcon {
+    width: 28px;
+    height: 29px;
+  }
 }
 
-.yourEmail {
-  position: absolute;
-  top: 112px;
-  left: 32px;
-  font-size: 16.27px;
-  color: var(--color-dimgray-100);
-  font-family: var(--font-arial);
+.socialText {
+  color: var(--Body);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+  margin: 2rem 0 1rem 0;
 }
 
-.orSignUp {
-  position: absolute;
-  top: 374px;
-  left: 96px;
-  font-size: 16.02px;
-  color: var(--color-dimgray-200);
-  font-family: var(--font-arial);
+@media (max-width: 640px) {
+  .socialText {
+    font-size: 15px;
+    margin: 1.5rem 0 0.75rem 0;
+  }
 }
 
-.byContinuingYou {
-  position: absolute;
-  top: 542px;
-  left: 0px;
-  font-size: 16.02px;
-  color: var(--color-dimgray-200);
-  font-family: var(--font-arial);
-  width: 100%;
+.privacyText {
+  color: var(--Body);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+  margin: 2rem 0 0 0;
+}
+
+@media (max-width: 640px) {
+  .privacyText {
+    font-size: 14px;
+    margin: 1.5rem 0 0 0;
+  }
 }

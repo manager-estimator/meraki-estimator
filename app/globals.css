@@ -1,43 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=PP+Neue+Montreal:ital,wght@0,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Arial:ital,wght@0,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PP+Neue+Montreal:wght@300;400;500&display=swap');
 
 :root {
-  /* Color */
-  --color-dimgray-100: #5a5253;
-  --color-dimgray-200: rgba(90, 82, 83, 0.85);
-  --color-dimgray-300: rgba(90, 82, 83, 0.5);
-  --color-linen-100: #e6e1d6;
-  --color-linen-200: rgba(230, 225, 214, 0.09);
-  --color-white: #fff;
-  --color-whitesmoke: #fafaf8;
-
-  /* BorderRadius */
-  --br-32: 32px;
-
-  /* Font */
-  --font-arial: Arial;
-  --font-pp-neue-montreal: "PP Neue Montreal";
-
-  /* Shadows */
-  --shadow-drop: -5px -5px 10px rgba(255, 255, 255, 0.6), 5px 5px 10px rgba(217, 217, 217, 0.15), 10px 10px 20px rgba(139, 138, 138, 0.2), -10px -10px 20px var(--color-white);
-
-  /* WidthHeights */
-  --height-2: 2px;
-  --height-64: 64px;
+  --Principal: #5A5253;
+  --Fondo: #FAFAF8;
+  --Boton: rgba(90, 82, 83, 0.50);
+  --Body: rgba(90, 82, 83, 0.85);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  margin: 0;
-  padding: 0;
+  color: var(--Principal);
+  background: #fff;
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th {
@@ -48,293 +38,4 @@ p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th {
 pre, code {
   overflow-x: auto;
   white-space: pre;
-}
-
-.signup-container {
-  width: 100%;
-  min-height: 900px;
-  max-width: 1440px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--background);
-}
-
-.signup-wrapper {
-  width: 100%;
-  max-width: var(--canvas-width);
-  aspect-ratio: 1440 / 900;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  background-color: #ffffff;
-  padding: 4rem 5.8rem;
-  flex-direction: row;
-  box-sizing: border-box;
-  margin-bottom: 141px;
-}
-
-@media (max-width: 1440px) {
-  .signup-wrapper {
-    padding: 2rem 1.5rem;
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 1024px) {
-  .signup-wrapper {
-    padding: 1.5rem;
-  }
-}
-
-.logo-section {
-  width: 50%;
-  height: 100%;
-  flex-shrink: 0;
-  background-color: #E6E1D6;
-  opacity: 0.5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0;
-}
-
-@media (max-width: 1024px) {
-  .logo-section {
-    display: none;
-    width: 100%;
-    height: 30%;
-  }
-}
-
-.logo-section svg {
-  width: auto;
-  height: auto;
-  max-width: 85%;
-  max-height: 85%;
-  object-fit: contain;
-  margin: auto 0;
-  color: rgba(54, 48, 48, 1);
-}
-
-.form-section {
-  width: 50%;
-  height: 100%;
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  background-color: transparent;
-}
-
-@media (max-width: 991px) {
-  .form-section {
-    display: flex;
-  }
-}
-
-@media (max-width: 640px) {
-  .form-section {
-    display: flex;
-  }
-}
-
-@media (max-width: 1024px) {
-  .form-section {
-    width: 100%;
-    height: auto;
-    padding: 2rem;
-    background-color: rgba(230, 225, 214, 0.09);
-  }
-}
-
-.form-content {
-  width: 100%;
-  max-width: 27rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-@media (max-width: 768px) {
-  .form-content {
-    max-width: 100%;
-  }
-}
-
-.signup-title {
-  color: var(--Principal);
-  font-family: "PP Neue Montreal", sans-serif;
-  font-size: 1.25rem;
-  font-weight: 375;
-  line-height: normal;
-  margin: 0 0 3.5rem 0;
-}
-
-@media (max-width: 768px) {
-  .signup-title {
-    font-size: 1.1rem;
-    margin-bottom: 2.5rem;
-  }
-}
-
-.input-group {
-  position: relative;
-  margin-bottom: 2.5rem;
-}
-
-@media (max-width: 768px) {
-  .input-group {
-    margin-bottom: 1.8rem;
-  }
-}
-
-.input-label {
-  display: block;
-  color: var(--Principal);
-  font-family: Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: normal;
-  margin-bottom: 0.8rem;
-}
-
-@media (max-width: 768px) {
-  .input-label {
-    font-size: 0.95rem;
-    margin-bottom: 0.6rem;
-  }
-}
-
-.input-field {
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(90, 82, 83, 0.5);
-  padding: 0.5rem 0;
-  color: var(--Principal);
-  font-family: Arial, sans-serif;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-@media (max-width: 768px) {
-  .input-field {
-    font-size: 0.95rem;
-  }
-}
-
-.input-field::placeholder {
-  color: transparent;
-}
-
-.input-field:focus {
-  border-bottom-color: var(--Principal);
-}
-
-.button-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2.5rem;
-  margin-top: 2rem;
-}
-
-@media (max-width: 768px) {
-  .button-wrapper {
-    margin-bottom: 1.8rem;
-    margin-top: 1.5rem;
-  }
-}
-
-.auth-button {
-  min-width: 13.5rem;
-  height: 4rem;
-  border-radius: 2rem;
-  background: var(--Fondo);
-  color: var(--Boton);
-  font-family: "PP Neue Montreal", sans-serif;
-  font-size: 1.25rem;
-  font-weight: 375;
-  line-height: normal;
-  box-shadow: -5px -5px 10px 0 rgba(255, 255, 255, 0.60), 5px 5px 10px 0 rgba(217, 217, 217, 0.15), 10px 10px 20px 0 rgba(139, 138, 138, 0.20), -10px -10px 20px 0 #FFF;
-  transition: all 0.2s;
-  border: none;
-  cursor: pointer;
-  padding: 0 1rem;
-  white-space: nowrap;
-}
-
-@media (max-width: 768px) {
-  .auth-button {
-    min-width: 12rem;
-    height: 3.5rem;
-    font-size: 1.1rem;
-  }
-}
-
-.auth-button:hover {
-  transform: translateY(-1px);
-  box-shadow: -6px -6px 12px 0 rgba(255, 255, 255, 0.65), 6px 6px 12px 0 rgba(217, 217, 217, 0.20), 12px 12px 24px 0 rgba(139, 138, 138, 0.25), -12px -12px 24px 0 #FFF;
-}
-
-.auth-button:active {
-  transform: scale(0.98);
-}
-
-.google-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-}
-
-.google-icon {
-  width: 2.125rem;
-  height: 2.1875rem;
-  opacity: 0.8;
-  flex-shrink: 0;
-}
-
-@media (max-width: 768px) {
-  .google-icon {
-    width: 1.8rem;
-    height: 1.8rem;
-  }
-}
-
-.social-text {
-  text-align: center;
-  margin: 1.5rem 0 2rem 0;
-  font-size: 1rem;
-}
-
-@media (max-width: 768px) {
-  .social-text {
-    margin: 1rem 0 1.5rem 0;
-    font-size: 0.95rem;
-  }
-}
-
-.privacy-text {
-  text-align: center;
-  margin: 2rem 0 0 0;
-  font-size: 1rem;
-}
-
-@media (max-width: 768px) {
-  .privacy-text {
-    margin: 1.5rem 0 0 0;
-    font-size: 0.9rem;
-  }
-}
-
-.body-text {
-  color: var(--Body);
-  font-family: Arial, sans-serif;
-  font-weight: 400;
-  line-height: normal;
 }
