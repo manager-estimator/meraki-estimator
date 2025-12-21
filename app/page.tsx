@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
+import Rectangle1 from "./components/Rectangle1";
 
 export default function FrameDesktop() {
   const [email, setEmail] = useState("");
