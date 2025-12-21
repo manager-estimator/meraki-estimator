@@ -72,14 +72,16 @@ export default function FrameDesktop() {
 
           {/* Continue Button */}
           <div className={styles.buttonParent}>
-            <button className={styles.button} onClick={handleContinue} />
-            <div className={styles.continue}>Continue</div>
+            <button className={styles.button} onClick={handleContinue}>
+              <div className={styles.continue}>Continue</div>
+            </button>
           </div>
 
           {/* Google Button */}
           <div className={styles.buttonGroup}>
-            <button className={styles.button} onClick={handleGoogleSignUp} />
-            <div className={styles.google}>Google</div>
+            <button className={styles.button} onClick={handleGoogleSignUp}>
+              <div className={styles.google}>Google</div>
+            </button>
           </div>
 
           {/* Google Icon */}
