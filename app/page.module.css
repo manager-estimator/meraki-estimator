@@ -1,5 +1,6 @@
 .frameDesktoop {
   width: 100%;
+  height: 900px;
   position: relative;
   background-color: var(--color-white);
   overflow: hidden;
@@ -16,6 +17,118 @@
   font-size: 20.08px;
   color: var(--color-dimgray-100);
   font-family: var(--font-arial);
+}
+
+@media (max-width: 1024px) {
+  .frameDesktoop {
+    height: auto;
+    flex-direction: column;
+    padding: 2rem 1rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .frameDesktoopChild {
+    width: 100%;
+    height: auto;
+    max-width: 500px;
+    margin-bottom: 2rem;
+  }
+
+  .frameIzquierdoIcon {
+    position: relative;
+    top: 0 !important;
+    left: 0 !important;
+    margin-bottom: 1.5rem;
+  }
+
+  .frameDesktoopItem {
+    width: 100%;
+    height: auto;
+    max-width: 500px;
+  }
+
+  .frameDerecho {
+    position: relative;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100%;
+    max-width: 500px;
+    overflow: visible;
+  }
+
+  .authCard {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .signUp {
+    position: relative;
+    top: 0 !important;
+    left: 0 !important;
+    margin-bottom: 1.5rem;
+  }
+
+  .authCardChild,
+  .authCardItem {
+    position: relative;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100%;
+    margin: 1rem 0;
+  }
+
+  .buttonParent,
+  .buttonGroup {
+    position: relative;
+    top: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    width: 100%;
+    margin: 1.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .button {
+    position: relative;
+    top: 0 !important;
+    right: 0 !important;
+    width: 100%;
+  }
+
+  .continue,
+  .google {
+    position: relative;
+    top: 0 !important;
+    left: 0 !important;
+    height: auto;
+  }
+
+  .password,
+  .yourEmail,
+  .orSignUp,
+  .byContinuingYou {
+    position: relative;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0.5rem 0;
+    width: 100%;
+  }
+
+  .groupIcon {
+    position: relative;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: auto;
+    width: auto;
+    margin: 0.5rem 0;
+  }
 }
 
 .frameDesktoopChild {
