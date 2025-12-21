@@ -255,7 +255,7 @@
 .googleIcon {
   width: 34px;
   height: 35px;
-  opacity: 0.8;
+  flex-shrink: 0;
   position: relative;
   z-index: 7;
 }
