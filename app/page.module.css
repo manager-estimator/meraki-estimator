@@ -19,6 +19,7 @@
   background: #e6e1d6;
   opacity: 0.5;
   padding: 4rem 2rem;
+  font-family: Arial, sans-serif;
 }
 
 @media (max-width: 1024px) {
@@ -50,6 +51,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid;
 }
 
 @media (max-width: 991px) {
