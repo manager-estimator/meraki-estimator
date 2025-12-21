@@ -103,6 +103,9 @@ export default function FrameDesktop() {
           <div className={styles.byContinuingYou}>By continuing, you agree to our Privacy Policy and Terms</div>
         </div>
       </div>
+
+      {/* Rectangle Component */}
+      <Rectangle1 />
     </div>
   );
 }
