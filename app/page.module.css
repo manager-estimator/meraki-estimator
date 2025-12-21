@@ -47,11 +47,21 @@
   width: 100%;
   height: auto;
   max-width: 370px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 991px) {
+  .logo {
+    display: flex;
+  }
 }
 
 @media (max-width: 640px) {
   .logo {
     max-width: 280px;
+    display: flex;
   }
 }
 
