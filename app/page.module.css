@@ -208,11 +208,13 @@
   line-height: normal;
   border: none;
   cursor: pointer;
-  box-shadow: -5px -5px 10px 0 rgba(255, 255, 255, 0.60), 
-              5px 5px 10px 0 rgba(217, 217, 217, 0.15), 
-              10px 10px 20px 0 rgba(139, 138, 138, 0.20), 
+  box-shadow: -5px -5px 10px 0 rgba(255, 255, 255, 0.60),
+              5px 5px 10px 0 rgba(217, 217, 217, 0.15),
+              10px 10px 20px 0 rgba(139, 138, 138, 0.20),
               -10px -10px 20px 0 #fff;
   transition: all 0.2s;
+  position: relative;
+  z-index: 6;
 }
 
 .continueButton:hover,
