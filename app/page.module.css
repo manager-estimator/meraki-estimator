@@ -209,8 +209,9 @@
   color: var(--Boton);
   font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 20px;
-  font-weight: 375;
+  font-weight: 400;
   line-height: normal;
+  letter-spacing: -0.5px;
   border: none;
   cursor: pointer;
   box-shadow: -5px -5px 10px 0 rgba(255, 255, 255, 0.60),
