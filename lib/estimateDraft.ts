@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export type DraftRoom = {
   name: string;
   area: number; // m²
@@ -26,16 +25,64 @@ function emptyDraft(): EstimateDraft {
   return { selectedAreas: [], areas: {} };
 }
 
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === "object" && v !== null;
+}
+
+function coerceSelectedArea(v: unknown): SelectedArea | null {
+  if (!isRecord(v)) return null;
+  const slug = typeof v["slug"] === "string" ? v["slug"] : null;
+  const label = typeof v["label"] === "string" ? v["label"] : null;
+  if (!slug || !label) return null;
+  return { slug, label };
+}
+
+function coerceDraftRoom(v: unknown): DraftRoom | null {
+  if (!isRecord(v)) return null;
+  const name = typeof v["name"] === "string" ? v["name"] : null;
+  const area = typeof v["area"] === "number" && Number.isFinite(v["area"]) ? v["area"] : null;
+  if (!name || area === null) return null;
+  return { name, area };
+}
+
+function coerceDraftArea(v: unknown): DraftArea | null {
+  if (!isRecord(v)) return null;
+  const slug = typeof v["slug"] === "string" ? v["slug"] : null;
+  const label = typeof v["label"] === "string" ? v["label"] : null;
+  if (!slug || !label) return null;
+
+  const roomsRaw = v["rooms"];
+  const rooms: DraftRoom[] = Array.isArray(roomsRaw)
+    ? roomsRaw
+        .map(coerceDraftRoom)
+        .filter((x): x is DraftRoom => x !== null)
+    : [];
+
+  return { slug, label, rooms };
+}
+
+
 function loadDraft(): EstimateDraft {
   if (typeof window === "undefined") return emptyDraft();
   try {
     const raw = window.localStorage.getItem(KEY);
     if (!raw) return emptyDraft();
     const parsed = JSON.parse(raw) as Partial<EstimateDraft> | null;
-
     const d = emptyDraft();
-    if (parsed?.selectedAreas && Array.isArray(parsed.selectedAreas)) d.selectedAreas = parsed.selectedAreas as any;
-    if (parsed?.areas && typeof parsed.areas === "object") d.areas = parsed.areas as any;
+
+    if (Array.isArray(parsed?.selectedAreas)) {
+      d.selectedAreas = parsed.selectedAreas
+        .map(coerceSelectedArea)
+        .filter((x): x is SelectedArea => x !== null);
+    }
+
+    if (isRecord(parsed?.areas)) {
+      for (const [key, value] of Object.entries(parsed.areas)) {
+        const area = coerceDraftArea(value);
+        if (area) d.areas[key] = area;
+      }
+    }
+
     return d;
   } catch {
     return emptyDraft();

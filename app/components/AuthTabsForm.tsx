@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, Suspense, type ComponentProps } from "react";
+import {useMemo, Suspense, type ComponentProps} from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "../page.module.css";
@@ -11,24 +11,14 @@ type Mode = "signup" | "login";
 function AuthTabsFormInner({ defaultMode = "signup" }: { defaultMode?: Mode }) {
   const router = useRouter();
   const sp = useSearchParams();
-
   const urlMode = sp.get("mode");
-  const modeFromUrl: Mode | null =
-    urlMode === "login" || urlMode === "signup" ? (urlMode as Mode) : null;
-
-  const initialMode = modeFromUrl ?? defaultMode;
-  const [mode, setMode] = useState<Mode>(initialMode);
-
-  useEffect(() => {
-    if (mode !== initialMode) setMode(initialMode);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [urlMode]);
+  const mode: Mode =
+    urlMode === "login" || urlMode === "signup" ? (urlMode as Mode) : defaultMode;
 
   const errorMsg = sp.get("error");
 
   const setModeAndUrl = (m: Mode) => {
-    setMode(m);
-    const nextUrl = m === "login" ? "/?mode=login" : "/?mode=signup";
+const nextUrl = m === "login" ? "/?mode=login" : "/?mode=signup";
     router.replace(nextUrl);
   };
 

@@ -1,7 +1,5 @@
 "use client";
 
-/* eslint-disable react/no-unescaped-entities */
-
 import { useState, FormEvent } from "react";
 import AuthLayout from "../components/AuthLayout";
 import styles from "../page.module.css";
@@ -75,7 +73,7 @@ export default function ForgotPasswordPage() {
                 marginBottom: "1rem",
                 lineHeight: "1.6"
               }}>
-                We've sent a password reset link to your email address.
+                We&apos;ve sent a password reset link to your email address.
               </p>
               <p style={{ 
                 color: "var(--Body)",
