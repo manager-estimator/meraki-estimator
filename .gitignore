@@ -44,3 +44,14 @@ next-env.d.ts
 
 # Backups temporales
 *.bak.*
+
+# --- generated / local artifacts ---
+.preflight/
+*_scan_*.txt
+*_dump_*.txt
+*.bak.*
+*.current
+
+# (si quieres) logs temporales
+*.log
+

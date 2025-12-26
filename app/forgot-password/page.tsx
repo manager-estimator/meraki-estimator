@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react/no-unescaped-entities */
+
 import { useState, FormEvent } from "react";
 import AuthLayout from "../components/AuthLayout";
 import styles from "../page.module.css";

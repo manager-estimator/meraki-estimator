@@ -11,7 +11,7 @@ export async function signUpAction(formData: FormData) {
   const { error } = await supabase.auth.signUp({ email, password });
 
   if (error) {
-    redirect("/?error=" + encodeURIComponent(error.message));
+    redirect("/?mode=signup&error=" + encodeURIComponent(error.message));
   }
 
   // Si tu proyecto exige verificación por email, esto te llevará a una pantalla “check email” luego.
@@ -49,10 +49,10 @@ export async function signInAction(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    redirect("/login?error=" + encodeURIComponent(error.message));
+    redirect("/?mode=login&error=" + encodeURIComponent(error.message));
   }
 
-  redirect("/estimate");
+  redirect("/dashboard");
 }
 
 export async function signOutAction() {

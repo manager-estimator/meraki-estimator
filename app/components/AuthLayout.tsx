@@ -1,6 +1,8 @@
 "use client";
 
 import { ReactNode } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import styles from "./AuthLayout.module.css";
 
 interface AuthLayoutProps {
@@ -8,6 +10,8 @@ interface AuthLayoutProps {
 }
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
+  const pathname = usePathname();
+  const hideProfileOn = new Set(["/", "/login", "/check-email", "/forgot-password", "/create-profile"]);
   return (
     <div className={styles.container}>
       <div className={styles.leftPanel}>
@@ -48,6 +52,11 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       </div>
 
       <div className={styles.rightPanel}>
+        {!hideProfileOn.has(pathname) ? (
+          <Link className={styles.profileBtn} href="/dashboard" aria-label="Profile">
+            <span className={styles.profileDot} />
+          </Link>
+        ) : null}
         {children}
       </div>
     </div>

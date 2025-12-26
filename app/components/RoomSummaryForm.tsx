@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState} from "react";
 import { useRouter } from "next/navigation";
 import styles from "./RoomSummaryForm.module.css";
+import { getAreaRooms, getNextSelectedAreaSlug, getSelectedAreaLabel } from "../../lib/estimateDraft";
 
 type Line = {
   id: string;
@@ -29,7 +30,14 @@ export default function RoomSummaryForm({
   roomIndex: string;
 }) {
   const router = useRouter();
-  const title = useMemo(() => titleFromSlug(slug), [slug]);
+
+  const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
+  const areaLabel = getSelectedAreaLabel(slug) ?? fallbackLabel;
+const rooms = getAreaRooms(slug);
+const cur = parseInt(roomIndex, 10) || 1;
+  const idx = Math.max(0, cur - 1);
+  const roomName = rooms[idx]?.name ?? `${areaLabel} ${cur}`;
+  const roomCount = rooms.length > 0 ? rooms.length : 1;
 
   // Mock (luego lo conectamos a estado real)
   const base = 16000;
@@ -44,19 +52,32 @@ export default function RoomSummaryForm({
   const optionals = chosen.reduce((acc, x) => acc + x.price, 0);
   const total = base + optionals;
 
-  // Mock reuse pills (luego lo conectamos a "rooms vacías")
-  const reuseTargets = useMemo(() => ["2", "3"], []);
+  // Reuse pills: todas las rooms excepto la actual
+  const reuseTargets = useMemo(() => {
+    const all = Array.from({ length: roomCount }, (_, i) => String(i + 1));
+    return all.filter((k) => k !== String(cur));
+  }, [roomCount, cur]);
+
   const [reuse, setReuse] = useState<Record<string, boolean>>({});
+  const toggleReuse = (k: string) => setReuse((prev) => ({ ...prev, [k]: !prev[k] }));
 
-  const toggleReuse = (k: string) =>
-    setReuse((prev) => ({ ...prev, [k]: !prev[k] }));
-
-  const nextRoomIndex = String((parseInt(roomIndex, 10) || 1) + 1);
+  const handleContinue = () => {
+    if (cur < roomCount) {
+      router.push(`/optionals/${slug}/${cur + 1}`);
+      return;
+    }
+    const nextArea = getNextSelectedAreaSlug(slug);
+    if (nextArea) {
+      router.push(`/area/${nextArea}`);
+      return;
+    }
+    router.push(`/project-summary`);
+  };
 
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
-        <div className={styles.title}>{title}</div>
+        <div className={styles.title}>{roomName}</div>
         <div className={styles.subtitle}>Summary · Room {roomIndex}</div>
       </div>
 
@@ -90,9 +111,7 @@ export default function RoomSummaryForm({
 
           <div className={styles.reuse}>
             <div className={styles.reuseTitle}>Reuse this setup?</div>
-            <div className={styles.reuseHelp}>
-              Apply to other empty rooms in this category.
-            </div>
+            <div className={styles.reuseHelp}>Apply to other empty rooms in this category.</div>
 
             <div className={styles.pills}>
               {reuseTargets.map((k) => (
@@ -102,7 +121,7 @@ export default function RoomSummaryForm({
                   className={`${styles.pill} ${reuse[k] ? styles.pillOn : ""}`}
                   onClick={() => toggleReuse(k)}
                 >
-                  {title} {k}
+                  {areaLabel} {k}
                 </button>
               ))}
             </div>
@@ -114,7 +133,7 @@ export default function RoomSummaryForm({
         <button
           type="button"
           className={styles.backBtn}
-          onClick={() => router.push(`/optionals/${slug}?roomIndex=${roomIndex}`)}
+          onClick={() => router.push(`/optionals/${slug}/${roomIndex}`)}
         >
           Back
         </button>
@@ -123,11 +142,7 @@ export default function RoomSummaryForm({
           Skip
         </button>
 
-        <button
-          type="button"
-          className={styles.continueBtn}
-          onClick={() => router.push(`/optionals/${slug}?roomIndex=${nextRoomIndex}`)}
-        >
+        <button type="button" className={styles.continueBtn} onClick={handleContinue}>
           Continue
         </button>
       </div>

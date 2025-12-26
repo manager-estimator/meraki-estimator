@@ -2,10 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import styles from "../page.module.css";
 import ad from "./AreaDetailsForm.module.css";
-import { getAreaRooms, getSelectedAreaLabel, setAreaRooms } from "../../lib/estimateDraft";
 
 type Room = {
   name: string;
@@ -24,64 +22,64 @@ function euro(n: number) {
   return n.toLocaleString("es-ES", { maximumFractionDigits: 0 }) + " €";
 }
 
-function safeDecode(input: string) {
-  try {
-    return decodeURIComponent(input);
-  } catch {
-    return input;
-  }
-}
-
 export default function AreaDetailsForm({ slug }: { slug?: string }) {
-  const router = useRouter();
-
+  const [nameOverrides, setNameOverrides] = useState<Record<number, string>>({});
   const safeSlug = (() => {
     const raw = (slug ?? "").trim();
-    const decoded = safeDecode(raw);
-    return decoded.replace(/:$/, "").trim();
+    let decoded = raw;
+    try {
+      decoded = decodeURIComponent(raw);
+    } catch {
+      // ignore
+    }
+    return decoded.replace(/:$/, "");
   })();
+const title = useMemo(() => titleFromSlug(safeSlug), [safeSlug]);
 
-const baseTitle = titleFromSlug(safeSlug);
-const displayTitle = safeSlug === "entrance-circulation" ? "Entrance & Circulation" : baseTitle;
-
-// (por ahora fijo como en la maqueta)
+  // (por ahora fijo como en la maqueta)
   const unitPrice = 800; // €/m²
 
-  const [rooms, setRooms] = useState<Room[]>(() => {
-    if (!safeSlug) return [];
-    const stored = getAreaRooms(safeSlug);
-    if (stored && stored.length > 0) return stored;
-    return [
-      { name: `${displayTitle} 1`, area: 1 },
-      { name: `${displayTitle} 2`, area: 1 },
-      { name: `${displayTitle} 3`, area: 1 },
-    ];
-  });
-// 2) Guardar automáticamente cuando cambian rooms (para no perder datos)
+  const [rooms, setRooms] = useState<Room[]>(() => [
+    { name: `${title} 1`, area: 1 },
+    { name: `${title} 2`, area: 1 },
+    { name: `${title} 3`, area: 1 },
+  ]);
+
+  // Si cambias de /area/[slug], resetea defaults con el nuevo título
   useEffect(() => {
-    if (!safeSlug) return;
-    const label = getSelectedAreaLabel(safeSlug) ?? displayTitle;
-    setAreaRooms(safeSlug, label, rooms);
-  }, [safeSlug, displayTitle, rooms]);
+    setRooms([
+      { name: `${title} 1`, area: 1 },
+      { name: `${title} 2`, area: 1 },
+      { name: `${title} 3`, area: 1 },
+    ]);
+  }, [title]);
 
-  const totalArea = useMemo(() => rooms.reduce((acc, r) => acc + r.area, 0), [rooms]);
+  const totalArea = useMemo(
+    () => rooms.reduce((acc, r) => acc + r.area, 0),
+    [rooms]
+  );
+
   const base = totalArea * unitPrice;
-
-  // placeholders (luego conectamos optionals reales)
   const optionals = 0;
   const total = base + optionals;
 
   const setRoomName = (idx: number, name: string) => {
-    setRooms((prev) => prev.map((r, i) => (i === idx ? { ...r, name } : r)));
+    setRooms((prev) =>
+      prev.map((r, i) => (i === idx ? { ...r, name } : r))
+    );
   };
 
   const incArea = (idx: number) => {
-    setRooms((prev) => prev.map((r, i) => (i === idx ? { ...r, area: r.area + 1 } : r)));
+    setRooms((prev) =>
+      prev.map((r, i) => (i === idx ? { ...r, area: r.area + 1 } : r))
+    );
   };
 
   const decArea = (idx: number) => {
     setRooms((prev) =>
-      prev.map((r, i) => (i === idx ? { ...r, area: Math.max(1, r.area - 1) } : r))
+      prev.map((r, i) =>
+        i === idx ? { ...r, area: Math.max(1, r.area - 1) } : r
+      )
     );
   };
 
@@ -92,20 +90,15 @@ const displayTitle = safeSlug === "entrance-circulation" ? "Entrance & Circulati
   const moreRooms = () => {
     setRooms((prev) => {
       const nextIndex = prev.length + 1;
-      return [...prev, { name: `${displayTitle} ${nextIndex}`, area: 1 }];
+      return [...prev, { name: `${title} ${nextIndex}`, area: 1 }];
     });
   };
-
-  const handleContinue = () => {
-    if (!safeSlug) return;
-    // Ya se guarda en el useEffect, pero por claridad lo dejamos “fluido”
-    router.push(`/optionals/${encodeURIComponent(safeSlug)}/1`);
-  };
+  const displayTitle = safeSlug === "entrance-circulation" ? "Entrance & Circulation" : title;
 
   return (
     <form className={ad.form}>
       <div className={ad.headerRow}>
-        <h1 className={styles.title}>{displayTitle}</h1>
+        <h1 className={styles.title}>{title}</h1>
         <div className={ad.price}>{unitPrice} € / m²</div>
       </div>
 
@@ -115,16 +108,19 @@ const displayTitle = safeSlug === "entrance-circulation" ? "Entrance & Circulati
           <div className={ad.roomBlock} key={`${idx}`}>
             <div className={ad.label}>Name</div>
 
-            <input
+                        <input
               className={ad.nameInput}
-              value={room.name}
+              value={nameOverrides[idx] ?? ""}
               placeholder={`${displayTitle} ${idx + 1}`}
-              onChange={(e) => setRoomName(idx, e.target.value)}
+              onChange={(e) =>
+                setNameOverrides((prev) => ({ ...prev, [idx]: e.target.value }))
+              }
             />
 
             <div className={ad.areaRow}>
               <div className={ad.areaLabel}>Approximate floor area (m²)</div>
 
+              {/* Subido 5px */}
               <div className={ad.qtyControls} aria-label="Area controls">
                 <button
                   type="button"
@@ -169,8 +165,8 @@ const displayTitle = safeSlug === "entrance-circulation" ? "Entrance & Circulati
       </div>
 
       <p className={ad.note}>
-        Next, you&apos;ll select your options—and you can reuse the same setup for other rooms.
-        In the final summary, you can edit, add, or remove rooms.
+        Next, you'll select your options—and you can reuse the same setup for
+        other rooms. In the final summary, you can edit, add, or remove rooms.
       </p>
 
       <div className={ad.summary}>
@@ -192,7 +188,7 @@ const displayTitle = safeSlug === "entrance-circulation" ? "Entrance & Circulati
           Back
         </Link>
 
-        <button type="button" className={ad.actionButton} onClick={handleContinue}>
+        <button type="button" className={ad.actionButton}>
           Continue
         </button>
       </div>

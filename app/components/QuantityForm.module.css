@@ -1,0 +1,149 @@
+.title {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  color: rgb(120, 113, 108);
+  margin: 0 0 10px 0;
+  text-align: left;
+  width: 100%;
+}
+
+.description {
+  margin: 0 0 34px 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(120, 113, 108);
+  opacity: 0.9;
+  text-align: left;
+  width: 100%;
+  max-width: 460px;
+}
+
+.qtyRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 18px 0 38px 0;
+}
+
+.qtyLabel {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  color: rgb(120, 113, 108);
+}
+
+.qtyControls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 0 0 auto;
+}
+
+.qtyBtn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 400;
+  color: rgba(90, 82, 83, 0.75);
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qtyPill {
+  border: 1px solid rgba(90, 82, 83, 0.55);
+  border-radius: 999px;
+  height: 36px;
+  width: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.qtyValue {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  color: rgba(90, 82, 83, 0.75);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.scopeBlock {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.scopeLabel {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  color: rgb(120, 113, 108);
+  margin-bottom: 14px;
+}
+
+.scopeText {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(120, 113, 108);
+  opacity: 0.9;
+  text-align: left;
+  width: 100%;
+  max-width: 520px;
+}
+
+.actionsRow {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 46px;
+}
+
+.actionButton {
+  width: 160px;
+  height: 44px;
+  border-radius: 22px;
+  background: rgb(250, 250, 248);
+  color: rgba(90, 82, 83, 0.55);
+  font-family: "PP Neue Montreal", -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22px;
+  border: none;
+  cursor: pointer;
+  box-shadow: -5px -5px 10px 0 rgba(255, 255, 255, 0.6),
+    5px 5px 10px 0 rgba(217, 217, 217, 0.15),
+    10px 10px 20px 0 rgba(139, 138, 138, 0.2),
+    -10px -10px 20px 0 rgb(255, 255, 255);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease,
+    color 120ms ease;
+  will-change: transform;
+}
+
+
+.actionButton:hover {
+  transform: translateY(-1px);
+}
+
+.actionButton:active {
+  transform: translateY(1px);
+}
