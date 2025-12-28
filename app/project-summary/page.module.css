@@ -11,6 +11,26 @@
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.headerLeft {
+  min-width: 260px;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.logoImg {
+  height: 38px;
+  width: auto;
+  border-radius: 12px;
+  box-shadow: -6px -6px 12px rgba(255, 255, 255, 0.6),
+    6px 6px 12px rgba(217, 217, 217, 0.18);
 }
 
 .title {
@@ -36,12 +56,6 @@
   background: rgba(255, 255, 255, 0.35);
   box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
   color: rgba(90, 82, 83, 0.85);
-}
-
-.headerActions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .grid {
@@ -233,6 +247,84 @@
   box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
 }
 
+.optMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.expandBtn {
+  margin-left: 10px;
+  height: 28px;
+  width: 28px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1;
+  color: rgba(90, 82, 83, 0.85);
+  background: rgba(250, 250, 248, 0.9);
+  box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
+}
+
+.optRowOpen {
+  display: table-row;
+}
+
+.optRowClosed {
+  display: none;
+}
+
+.optCell {
+  padding: 0;
+  border-bottom: 1px solid rgba(90, 82, 83, 0.10);
+}
+
+.optBox {
+  padding: 12px 14px;
+  background: rgba(250, 250, 248, 0.55);
+}
+
+.optTitle {
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  color: rgba(90, 82, 83, 0.85);
+  margin-bottom: 8px;
+}
+
+.optList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.optItem {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.06);
+}
+
+.optLabel {
+  color: rgba(90, 82, 83, 0.85);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+}
+
+.optPrice {
+  color: rgba(90, 82, 83, 0.9);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
 .cardActions {
   display: flex;
   gap: 10px;
@@ -241,8 +333,7 @@
 }
 
 .primaryBtn,
-.secondaryBtn,
-.ghostBtn {
+.secondaryBtn {
   height: 42px;
   padding: 0 16px;
   border-radius: 999px;
@@ -269,22 +360,23 @@
   box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
 }
 
-.ghostBtn {
-  background: transparent;
-  color: rgba(90, 82, 83, 0.75);
-  box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.10);
-}
-
 @media print {
-  .headerActions,
-  .cardActions,
-  .editLink {
+  .expandBtn {
     display: none !important;
+  }
+
+  /* Show optionals rows even if collapsed (so the PDF includes full detail) */
+  .optRowClosed {
+    display: table-row !important;
   }
 
   .page {
     padding: 0;
     max-width: none;
+  }
+
+  .tableWrap {
+    overflow: visible;
   }
 
   .card {
@@ -293,7 +385,7 @@
     border: 1px solid rgba(90, 82, 83, 0.15);
   }
 
-  .table {
-    min-width: 0;
+  .editLink {
+    display: none !important;
   }
 }

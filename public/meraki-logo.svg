@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="44" viewBox="0 0 220 44" role="img" aria-label="Meraki">
+  <rect width="220" height="44" rx="12" fill="white"/>
+  <text x="18" y="30" font-family="Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif"
+        font-size="22" font-weight="600" fill="#5A5253" letter-spacing="-0.3">
+    Meraki
+  </text>
+</svg>

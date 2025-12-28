@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useSyncExternalStore } from "react";
+import Image from "next/image";
+import { useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import {
@@ -28,6 +29,8 @@ function fmtDate(iso?: string) {
   return d.toLocaleDateString("es-ES");
 }
 
+type OptionalLine = { label: string; price: number };
+
 type RoomLine = {
   roomIndex: number;
   name: string;
@@ -36,6 +39,7 @@ type RoomLine = {
   optionals: number;
   subtotal: number;
   optionalsCount: number;
+  optionalsList: OptionalLine[];
   editHref: string;
   isMissingM2: boolean;
 };
@@ -138,8 +142,16 @@ function buildSnapshot(draft: EstimateDraft): Snapshot {
       const roomBase = m2safe * UNIT_PRICE;
 
       const opts = Array.isArray(r?.optionals) ? r.optionals : [];
-      const roomOpts = opts.reduce((acc, o) => acc + (typeof o.price === "number" ? o.price : 0), 0);
+      const roomOpts = opts.reduce((acc, o) => acc + (typeof o?.price === "number" ? o.price : 0), 0);
       const roomOptsCount = opts.length;
+
+      const optionalsList: OptionalLine[] = opts
+        .map((o) => {
+          const label = typeof o?.label === "string" && o.label.trim() ? o.label : "Optional";
+          const price = typeof o?.price === "number" && Number.isFinite(o.price) ? o.price : 0;
+          return { label, price };
+        })
+        .filter((x) => x.label !== "Optional" || x.price !== 0);
 
       optionalsCount += roomOptsCount;
 
@@ -160,6 +172,7 @@ function buildSnapshot(draft: EstimateDraft): Snapshot {
         optionals: roomOpts,
         subtotal: roomSubtotal,
         optionalsCount: roomOptsCount,
+        optionalsList,
         editHref: `/room-summary/${encodeURIComponent(slug)}/${idx}`,
         isMissingM2,
       });
@@ -220,6 +233,8 @@ export default function ProjectSummaryPage() {
   const router = useRouter();
   const snap = useSyncExternalStore(subscribe, getSnapshot, () => EMPTY);
 
+  const [openOpts, setOpenOpts] = useState<Record<string, boolean>>({});
+
   const title = snap.meta?.title || "Estimate";
   const created = fmtDate(snap.meta?.createdAt);
   const updated = fmtDate(snap.meta?.updatedAt);
@@ -240,20 +255,22 @@ export default function ProjectSummaryPage() {
     router.push("/dashboard");
   }
 
+  function toggleOptionals(key: string) {
+    setOpenOpts((m) => ({ ...m, [key]: !m[key] }));
+  }
+
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <div>
+        <div className={styles.headerLeft}>
           <h1 className={styles.title}>Project summary</h1>
           <p className={styles.subtitle}>
             Review scope & totals before exporting. Unit price: <span className={styles.pill}>{UNIT_PRICE} €/m²</span>
           </p>
         </div>
 
-        <div className={styles.headerActions}>
-          <button type="button" className={styles.ghostBtn} onClick={onExportPdf} aria-label="Export to PDF (Print)">
-            Export to PDF
-          </button>
+        <div className={styles.headerRight} aria-label="Meraki logo">
+          <Image className={styles.logoImg} src="/meraki-logo.svg" alt="Meraki" width={220} height={44} priority />
         </div>
       </header>
 
@@ -308,9 +325,7 @@ export default function ProjectSummaryPage() {
                   {a}
                 </div>
               ))}
-              {snap.alerts.length > 12 ? (
-                <div className={styles.muted}>+ {snap.alerts.length - 12} more…</div>
-              ) : null}
+              {snap.alerts.length > 12 ? <div className={styles.muted}>+ {snap.alerts.length - 12} more…</div> : null}
             </div>
           </section>
         ) : null}
@@ -346,22 +361,64 @@ export default function ProjectSummaryPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {a.rooms.map((r) => (
-                        <tr key={r.roomIndex} className={r.isMissingM2 ? styles.rowWarn : undefined}>
-                          <td className={styles.td}>{r.name}</td>
-                          <td className={styles.tdRight}>{r.m2 ? r.m2.toLocaleString("es-ES") : "—"}</td>
-                          <td className={styles.tdRight}>{euro(r.base)}</td>
-                          <td className={styles.tdRight}>
-                            {euro(r.optionals)} <span className={styles.muted}>({r.optionalsCount})</span>
-                          </td>
-                          <td className={styles.tdRight}>{euro(r.subtotal)}</td>
-                          <td className={styles.tdRight}>
-                            <Link className={styles.editLink} href={r.editHref}>
-                              Edit
-                            </Link>
-                          </td>
-                        </tr>
-                      ))}
+                      {a.rooms.map((r) => {
+                        const key = `${a.slug}:${r.roomIndex}`;
+                        const isOpen = !!openOpts[key];
+                        const hasOpts = r.optionalsCount > 0;
+
+                        return (
+                          <>
+                            <tr key={key} className={r.isMissingM2 ? styles.rowWarn : undefined}>
+                              <td className={styles.td}>{r.name}</td>
+                              <td className={styles.tdRight}>{r.m2 ? r.m2.toLocaleString("es-ES") : "—"}</td>
+                              <td className={styles.tdRight}>{euro(r.base)}</td>
+
+                              <td className={styles.tdRight}>
+                                <span className={styles.optMeta}>
+                                  {euro(r.optionals)} <span className={styles.muted}>({r.optionalsCount})</span>
+                                </span>
+
+                                {hasOpts ? (
+                                  <button
+                                    type="button"
+                                    className={styles.expandBtn}
+                                    onClick={() => toggleOptionals(key)}
+                                    aria-expanded={isOpen}
+                                    aria-label={isOpen ? "Hide optionals" : "Show optionals"}
+                                  >
+                                    {isOpen ? "−" : "+"}
+                                  </button>
+                                ) : null}
+                              </td>
+
+                              <td className={styles.tdRight}>{euro(r.subtotal)}</td>
+                              <td className={styles.tdRight}>
+                                <Link className={styles.editLink} href={r.editHref}>
+                                  Edit
+                                </Link>
+                              </td>
+                            </tr>
+
+                            {hasOpts ? (
+                              <tr className={isOpen ? styles.optRowOpen : styles.optRowClosed}>
+                                <td className={styles.optCell} colSpan={6}>
+                                  <div className={styles.optBox} aria-label="Room optionals list">
+                                    <div className={styles.optTitle}>Optionals</div>
+                                    <ul className={styles.optList}>
+                                      {r.optionalsList.map((o, i) => (
+                                        <li key={i} className={styles.optItem}>
+                                          <span className={styles.optLabel}>{o.label}</span>
+                                          <span className={styles.optPrice}>{euro(o.price)}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </td>
+                              </tr>
+                            ) : null}
+                          </>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -382,6 +439,10 @@ export default function ProjectSummaryPage() {
             <Link className={styles.secondaryBtn} href="/select-areas">
               Edit scope
             </Link>
+
+            <button type="button" className={styles.secondaryBtn} onClick={onExportPdf} aria-label="Export to PDF (Print)">
+              Export to PDF
+            </button>
 
             <button
               type="button"
