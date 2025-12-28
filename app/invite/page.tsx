@@ -22,10 +22,7 @@ export default function InvitePage() {
             </Link>
           </div>
 
-          <div className={styles.note}>
-            Next: add tracking / tokens (optional) without changing the link structure.
           </div>
-        </div>
       </div>
     </AuthLayout>
   );
