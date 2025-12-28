@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState, useSyncExternalStore, Fragment } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
+import MerakiLogo from "../components/MerakiLogo";
+
 import {
   ESTIMATES_EVENT,
   finalizeActiveEstimate,
@@ -270,7 +271,7 @@ export default function ProjectSummaryPage() {
         </div>
 
         <div className={styles.headerRight} aria-label="Meraki logo">
-          <Image className={styles.logoImg} src="/meraki-logo.svg" alt="Meraki" width={220} height={44} priority />
+          <MerakiLogo className={styles.logoImg} />
         </div>
       </header>
 

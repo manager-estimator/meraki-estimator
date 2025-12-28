@@ -28,10 +28,9 @@
 .logoImg {
   height: 38px;
   width: auto;
-  border-radius: 12px;
-  box-shadow: -6px -6px 12px rgba(255, 255, 255, 0.6),
-    6px 6px 12px rgba(217, 217, 217, 0.18);
+  display: block;
 }
+
 
 .title {
   color: var(--Principal);
