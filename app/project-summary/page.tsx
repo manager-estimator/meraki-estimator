@@ -1,128 +1,238 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import {
   ESTIMATES_EVENT,
   finalizeActiveEstimate,
   getActiveDraftSnapshot,
+  getActiveEstimateId,
   isActiveEstimateFinalized,
+  listEstimates,
   type EstimateDraft,
+  type EstimateMeta,
 } from "@/lib/estimateDraft";
 
-type SummaryRow = { label: string; value: string };
-
-type Totals = {
-  areas: number;
-  rooms: number;
-  base: number;
-  optionals: number;
-  total: number;
-};
+const UNIT_PRICE = 800; // €/m² (por ahora fijo)
 
 function euro(n: number) {
   return n.toLocaleString("es-ES", { maximumFractionDigits: 0 }) + " €";
 }
 
-const UNIT_PRICE = 800; // €/m² (por ahora fijo)
+function fmtDate(iso?: string) {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "—";
+  return d.toLocaleDateString("es-ES");
+}
 
-// SSR-safe stable reference
-const EMPTY_TOTALS: Totals = { areas: 0, rooms: 0, base: 0, optionals: 0, total: 0 };
+type RoomLine = {
+  roomIndex: number;
+  name: string;
+  m2: number;
+  base: number;
+  optionals: number;
+  subtotal: number;
+  optionalsCount: number;
+  editHref: string;
+  isMissingM2: boolean;
+};
+
+type AreaBlock = {
+  slug: string;
+  label: string;
+  rooms: RoomLine[];
+  base: number;
+  optionals: number;
+  subtotal: number;
+};
+
+type Snapshot = {
+  meta: EstimateMeta | null;
+  resumeHref: string;
+  alreadyFinalized: boolean;
+  totals: {
+    areas: number;
+    rooms: number;
+    m2: number;
+    optionalsCount: number;
+    base: number;
+    optionals: number;
+    total: number;
+  };
+  alerts: string[];
+  areas: AreaBlock[];
+};
+
+const EMPTY: Snapshot = {
+  meta: null,
+  resumeHref: "/select-areas",
+  alreadyFinalized: false,
+  totals: { areas: 0, rooms: 0, m2: 0, optionalsCount: 0, base: 0, optionals: 0, total: 0 },
+  alerts: [],
+  areas: [],
+};
 
 // Cache: important for useSyncExternalStore (must return same reference if unchanged)
 let cachedSig = "";
-let cachedTotals: Totals = EMPTY_TOTALS;
-
-function computeTotals(draft: EstimateDraft): Totals {
-  let rooms = 0;
-  let base = 0;
-  let optionals = 0;
-
-  for (const area of Object.values(draft.areas || {})) {
-    for (const r of area.rooms || []) {
-      rooms += 1;
-      const m2 = typeof r.area === "number" && r.area > 0 ? r.area : 0;
-      base += m2 * UNIT_PRICE;
-
-      const opts = Array.isArray(r.optionals) ? r.optionals : [];
-      optionals += opts.reduce((acc, o) => acc + (typeof o.price === "number" ? o.price : 0), 0);
-    }
-  }
-
-  const total = base + optionals;
-  const areas = (draft.selectedAreas || []).length;
-
-  return { areas, rooms, base, optionals, total };
-}
+let cachedSnap: Snapshot = EMPTY;
 
 function subscribe(onStoreChange: () => void): () => void {
   if (typeof window === "undefined") return () => {};
-
   const handler = () => onStoreChange();
   window.addEventListener("storage", handler);
   window.addEventListener(ESTIMATES_EVENT, handler);
-
   return () => {
     window.removeEventListener("storage", handler);
     window.removeEventListener(ESTIMATES_EVENT, handler);
   };
 }
 
-function getSnapshot(): Totals {
-  if (typeof window === "undefined") return EMPTY_TOTALS;
+function buildSnapshot(draft: EstimateDraft): Snapshot {
+  const index = listEstimates();
+  const activeId = getActiveEstimateId() || index[0]?.id || null;
+  const meta = activeId ? index.find((x) => x.id === activeId) || null : null;
+
+  const resumeHref = meta?.resumeHref || "/select-areas";
+  const alreadyFinalized = typeof window !== "undefined" ? isActiveEstimateFinalized() : false;
+
+  const alerts: string[] = [];
+  const areas: AreaBlock[] = [];
+
+  let rooms = 0;
+  let m2 = 0;
+  let base = 0;
+  let optionals = 0;
+  let optionalsCount = 0;
+
+  // Keep ordering stable using selectedAreas, and fallback to any areas present
+  const selected = Array.isArray(draft.selectedAreas) ? draft.selectedAreas : [];
+  const orderedSlugs = selected.map((a) => a.slug);
+
+  const extraSlugs = Object.keys(draft.areas || {}).filter((s) => !orderedSlugs.includes(s));
+  const slugs = [...orderedSlugs, ...extraSlugs];
+
+  for (const slug of slugs) {
+    const area = (draft.areas || {})[slug];
+    const areaLabel = area?.label || selected.find((x) => x.slug === slug)?.label || slug;
+
+    const roomLines: RoomLine[] = [];
+    let areaBase = 0;
+    let areaOptionals = 0;
+
+    const roomList = Array.isArray(area?.rooms) ? area!.rooms : [];
+
+    roomList.forEach((r, idx) => {
+      rooms += 1;
+
+      const m2raw = typeof r?.area === "number" && Number.isFinite(r.area) ? r.area : 0;
+      const m2safe = m2raw > 0 ? m2raw : 0;
+      const isMissingM2 = !(m2raw > 0);
+
+      if (isMissingM2) {
+        alerts.push(`⚠️ "${areaLabel}" → room #${idx + 1} (${r?.name || "Unnamed"}) tiene m² = 0.`);
+      }
+
+      const roomBase = m2safe * UNIT_PRICE;
+
+      const opts = Array.isArray(r?.optionals) ? r.optionals : [];
+      const roomOpts = opts.reduce((acc, o) => acc + (typeof o.price === "number" ? o.price : 0), 0);
+      const roomOptsCount = opts.length;
+
+      optionalsCount += roomOptsCount;
+
+      const roomSubtotal = roomBase + roomOpts;
+
+      m2 += m2safe;
+      base += roomBase;
+      optionals += roomOpts;
+
+      areaBase += roomBase;
+      areaOptionals += roomOpts;
+
+      roomLines.push({
+        roomIndex: idx,
+        name: r?.name || `Room ${idx + 1}`,
+        m2: m2safe,
+        base: roomBase,
+        optionals: roomOpts,
+        subtotal: roomSubtotal,
+        optionalsCount: roomOptsCount,
+        editHref: `/room-summary/${encodeURIComponent(slug)}/${idx}`,
+        isMissingM2,
+      });
+    });
+
+    const areaSubtotal = areaBase + areaOptionals;
+
+    // Only push if it exists in selected or has rooms (keeps it clean)
+    if (selected.length === 0 ? roomLines.length > 0 : orderedSlugs.includes(slug)) {
+      areas.push({
+        slug,
+        label: areaLabel,
+        rooms: roomLines,
+        base: areaBase,
+        optionals: areaOptionals,
+        subtotal: areaSubtotal,
+      });
+    }
+  }
+
+  const total = base + optionals;
+
+  return {
+    meta,
+    resumeHref,
+    alreadyFinalized,
+    totals: {
+      areas: selected.length || areas.length,
+      rooms,
+      m2,
+      optionalsCount,
+      base,
+      optionals,
+      total,
+    },
+    alerts,
+    areas,
+  };
+}
+
+function getSnapshot(): Snapshot {
+  if (typeof window === "undefined") return EMPTY;
   try {
     const draft = getActiveDraftSnapshot();
 
-    // If draft didn't change, return SAME object reference
-    const sig = JSON.stringify(draft);
-    if (sig === cachedSig) return cachedTotals;
+    const sig = JSON.stringify(draft) + "::" + JSON.stringify(listEstimates());
+    if (sig === cachedSig) return cachedSnap;
 
     cachedSig = sig;
-    cachedTotals = computeTotals(draft);
-    return cachedTotals;
+    cachedSnap = buildSnapshot(draft);
+    return cachedSnap;
   } catch {
-    return EMPTY_TOTALS;
+    return EMPTY;
   }
 }
 
 export default function ProjectSummaryPage() {
   const router = useRouter();
+  const snap = useSyncExternalStore(subscribe, getSnapshot, () => EMPTY);
 
-  // ✅ Stable snapshot (no infinite loop)
-  const tot = useSyncExternalStore(subscribe, getSnapshot, () => EMPTY_TOTALS);
-
-  const alreadyFinalized = typeof window !== "undefined" ? isActiveEstimateFinalized() : false;
-
-  const project: SummaryRow[] = useMemo(
-    () => [
-      { label: "Project name", value: "Meraki Estimator Project" },
-      { label: "Client", value: "—" },
-      { label: "Created", value: new Date().toLocaleDateString() },
-    ],
-    []
-  );
-
-  const totals: SummaryRow[] = useMemo(
-    () => [
-      { label: "Areas", value: String(tot.areas) },
-      { label: "Rooms", value: String(tot.rooms) },
-      { label: "Base", value: euro(tot.base) },
-      { label: "Optionals", value: euro(tot.optionals) },
-      { label: "Estimated total", value: euro(tot.total) },
-    ],
-    [tot]
-  );
+  const title = snap.meta?.title || "Estimate";
+  const created = fmtDate(snap.meta?.createdAt);
+  const updated = fmtDate(snap.meta?.updatedAt);
 
   function finalizeWithTotal() {
-    if (alreadyFinalized) return;
-    finalizeActiveEstimate({ total: euro(tot.total) });
+    if (snap.alreadyFinalized) return;
+    finalizeActiveEstimate({ total: euro(snap.totals.total) });
   }
 
   function onExportPdf() {
     finalizeWithTotal();
-    window.print();
+    // Give the browser a tick so the UI is stable before printing
+    setTimeout(() => window.print(), 0);
   }
 
   function onSaveAndGoDashboard() {
@@ -135,16 +245,13 @@ export default function ProjectSummaryPage() {
       <header className={styles.header}>
         <div>
           <h1 className={styles.title}>Project summary</h1>
-          <p className={styles.subtitle}>Review everything before exporting to PDF or going back to adjust scope.</p>
+          <p className={styles.subtitle}>
+            Review scope & totals before exporting. Unit price: <span className={styles.pill}>{UNIT_PRICE} €/m²</span>
+          </p>
         </div>
 
         <div className={styles.headerActions}>
-          <button
-            type="button"
-            className={styles.ghostBtn}
-            onClick={onExportPdf}
-            aria-label="Export to PDF (Print)"
-          >
+          <button type="button" className={styles.ghostBtn} onClick={onExportPdf} aria-label="Export to PDF (Print)">
             Export to PDF
           </button>
         </div>
@@ -154,34 +261,126 @@ export default function ProjectSummaryPage() {
         <section className={styles.card}>
           <h2 className={styles.cardTitle}>Project</h2>
           <div className={styles.kvList}>
-            {project.map((r) => (
-              <div key={r.label} className={styles.kvRow}>
-                <div className={styles.kvLabel}>{r.label}</div>
-                <div className={styles.kvValue}>{r.value}</div>
-              </div>
-            ))}
+            <div className={styles.kvRow}>
+              <div className={styles.kvLabel}>Title</div>
+              <div className={styles.kvValue}>{title}</div>
+            </div>
+            <div className={styles.kvRow}>
+              <div className={styles.kvLabel}>Created</div>
+              <div className={styles.kvValue}>{created}</div>
+            </div>
+            <div className={styles.kvRow}>
+              <div className={styles.kvLabel}>Updated</div>
+              <div className={styles.kvValue}>{updated}</div>
+            </div>
           </div>
         </section>
 
         <section className={styles.card}>
           <h2 className={styles.cardTitle}>Totals</h2>
+
+          <div className={styles.totalBig}>{euro(snap.totals.total)}</div>
+          <div className={styles.kpiRow}>
+            <div className={styles.kpiPill}>{snap.totals.areas} areas</div>
+            <div className={styles.kpiPill}>{snap.totals.rooms} rooms</div>
+            <div className={styles.kpiPill}>{snap.totals.m2.toLocaleString("es-ES")} m²</div>
+            <div className={styles.kpiPill}>{snap.totals.optionalsCount} optionals</div>
+          </div>
+
           <div className={styles.kvList}>
-            {totals.map((r) => (
-              <div key={r.label} className={styles.kvRow}>
-                <div className={styles.kvLabel}>{r.label}</div>
-                <div className={styles.kvValue}>{r.value}</div>
-              </div>
-            ))}
+            <div className={styles.kvRow}>
+              <div className={styles.kvLabel}>Base (m² × {UNIT_PRICE})</div>
+              <div className={styles.kvValue}>{euro(snap.totals.base)}</div>
+            </div>
+            <div className={styles.kvRow}>
+              <div className={styles.kvLabel}>Optionals</div>
+              <div className={styles.kvValue}>{euro(snap.totals.optionals)}</div>
+            </div>
           </div>
         </section>
 
-        <section className={styles.card}>
+        {snap.alerts.length > 0 ? (
+          <section className={`${styles.card} ${styles.span2}`}>
+            <h2 className={styles.cardTitle}>Checks</h2>
+            <div className={styles.alertBox}>
+              {snap.alerts.slice(0, 12).map((a, i) => (
+                <div key={i} className={styles.alertItem}>
+                  {a}
+                </div>
+              ))}
+              {snap.alerts.length > 12 ? (
+                <div className={styles.muted}>+ {snap.alerts.length - 12} more…</div>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
+
+        <section className={`${styles.card} ${styles.span2}`}>
+          <h2 className={styles.cardTitle}>Breakdown</h2>
+
+          {snap.areas.length === 0 ? (
+            <p className={styles.muted}>No rooms yet. Go back to scope to add areas and rooms.</p>
+          ) : (
+            snap.areas.map((a) => (
+              <div key={a.slug} className={styles.areaBlock}>
+                <div className={styles.areaHeader}>
+                  <div>
+                    <div className={styles.areaTitle}>{a.label}</div>
+                    <div className={styles.areaSub}>
+                      {a.rooms.length} rooms · base {euro(a.base)} · optionals {euro(a.optionals)}
+                    </div>
+                  </div>
+                  <div className={styles.areaTotal}>{euro(a.subtotal)}</div>
+                </div>
+
+                <div className={styles.tableWrap}>
+                  <table className={styles.table}>
+                    <thead>
+                      <tr>
+                        <th className={styles.th}>Room</th>
+                        <th className={styles.thRight}>m²</th>
+                        <th className={styles.thRight}>Base</th>
+                        <th className={styles.thRight}>Optionals</th>
+                        <th className={styles.thRight}>Subtotal</th>
+                        <th className={styles.thRight}>Edit</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {a.rooms.map((r) => (
+                        <tr key={r.roomIndex} className={r.isMissingM2 ? styles.rowWarn : undefined}>
+                          <td className={styles.td}>{r.name}</td>
+                          <td className={styles.tdRight}>{r.m2 ? r.m2.toLocaleString("es-ES") : "—"}</td>
+                          <td className={styles.tdRight}>{euro(r.base)}</td>
+                          <td className={styles.tdRight}>
+                            {euro(r.optionals)} <span className={styles.muted}>({r.optionalsCount})</span>
+                          </td>
+                          <td className={styles.tdRight}>{euro(r.subtotal)}</td>
+                          <td className={styles.tdRight}>
+                            <Link className={styles.editLink} href={r.editHref}>
+                              Edit
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))
+          )}
+        </section>
+
+        <section className={`${styles.card} ${styles.span2}`}>
           <h2 className={styles.cardTitle}>Next</h2>
           <p className={styles.muted}>If everything looks good, export to PDF or save to dashboard.</p>
 
           <div className={styles.cardActions}>
+            <Link className={styles.secondaryBtn} href={snap.resumeHref || "/select-areas"}>
+              Back
+            </Link>
+
             <Link className={styles.secondaryBtn} href="/select-areas">
-              Back to scope
+              Edit scope
             </Link>
 
             <button
@@ -190,7 +389,7 @@ export default function ProjectSummaryPage() {
               onClick={onSaveAndGoDashboard}
               aria-label="Finalize and go to dashboard"
             >
-              {alreadyFinalized ? "Go to dashboard" : "Save to dashboard"}
+              {snap.alreadyFinalized ? "Go to dashboard" : "Save to dashboard"}
             </button>
           </div>
         </section>
