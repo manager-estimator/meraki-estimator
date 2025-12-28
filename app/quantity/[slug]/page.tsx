@@ -19,7 +19,7 @@ export default async function QuantityPage({
 
   return (
     <AuthLayout>
-      <QuantityForm slug={cleanSlug} />
+      <QuantityForm key={cleanSlug} slug={cleanSlug} />
     </AuthLayout>
   );
 }

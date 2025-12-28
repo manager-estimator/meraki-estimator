@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState} from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./OptionalsForm.module.css";
-import { getAreaRooms, getSelectedAreaLabel } from "../../lib/estimateDraft";
+import { getAreaRooms, getSelectedAreaLabel, setAreaRooms, type DraftRoomOptional } from "../../lib/estimateDraft";
+import { useFinalizedGuard } from "./useFinalizedGuard";
 
 type Opt = {
   id: string;
@@ -20,8 +21,10 @@ function titleFromSlug(slug: string) {
 }
 
 function euro(n: number) {
-  return n.toLocaleString("es-ES") + " €";
+  return n.toLocaleString("es-ES", { maximumFractionDigits: 0 }) + " €";
 }
+
+const UNIT_PRICE = 800; // €/m² (por ahora fijo)
 
 export default function OptionalsForm({
   slug,
@@ -31,12 +34,16 @@ export default function OptionalsForm({
   roomIndex?: string;
 }) {
   const router = useRouter();
+  useFinalizedGuard();
 
   const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
   const areaLabel = getSelectedAreaLabel(slug) ?? fallbackLabel;
-const rooms = getAreaRooms(slug);
-const idx = Math.max(0, (parseInt(roomIndex, 10) || 1) - 1);
-  const roomName = rooms[idx]?.name ?? `${areaLabel} ${idx + 1}`;
+
+  const rooms = getAreaRooms(slug);
+  const idx = Math.max(0, (parseInt(roomIndex, 10) || 1) - 1);
+  const room = rooms[idx];
+  const roomName = room?.name ?? `${areaLabel} ${idx + 1}`;
+  const roomArea = typeof room?.area === "number" && room.area > 0 ? room.area : 1;
 
   const options: Opt[] = useMemo(
     () => [
@@ -50,12 +57,35 @@ const idx = Math.max(0, (parseInt(roomIndex, 10) || 1) - 1);
     []
   );
 
-  const [selected, setSelected] = useState<string | null>(null);
+  // Leer selección guardada (category = "floorings")
+  const saved = room?.optionals?.find((o) => o.category === "floorings");
+  const [selected, setSelected] = useState<string | null>(saved?.id ?? null);
 
-  // Placeholder (luego lo conectamos con el total real)
-  const base = 16000;
+  const base = roomArea * UNIT_PRICE;
   const optionals = selected ? (options.find((o) => o.id === selected)?.price ?? 0) : 0;
   const total = base + optionals;
+
+  function persist(nextSelected: string | null) {
+    const curRooms = getAreaRooms(slug);
+    const nextRooms = curRooms.map((r, i) => {
+      if (i !== idx) return r;
+
+      const prevOpts = Array.isArray(r.optionals) ? r.optionals : [];
+      const withoutFloorings = prevOpts.filter((o) => o.category !== "floorings");
+
+      if (!nextSelected) {
+        return { ...r, optionals: withoutFloorings };
+      }
+
+      const opt = options.find((o) => o.id === nextSelected);
+      if (!opt) return { ...r, optionals: withoutFloorings };
+
+      const nextOpt: DraftRoomOptional = { category: "floorings", id: opt.id, label: opt.label, price: opt.price };
+      return { ...r, optionals: [...withoutFloorings, nextOpt] };
+    });
+
+    setAreaRooms(slug, areaLabel, nextRooms);
+  }
 
   return (
     <div className={styles.wrap}>
@@ -72,7 +102,11 @@ const idx = Math.max(0, (parseInt(roomIndex, 10) || 1) - 1);
               key={opt.id}
               type="button"
               className={`${styles.card} ${isSel ? styles.cardSelected : ""}`}
-              onClick={() => setSelected(isSel ? null : opt.id)}
+              onClick={() => {
+                const next = isSel ? null : opt.id;
+                setSelected(next);
+                persist(next);
+              }}
             >
               <div
                 className={styles.cardImage}
@@ -93,7 +127,7 @@ const idx = Math.max(0, (parseInt(roomIndex, 10) || 1) - 1);
         <div className={styles.summaryLeft}>
           <div>Base</div>
           <div>Optionals</div>
-          <div>Total of project</div>
+          <div>Total of room</div>
         </div>
         <div className={styles.summaryRight}>
           <div>{euro(base)}</div>
@@ -107,15 +141,7 @@ const idx = Math.max(0, (parseInt(roomIndex, 10) || 1) - 1);
           Back
         </button>
 
-        <button type="button" className={styles.skipBtn}>
-          Skip
-        </button>
-
-        <button
-          type="button"
-          className={styles.continueBtn}
-          onClick={() => router.push(`/room-summary/${slug}/${roomIndex}`)}
-        >
+        <button type="button" className={styles.continueBtn} onClick={() => router.push(`/room-summary/${slug}/${roomIndex}`)}>
           Continue
         </button>
       </div>

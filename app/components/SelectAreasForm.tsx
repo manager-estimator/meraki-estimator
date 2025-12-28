@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import styles from "../page.module.css";
 import sa from "./SelectAreasForm.module.css";
 import { setSelectedAreas, type SelectedArea } from "../../lib/estimateDraft";
+import { useFinalizedGuard } from "./useFinalizedGuard";
 
 const AREAS = [
   "Entrance & Circulation",
@@ -42,7 +43,8 @@ const AREA_META = [
 
 export default function SelectAreasForm() {
   const router = useRouter();
-  const [selected, setSelected] = useState<string[]>([]);
+  useFinalizedGuard();
+const [selected, setSelected] = useState<string[]>([]);
 
   const mainAreas = useMemo(() => AREAS.slice(0, -1), []);
   const fullRenovation = useMemo(() => AREAS[AREAS.length - 1], []);

@@ -5,12 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import styles from "../page.module.css";
 import ad from "./AreaDetailsForm.module.css";
-import { getAreaRooms, getSelectedAreaLabel, setAreaRooms } from "../../lib/estimateDraft";
+import { DraftRoom, getAreaRooms, getSelectedAreaLabel, setAreaRooms } from "../../lib/estimateDraft";
+import { useFinalizedGuard } from "./useFinalizedGuard";
 
-type Room = {
-  name: string;
-  area: number; // m²
-};
+type Room = DraftRoom;
 
 function titleFromSlug(slug: string) {
   const s = (slug || "").trim();
@@ -34,8 +32,8 @@ function safeDecode(input: string) {
 
 export default function AreaDetailsForm({ slug }: { slug?: string }) {
   const router = useRouter();
-
-  const safeSlug = (() => {
+  useFinalizedGuard();
+const safeSlug = (() => {
     const raw = (slug ?? "").trim();
     const decoded = safeDecode(raw);
     return decoded.replace(/:$/, "").trim();
@@ -47,19 +45,19 @@ const displayTitle = safeSlug === "entrance-circulation" ? "Entrance & Circulati
 // (por ahora fijo como en la maqueta)
   const unitPrice = 800; // €/m²
 
+  // Init (client): leemos storage en el initializer para arrancar con rooms reales
+  // y evitar setState dentro de useEffect (pasa lint y evita pisar qty).
   const [rooms, setRooms] = useState<Room[]>(() => {
     if (!safeSlug) return [];
     const stored = getAreaRooms(safeSlug);
     if (stored && stored.length > 0) return stored;
-    return [
-      { name: `${displayTitle} 1`, area: 1 },
-      { name: `${displayTitle} 2`, area: 1 },
-      { name: `${displayTitle} 3`, area: 1 },
-    ];
+    return [{ name: `${displayTitle} 1`, area: 1, optionals: [] }];
   });
-// 2) Guardar automáticamente cuando cambian rooms (para no perder datos)
+// Guardar automáticamente cuando cambian rooms (para no perder datos)
   useEffect(() => {
     if (!safeSlug) return;
+    if (!rooms || rooms.length === 0) return;
+
     const label = getSelectedAreaLabel(safeSlug) ?? displayTitle;
     setAreaRooms(safeSlug, label, rooms);
   }, [safeSlug, displayTitle, rooms]);
@@ -92,7 +90,7 @@ const displayTitle = safeSlug === "entrance-circulation" ? "Entrance & Circulati
   const moreRooms = () => {
     setRooms((prev) => {
       const nextIndex = prev.length + 1;
-      return [...prev, { name: `${displayTitle} ${nextIndex}`, area: 1 }];
+      return [...prev, { name: `${displayTitle} ${nextIndex}`, area: 1, optionals: [] }];
     });
   };
 
@@ -188,7 +186,7 @@ const displayTitle = safeSlug === "entrance-circulation" ? "Entrance & Circulati
       </div>
 
       <div className={ad.actionsRow}>
-        <Link className={ad.actionButton} href="/select-areas">
+        <Link className={ad.actionButton} href={`/quantity/${encodeURIComponent(safeSlug || "")}`}>
           Back
         </Link>
 

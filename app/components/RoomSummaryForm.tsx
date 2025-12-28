@@ -1,15 +1,10 @@
 "use client";
 
-import { useMemo, useState} from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./RoomSummaryForm.module.css";
-import { getAreaRooms, getNextSelectedAreaSlug, getSelectedAreaLabel } from "../../lib/estimateDraft";
-
-type Line = {
-  id: string;
-  label: string;
-  price: number;
-};
+import { getAreaRooms, getNextSelectedAreaSlug, getSelectedAreaLabel, setAreaRooms, type DraftRoomOptional } from "../../lib/estimateDraft";
+import { useFinalizedGuard } from "./useFinalizedGuard";
 
 function titleFromSlug(slug: string) {
   if (!slug) return "";
@@ -19,8 +14,10 @@ function titleFromSlug(slug: string) {
 }
 
 function euro(n: number) {
-  return n.toLocaleString("es-ES") + " €";
+  return n.toLocaleString("es-ES", { maximumFractionDigits: 0 }) + " €";
 }
+
+const UNIT_PRICE = 800; // €/m² (por ahora fijo)
 
 export default function RoomSummaryForm({
   slug,
@@ -30,40 +27,71 @@ export default function RoomSummaryForm({
   roomIndex: string;
 }) {
   const router = useRouter();
+  useFinalizedGuard();
 
   const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
   const areaLabel = getSelectedAreaLabel(slug) ?? fallbackLabel;
-const rooms = getAreaRooms(slug);
-const cur = parseInt(roomIndex, 10) || 1;
+
+  const rooms = getAreaRooms(slug);
+  const cur = parseInt(roomIndex, 10) || 1;
   const idx = Math.max(0, cur - 1);
-  const roomName = rooms[idx]?.name ?? `${areaLabel} ${cur}`;
+
+  const room = rooms[idx];
+  const roomName = room?.name ?? `${areaLabel} ${cur}`;
   const roomCount = rooms.length > 0 ? rooms.length : 1;
 
-  // Mock (luego lo conectamos a estado real)
-  const base = 16000;
-  const chosen: Line[] = useMemo(
-    () => [
-      { id: "l1", label: "Floorings · Porcelanic", price: 1000 },
-      { id: "l2", label: "Walls · Microcement", price: 1100 },
-    ],
-    []
-  );
+  const roomArea = typeof room?.area === "number" && room.area > 0 ? room.area : 1;
+  const base = roomArea * UNIT_PRICE;
 
-  const optionals = chosen.reduce((acc, x) => acc + x.price, 0);
+  const chosen: DraftRoomOptional[] = Array.isArray(room?.optionals) ? room!.optionals! : [];
+  const optionals = chosen.reduce((acc, x) => acc + (typeof x.price === "number" ? x.price : 0), 0);
   const total = base + optionals;
 
   // Reuse pills: todas las rooms excepto la actual
-  const reuseTargets = useMemo(() => {
-    const all = Array.from({ length: roomCount }, (_, i) => String(i + 1));
-    return all.filter((k) => k !== String(cur));
-  }, [roomCount, cur]);
+  const reuseTargets: string[] = [];
+  for (let i = 1; i <= roomCount; i++) {
+    if (i !== cur) reuseTargets.push(String(i));
+  }
 
-  const [reuse, setReuse] = useState<Record<string, boolean>>({});
+const [reuse, setReuse] = useState<Record<string, boolean>>({});
   const toggleReuse = (k: string) => setReuse((prev) => ({ ...prev, [k]: !prev[k] }));
 
+  function applyReuseIfNeeded() {
+    const keys = Object.entries(reuse).filter(([, v]) => v).map(([k]) => k);
+    if (keys.length === 0) return;
+
+    const curRooms = getAreaRooms(slug);
+    const nextRooms = curRooms.map((r, i) => {
+      const roomNo = i + 1;
+      if (roomNo === cur) return r;
+      if (!keys.includes(String(roomNo))) return r;
+
+      const hasAny = Array.isArray(r.optionals) && r.optionals.length > 0;
+      // “Apply to other empty rooms” => solo si está vacío
+      if (hasAny) return r;
+
+      return { ...r, optionals: chosen.map((o) => ({ ...o })) };
+    });
+
+    setAreaRooms(slug, areaLabel, nextRooms);
+  }
+
   const handleContinue = () => {
+    applyReuseIfNeeded();
+
     if (cur < roomCount) {
-      router.push(`/optionals/${slug}/${cur + 1}`);
+      const nextNo = cur + 1;
+
+      // After reuse, if the next room already has optionals, skip optionals selection step.
+      const updatedRooms = getAreaRooms(slug);
+      const nextRoom = updatedRooms[nextNo - 1];
+      const nextHasOptionals = Array.isArray(nextRoom?.optionals) && nextRoom.optionals.length > 0;
+
+      router.push(
+        nextHasOptionals
+          ? `/room-summary/${encodeURIComponent(slug)}/${nextNo}`
+          : `/optionals/${encodeURIComponent(slug)}/${nextNo}`
+      );
       return;
     }
     const nextArea = getNextSelectedAreaSlug(slug);
@@ -86,12 +114,21 @@ const cur = parseInt(roomIndex, 10) || 1;
           <div className={styles.bigBoxTitle}>Selected optionals</div>
 
           <div className={styles.list} role="list">
-            {chosen.map((x) => (
-              <div key={x.id} className={styles.row} role="listitem">
-                <div className={styles.rowLabel}>{x.label}</div>
-                <div className={styles.rowPrice}>{euro(x.price)}</div>
+            {chosen.length === 0 ? (
+              <div className={styles.row} role="listitem">
+                <div className={styles.rowLabel}>—</div>
+                <div className={styles.rowPrice}>—</div>
               </div>
-            ))}
+            ) : (
+              chosen.map((x) => (
+                <div key={`${x.category}:${x.id}`} className={styles.row} role="listitem">
+                  <div className={styles.rowLabel}>
+                    {x.category} · {x.label}
+                  </div>
+                  <div className={styles.rowPrice}>{euro(x.price)}</div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -100,7 +137,7 @@ const cur = parseInt(roomIndex, 10) || 1;
             <div className={styles.summaryLeft}>
               <div>Base</div>
               <div>Optionals</div>
-              <div>Total of project</div>
+              <div>Total of room</div>
             </div>
             <div className={styles.summaryRight}>
               <div>{euro(base)}</div>
@@ -136,10 +173,6 @@ const cur = parseInt(roomIndex, 10) || 1;
           onClick={() => router.push(`/optionals/${slug}/${roomIndex}`)}
         >
           Back
-        </button>
-
-        <button type="button" className={styles.skipBtn}>
-          Skip
         </button>
 
         <button type="button" className={styles.continueBtn} onClick={handleContinue}>

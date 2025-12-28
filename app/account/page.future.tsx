@@ -15,7 +15,7 @@ export default function AccountPage() {
     []
   );
 
-  const sharePath = "/login";
+  const sharePath = "/invite";
 
   function getShareUrl(): string {
     // No dependemos de esto para el render SSR → solo para clicks
