@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore, Fragment } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import {
@@ -367,8 +367,8 @@ export default function ProjectSummaryPage() {
                         const hasOpts = r.optionalsCount > 0;
 
                         return (
-                          <>
-                            <tr key={key} className={r.isMissingM2 ? styles.rowWarn : undefined}>
+                          <Fragment key={key}>
+                            <tr className={r.isMissingM2 ? styles.rowWarn : undefined}>
                               <td className={styles.td}>{r.name}</td>
                               <td className={styles.tdRight}>{r.m2 ? r.m2.toLocaleString("es-ES") : "—"}</td>
                               <td className={styles.tdRight}>{euro(r.base)}</td>
@@ -416,7 +416,7 @@ export default function ProjectSummaryPage() {
                                 </td>
                               </tr>
                             ) : null}
-                          </>
+                          </Fragment>
                         );
                       })}
                     </tbody>
