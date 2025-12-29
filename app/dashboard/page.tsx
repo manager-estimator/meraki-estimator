@@ -87,8 +87,7 @@ export default function DashboardPage() {
       <div className={styles.shell}>
         <div className={styles.grid}>
           <main className={styles.main}>
-            <div className={styles.content}>
-              <div className={styles.headerRow}>
+            <div className={styles.headerRow}>
               <h1 className={styles.title}>Welcome</h1>
               <button type="button" className={styles.cta} onClick={onNewEstimate}>
                 New estimate
@@ -123,7 +122,13 @@ export default function DashboardPage() {
                     ))
                   )}
                 </div>
-</section>
+
+                <div className={styles.cardFooter}>
+                  <div className={styles.cardHint}>
+                    Drafts are stored per project. New estimate creates a new project ID (so qty won’t reset unexpectedly).
+                  </div>
+                </div>
+              </section>
 
               {/* FINALIZED */}
               <section className={styles.card}>
@@ -155,8 +160,11 @@ export default function DashboardPage() {
                     ))
                   )}
                 </div>
-</section>
-            </div>
+
+                <div className={styles.cardFooter}>
+                  <div className={styles.cardHint}>Finalized items must not be editable (UI + permissions).</div>
+                </div>
+              </section>
             </div>
           </main>
         </div>
