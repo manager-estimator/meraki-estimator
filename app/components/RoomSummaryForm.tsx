@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./RoomSummaryForm.module.css";
 import { getAreaRooms, getNextSelectedAreaSlug, getSelectedAreaLabel, setAreaRooms, type DraftRoomOptional } from "../../lib/estimateDraft";
 import { useFinalizedGuard } from "./useFinalizedGuard";
@@ -29,7 +29,14 @@ export default function RoomSummaryForm({
   useFinalizedGuard();
 
   
-  const safeSlug = (slug ?? "").trim().replace(/:$/, "");
+  
+
+  const searchParams = useSearchParams();
+  const from = searchParams?.get("from");
+  const returnTo = searchParams?.get("returnTo") || "/project-summary";
+  const isEdit = from === "edit";
+  const qs = isEdit ? `?from=edit&returnTo=${encodeURIComponent(returnTo)}` : "";
+const safeSlug = (slug ?? "").trim().replace(/:$/, "");
 const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
   const areaLabel = getSelectedAreaLabel(safeSlug) ?? fallbackLabel;
 
@@ -78,7 +85,13 @@ const [reuse, setReuse] = useState<Record<string, boolean>>({});
   }
 
   const handleContinue = () => {
-    applyReuseIfNeeded();
+    
+    if (isEdit) {
+      router.push(returnTo);
+      return;
+    }
+
+applyReuseIfNeeded();
 
     if (cur < roomCount) {
       const nextNo = cur + 1;
@@ -171,7 +184,7 @@ const [reuse, setReuse] = useState<Record<string, boolean>>({});
         <button
           type="button"
           className={styles.backBtn}
-          onClick={() => router.push(`/optionals/${slug}/${roomIndex}`)}
+          onClick={() => router.push(`/optionals/${encodeURIComponent(slug)}/${roomIndex}${qs}`)}
         >
           Back
         </button>

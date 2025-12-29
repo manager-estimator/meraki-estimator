@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./OptionalsForm.module.css";
 import { getAreaRooms, getSelectedAreaLabel, setAreaRooms, type DraftRoomOptional } from "../../lib/estimateDraft";
 import { useFinalizedGuard } from "./useFinalizedGuard";
@@ -36,7 +36,14 @@ export default function OptionalsForm({
   useFinalizedGuard();
 
   
-  const safeSlug = (slug ?? "").trim().replace(/:$/, "");
+  
+
+  const searchParams = useSearchParams();
+  const from = searchParams?.get("from");
+  const returnTo = searchParams?.get("returnTo") || "/project-summary";
+  const isEdit = from === "edit";
+  const qs = isEdit ? `?from=edit&returnTo=${encodeURIComponent(returnTo)}` : "";
+const safeSlug = (slug ?? "").trim().replace(/:$/, "");
 const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
   const areaLabel = getSelectedAreaLabel(safeSlug) ?? fallbackLabel;
 
@@ -138,11 +145,11 @@ const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
       </div>
 
       <div className={styles.actions}>
-        <button type="button" className={styles.backBtn} onClick={() => router.push(`/area/${encodeURIComponent(safeSlug)}`)}>
+        <button type="button" className={styles.backBtn} onClick={() => router.push(isEdit ? returnTo : `/area/${encodeURIComponent(safeSlug)}`)}>
           Back
         </button>
 
-        <button type="button" className={styles.continueBtn} onClick={() => router.push(`/room-summary/${encodeURIComponent(safeSlug)}/${roomIndex}`)}>
+        <button type="button" className={styles.continueBtn} onClick={() => router.push(`/room-summary/${encodeURIComponent(safeSlug)}/${roomIndex}${qs}`)}>
           Continue
         </button>
       </div>
