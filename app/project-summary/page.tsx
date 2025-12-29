@@ -29,7 +29,7 @@ function fmtDate(iso?: string) {
   return d.toLocaleDateString("es-ES");
 }
 
-type OptionalLine = { label: string; price: number };
+type OptionalLine = { category: string; label: string; price: number; editHref: string };
 
 type RoomLine = {
   roomIndex: number;
@@ -149,7 +149,9 @@ function buildSnapshot(draft: EstimateDraft): Snapshot {
         .map((o) => {
           const label = typeof o?.label === "string" && o.label.trim() ? o.label : "Optional";
           const price = typeof o?.price === "number" && Number.isFinite(o.price) ? o.price : 0;
-          return { label, price };
+          const category = typeof o?.category === "string" && o.category.trim() ? o.category : "floorings";
+          const editHref = `/optionals/${encodeURIComponent(slug)}/${idx + 1}?from=edit&returnTo=%2Fproject-summary&cat=${encodeURIComponent(category)}`;
+          return { category, label, price, editHref };
         })
         .filter((x) => x.label !== "Optional" || x.price !== 0);
 
@@ -417,8 +419,8 @@ export default function ProjectSummaryPage() {
                                     <ul className={styles.optList}>
                                       {r.optionalsList.map((o, i) => (
                                         <li key={i} className={styles.optItem}>
-                                          <span className={styles.optLabel}>{o.label}</span>
-                                          <span className={styles.optPrice}>{euro(o.price)}</span>
+                                          <span className={styles.optLabel}>{o.category} · {o.label}</span>
+                                          <span className={styles.optPrice}>{euro(o.price)}</span>{" "}<Link className={styles.editLink} href={o.editHref}>Edit</Link>
                                         </li>
                                       ))}
                                     </ul>

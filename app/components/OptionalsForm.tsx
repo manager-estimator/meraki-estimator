@@ -39,7 +39,10 @@ export default function OptionalsForm({
   
 
   const searchParams = useSearchParams();
-  const from = searchParams?.get("from");
+  
+  const catRaw = searchParams?.get("cat") || "floorings";
+  const category = (catRaw || "floorings").trim();
+const from = searchParams?.get("from");
   const returnTo = searchParams?.get("returnTo") || "/project-summary";
   const isEdit = from === "edit";
   const qs = isEdit ? `?from=edit&returnTo=${encodeURIComponent(returnTo)}` : "";
@@ -66,8 +69,8 @@ const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
   );
 
   // Leer selección guardada (category = "floorings")
-  const saved = room?.optionals?.find((o) => o.category === "floorings");
-  const [selected, setSelected] = useState<string | null>(saved?.id ?? null);
+  const saved = room?.optionals?.find((o) => o.category === category);
+const [selected, setSelected] = useState<string | null>(saved?.id ?? null);
 
   const base = roomArea * unitPriceForSlug(safeSlug);
   const optionals = selected ? (options.find((o) => o.id === selected)?.price ?? 0) : 0;
@@ -79,17 +82,16 @@ const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
       if (i !== idx) return r;
 
       const prevOpts = Array.isArray(r.optionals) ? r.optionals : [];
-      const withoutFloorings = prevOpts.filter((o) => o.category !== "floorings");
-
-      if (!nextSelected) {
-        return { ...r, optionals: withoutFloorings };
+      const withoutThisCategory = prevOpts.filter((o) => o.category !== category);
+if (!nextSelected) {
+        return { ...r, optionals: withoutThisCategory };
       }
 
       const opt = options.find((o) => o.id === nextSelected);
-      if (!opt) return { ...r, optionals: withoutFloorings };
+      if (!opt) return { ...r, optionals: withoutThisCategory };
 
-      const nextOpt: DraftRoomOptional = { category: "floorings", id: opt.id, label: opt.label, price: opt.price };
-      return { ...r, optionals: [...withoutFloorings, nextOpt] };
+      const nextOpt: DraftRoomOptional = { category, id: opt.id, label: opt.label, price: opt.price };
+      return { ...r, optionals: [...withoutThisCategory, nextOpt] };
     });
 
     setAreaRooms(slug, areaLabel, nextRooms);
@@ -99,7 +101,7 @@ const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
     <div className={styles.wrap}>
       <div className={styles.header}>
         <div className={styles.title}>{roomName} (Optionals)</div>
-        <div className={styles.subtitle}>Floorings</div>
+        <div className={styles.subtitle}>{category}</div>
       </div>
 
       <div className={styles.grid}>
@@ -146,7 +148,7 @@ const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
 
       <div className={styles.actions}>
         <button type="button" className={styles.backBtn} onClick={() => router.push(isEdit ? returnTo : `/area/${encodeURIComponent(safeSlug)}`)}>
-          Back
+          {isEdit ? "Back to Project" : "Back"}
         </button>
 
         <button type="button" className={styles.continueBtn} onClick={() => router.push(`/room-summary/${encodeURIComponent(safeSlug)}/${roomIndex}${qs}`)}>

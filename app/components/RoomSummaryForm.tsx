@@ -186,7 +186,7 @@ applyReuseIfNeeded();
           className={styles.backBtn}
           onClick={() => router.push(`/optionals/${encodeURIComponent(slug)}/${roomIndex}${qs}`)}
         >
-          Back
+          {isEdit ? "Back to Project" : "Back"}
         </button>
 
         <button type="button" className={styles.continueBtn} onClick={handleContinue}>
