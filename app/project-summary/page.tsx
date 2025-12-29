@@ -165,7 +165,7 @@ function buildSnapshot(draft: EstimateDraft): Snapshot {
       areaOptionals += roomOpts;
 
       roomLines.push({
-        roomIndex: idx,
+        roomIndex: idx + 1,
         name: r?.name || `Room ${idx + 1}`,
         m2: m2safe,
         base: roomBase,
@@ -173,7 +173,7 @@ function buildSnapshot(draft: EstimateDraft): Snapshot {
         subtotal: roomSubtotal,
         optionalsCount: roomOptsCount,
         optionalsList,
-        editHref: `/optionals/${encodeURIComponent(slug)}/${idx}`,
+        editHref: `/optionals/${encodeURIComponent(slug)}/${idx + 1}?from=edit&returnTo=%2Fproject-summary`,
         isMissingM2,
       });
     });
