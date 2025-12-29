@@ -2,7 +2,8 @@
   width: 100%;
   max-width: 980px;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem 3rem;
+  padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1rem, 3vw, 1.5rem) clamp(1.5rem, 4vw, 3rem);
+  box-sizing: border-box;
 }
 
 .header {
@@ -15,7 +16,8 @@
 }
 
 .headerLeft {
-  min-width: 260px;
+  min-width: 0;
+  flex: 1 1 360px;
 }
 
 .headerRight {
@@ -63,7 +65,7 @@
   gap: 14px;
 }
 
-@media (min-width: 860px) {
+@media (min-width: 1024px) {
   .grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -207,10 +209,12 @@
 }
 
 .table {
-  width: 100%;
+    table-layout: fixed;
+width: 100%;
   border-collapse: collapse;
-  min-width: 720px;
+  min-width: 0;
 }
+
 
 .th,
 .td {
@@ -388,3 +392,128 @@
     display: none !important;
   }
 }
+
+/* Mobile stacked table (Project Summary) */
+@media (max-width: 640px) {
+  .tableWrap {
+    overflow: visible;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .table {
+    display: block;
+    width: 100%;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tbody {
+    display: grid;
+    gap: 10px;
+  }
+
+  .table tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 10px;
+    padding: 12px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.35);
+    box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
+  }
+
+  .table tr.rowWarn {
+    background: rgba(255, 236, 236, 0.55);
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 0;
+    border-bottom: none;
+    font-size: 13px;
+  }
+
+  .table td::before {
+    color: rgba(90, 82, 83, 0.65);
+    font-weight: 600;
+    content: "";
+  }
+
+  /* Labels por orden de columnas: Room | m² | Base | Optionals | Subtotal | Edit */
+  .table td:nth-child(1)::before { content: "Room"; }
+  .table td:nth-child(2)::before { content: "m²"; }
+  .table td:nth-child(3)::before { content: "Base"; }
+  .table td:nth-child(4)::before { content: "Optionals"; }
+  .table td:nth-child(5)::before { content: "Subtotal"; }
+  .table td:nth-child(6)::before { content: ""; }
+
+  /* Room ocupa todo el ancho */
+  .table td:nth-child(1) {
+    grid-column: 1 / -1;
+  }
+
+  /* Edit al final, alineado a la derecha */
+  .table td:nth-child(6) {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+}
+
+/* Safety: if a row is marked hidden, never force it visible (important for mobile stacked table) */
+.table tr[hidden] {
+  display: none !important;
+}
+
+/* BREAKDOWN_TABLE_COLS_BEGIN */
+.table { table-layout: fixed; }
+.colRoom { width: auto; }
+.colM2 { width: 80px; }
+.colMoney { width: 120px; }
+.colEdit { width: 80px; }
+/* BREAKDOWN_TABLE_COLS_END */
+
+/* COLGROUP_WIDTHS_BEGIN */
+.table {
+  table-layout: fixed;
+}
+
+.colRoom { width: 40%; }
+.colM2 { width: 10%; }
+.colBase { width: 14%; }
+.colOptionals { width: 14%; }
+.colSubtotal { width: 14%; }
+.colEdit { width: 8%; }
+
+/* Evita que números / € rompan layout */
+.thRight,
+.tdRight {
+  white-space: nowrap;
+}
+
+/* Permite que nombres largos hagan wrap sin deformar columnas */
+.td {
+  overflow-wrap: anywhere;
+}
+/* COLGROUP_WIDTHS_END */
+
+/* SAFE_TABLE_LAYOUT_BEGIN */
+.table {
+  table-layout: fixed;
+}
+
+/* Room (1ª col) puede partir palabras largas sin empujar columnas */
+.td {
+  overflow-wrap: anywhere;
+}
+
+/* Columnas numéricas: no romper línea */
+.thRight,
+.tdRight {
+  white-space: nowrap;
+}
+/* SAFE_TABLE_LAYOUT_END */

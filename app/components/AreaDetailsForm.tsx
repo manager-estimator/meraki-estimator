@@ -8,6 +8,7 @@ import ad from "./AreaDetailsForm.module.css";
 import { DraftRoom, getAreaRooms, getSelectedAreaLabel, setAreaRooms } from "../../lib/estimateDraft";
 import { useFinalizedGuard } from "./useFinalizedGuard";
 
+import { unitPriceForSlug } from "@/lib/pricing";
 type Room = DraftRoom;
 
 function titleFromSlug(slug: string) {
@@ -41,10 +42,7 @@ const safeSlug = (() => {
 
 const baseTitle = titleFromSlug(safeSlug);
 const displayTitle = safeSlug === "entrance-circulation" ? "Entrance & Circulation" : baseTitle;
-
-// (por ahora fijo como en la maqueta)
-  const unitPrice = 800; // €/m²
-
+  const unitPrice = unitPriceForSlug(safeSlug); // €/m² (por estancia)
   // Init (client): leemos storage en el initializer para arrancar con rooms reales
   // y evitar setState dentro de useEffect (pasa lint y evita pisar qty).
   const [rooms, setRooms] = useState<Room[]>(() => {

@@ -6,6 +6,7 @@ import styles from "./OptionalsForm.module.css";
 import { getAreaRooms, getSelectedAreaLabel, setAreaRooms, type DraftRoomOptional } from "../../lib/estimateDraft";
 import { useFinalizedGuard } from "./useFinalizedGuard";
 
+import { unitPriceForSlug } from "@/lib/pricing";
 type Opt = {
   id: string;
   label: string;
@@ -24,8 +25,6 @@ function euro(n: number) {
   return n.toLocaleString("es-ES", { maximumFractionDigits: 0 }) + " €";
 }
 
-const UNIT_PRICE = 800; // €/m² (por ahora fijo)
-
 export default function OptionalsForm({
   slug,
   roomIndex = "1",
@@ -36,10 +35,12 @@ export default function OptionalsForm({
   const router = useRouter();
   useFinalizedGuard();
 
-  const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
-  const areaLabel = getSelectedAreaLabel(slug) ?? fallbackLabel;
+  
+  const safeSlug = (slug ?? "").trim().replace(/:$/, "");
+const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
+  const areaLabel = getSelectedAreaLabel(safeSlug) ?? fallbackLabel;
 
-  const rooms = getAreaRooms(slug);
+  const rooms = getAreaRooms(safeSlug);
   const idx = Math.max(0, (parseInt(roomIndex, 10) || 1) - 1);
   const room = rooms[idx];
   const roomName = room?.name ?? `${areaLabel} ${idx + 1}`;
@@ -61,12 +62,12 @@ export default function OptionalsForm({
   const saved = room?.optionals?.find((o) => o.category === "floorings");
   const [selected, setSelected] = useState<string | null>(saved?.id ?? null);
 
-  const base = roomArea * UNIT_PRICE;
+  const base = roomArea * unitPriceForSlug(safeSlug);
   const optionals = selected ? (options.find((o) => o.id === selected)?.price ?? 0) : 0;
   const total = base + optionals;
 
   function persist(nextSelected: string | null) {
-    const curRooms = getAreaRooms(slug);
+    const curRooms = getAreaRooms(safeSlug);
     const nextRooms = curRooms.map((r, i) => {
       if (i !== idx) return r;
 
@@ -137,11 +138,11 @@ export default function OptionalsForm({
       </div>
 
       <div className={styles.actions}>
-        <button type="button" className={styles.backBtn} onClick={() => router.push(`/area/${slug}`)}>
+        <button type="button" className={styles.backBtn} onClick={() => router.push(`/area/${encodeURIComponent(safeSlug)}`)}>
           Back
         </button>
 
-        <button type="button" className={styles.continueBtn} onClick={() => router.push(`/room-summary/${slug}/${roomIndex}`)}>
+        <button type="button" className={styles.continueBtn} onClick={() => router.push(`/room-summary/${encodeURIComponent(safeSlug)}/${roomIndex}`)}>
           Continue
         </button>
       </div>

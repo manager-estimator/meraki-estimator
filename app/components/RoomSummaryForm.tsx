@@ -6,6 +6,7 @@ import styles from "./RoomSummaryForm.module.css";
 import { getAreaRooms, getNextSelectedAreaSlug, getSelectedAreaLabel, setAreaRooms, type DraftRoomOptional } from "../../lib/estimateDraft";
 import { useFinalizedGuard } from "./useFinalizedGuard";
 
+import { unitPriceForSlug } from "@/lib/pricing";
 function titleFromSlug(slug: string) {
   if (!slug) return "";
   if (slug === "entrance-circulation") return "Entrance & Circulation";
@@ -17,8 +18,6 @@ function euro(n: number) {
   return n.toLocaleString("es-ES", { maximumFractionDigits: 0 }) + " €";
 }
 
-const UNIT_PRICE = 800; // €/m² (por ahora fijo)
-
 export default function RoomSummaryForm({
   slug,
   roomIndex,
@@ -29,10 +28,12 @@ export default function RoomSummaryForm({
   const router = useRouter();
   useFinalizedGuard();
 
-  const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
-  const areaLabel = getSelectedAreaLabel(slug) ?? fallbackLabel;
+  
+  const safeSlug = (slug ?? "").trim().replace(/:$/, "");
+const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
+  const areaLabel = getSelectedAreaLabel(safeSlug) ?? fallbackLabel;
 
-  const rooms = getAreaRooms(slug);
+  const rooms = getAreaRooms(safeSlug);
   const cur = parseInt(roomIndex, 10) || 1;
   const idx = Math.max(0, cur - 1);
 
@@ -41,7 +42,7 @@ export default function RoomSummaryForm({
   const roomCount = rooms.length > 0 ? rooms.length : 1;
 
   const roomArea = typeof room?.area === "number" && room.area > 0 ? room.area : 1;
-  const base = roomArea * UNIT_PRICE;
+  const base = roomArea * unitPriceForSlug(safeSlug);
 
   const chosen: DraftRoomOptional[] = Array.isArray(room?.optionals) ? room!.optionals! : [];
   const optionals = chosen.reduce((acc, x) => acc + (typeof x.price === "number" ? x.price : 0), 0);
@@ -60,7 +61,7 @@ const [reuse, setReuse] = useState<Record<string, boolean>>({});
     const keys = Object.entries(reuse).filter(([, v]) => v).map(([k]) => k);
     if (keys.length === 0) return;
 
-    const curRooms = getAreaRooms(slug);
+    const curRooms = getAreaRooms(safeSlug);
     const nextRooms = curRooms.map((r, i) => {
       const roomNo = i + 1;
       if (roomNo === cur) return r;
@@ -83,7 +84,7 @@ const [reuse, setReuse] = useState<Record<string, boolean>>({});
       const nextNo = cur + 1;
 
       // After reuse, if the next room already has optionals, skip optionals selection step.
-      const updatedRooms = getAreaRooms(slug);
+      const updatedRooms = getAreaRooms(safeSlug);
       const nextRoom = updatedRooms[nextNo - 1];
       const nextHasOptionals = Array.isArray(nextRoom?.optionals) && nextRoom.optionals.length > 0;
 
