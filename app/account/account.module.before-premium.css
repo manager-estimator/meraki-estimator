@@ -1,0 +1,261 @@
+.shell {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 22px 38px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+  color: rgba(90, 82, 83, 0.92);
+}
+
+.muted {
+  font-size: 14px;
+  color: rgba(90, 82, 83, 0.60);
+  margin: 0;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin: 14px 0 16px;
+}
+
+.tab,
+.tabActive,
+.tabDisabled {
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(90, 82, 83, 0.18);
+  background: rgba(255,255,255,0.80);
+  font-size: 13px;
+  color: rgba(90, 82, 83, 0.86);
+}
+
+.tabActive {
+  background: rgba(90, 82, 83, 0.92);
+  color: white;
+  border-color: rgba(90, 82, 83, 0.12);
+}
+
+.tabDisabled {
+  color: rgba(90, 82, 83, 0.45);
+  background: rgba(255,255,255,0.65);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 860px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(90, 82, 83, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.04);
+}
+
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 14px 10px;
+  border-bottom: 1px solid rgba(90, 82, 83, 0.10);
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(90, 82, 83, 0.92);
+}
+
+.cardSub {
+  font-size: 12px;
+  margin-top: 3px;
+  color: rgba(90, 82, 83, 0.55);
+}
+
+.cardBody {
+  padding: 12px 14px 14px;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(90, 82, 83, 0.12);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.k {
+  font-size: 12px;
+  color: rgba(90, 82, 83, 0.55);
+}
+
+.v {
+  font-size: 13px;
+  color: rgba(90, 82, 83, 0.92);
+}
+
+.note {
+  margin-top: 10px;
+  font-size: 12px;
+  color: rgba(90, 82, 83, 0.55);
+  line-height: 1.35;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(90, 82, 83, 0.16);
+  color: rgba(90, 82, 83, 0.70);
+  background: rgba(255,255,255,0.7);
+}
+
+.linkBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(90, 82, 83, 0.18);
+  color: rgba(90, 82, 83, 0.86);
+  background: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(90, 82, 83, 0.12);
+  color: white;
+  background: rgba(90, 82, 83, 0.92);
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.disabledBtn {
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(90, 82, 83, 0.14);
+  color: rgba(90, 82, 83, 0.50);
+  background: rgba(255,255,255,0.7);
+  font-size: 13px;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.pill,
+.pillMuted {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(90, 82, 83, 0.14);
+  background: rgba(255,255,255,0.7);
+}
+
+.pill {
+  color: rgba(90, 82, 83, 0.70);
+}
+
+.pillMuted {
+  color: rgba(90, 82, 83, 0.45);
+}
+
+.shareRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(90, 82, 83, 0.10);
+  margin: 14px 0;
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(90, 82, 83, 0.12);
+  background: rgba(255,255,255,0.72);
+}
+
+.liTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(90, 82, 83, 0.92);
+}
+
+.liSub {
+  margin-top: 2px;
+  font-size: 12px;
+  color: rgba(90, 82, 83, 0.55);
+}
+
+/* --- Fix: prevent button labels from wrapping (e.g. "Em / ail") --- */
+.linkBtn,
+.primaryBtn,
+.disabledBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.linkBtn,
+.disabledBtn {
+  min-width: 86px;
+}
+
+.primaryBtn {
+  min-width: 110px;
+}
+
+/* In list rows, keep the action button from shrinking too much */
+.listItem > a,
+.listItem > button {
+  flex-shrink: 0;
+}

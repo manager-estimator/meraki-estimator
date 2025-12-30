@@ -1,14 +1,46 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import styles from "./AuthLayout.module.css";
 
+import * as authActions from "../actions/auth";
 interface AuthLayoutProps {
   children: ReactNode;
 }
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
-  return (
+  const pathname = usePathname();
+  const hideProfileOn = new Set(["/", "/login", "/check-email", "/forgot-password", "/create-profile", "/invite"]);
+  
+
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function onDocMouseDown(e: MouseEvent) {
+      const el = menuRef.current;
+      const target = e.target as Node | null;
+      if (!el || !target) return;
+      if (el.contains(target) === false) setMenuOpen(false);
+    }
+    document.addEventListener("mousedown", onDocMouseDown);
+    return () => document.removeEventListener("mousedown", onDocMouseDown);
+  }, []);
+
+  const showTopNav = hideProfileOn.has(pathname) === false;
+  const showHome = showTopNav && pathname !== "/dashboard";
+
+  type FormAction = (formData: FormData) => void | Promise<void>;
+
+  const signOutAction: FormAction | null = (() => {
+    const actions = authActions as Record<string, unknown>;
+    const candidate = actions.signOut ?? actions.logout ?? actions.logOut;
+    return typeof candidate === "function" ? (candidate as FormAction) : null;
+  })();
+
+return (
     <div className={styles.container}>
       <div className={styles.leftPanel}>
         <div className={styles.logoWrapper}>
@@ -48,6 +80,58 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       </div>
 
       <div className={styles.rightPanel}>
+        {showTopNav ? (
+          <div className={styles.topNav}>
+            {showHome ? (
+              <Link className={styles.iconBtn} href="/dashboard" aria-label="Home">
+                <svg className={styles.iconSvg} viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3.2 3 10.4v10.4h6.4v-6.2h5.2v6.2H21V10.4L12 3.2z" fill="currentColor"/>
+                </svg>
+              </Link>
+            ) : null}
+
+            <div className={styles.menuWrap} ref={menuRef}>
+              <button
+                type="button"
+                className={styles.iconBtn}
+                aria-label="User menu"
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((v) => !v)}
+              >
+                <svg className={styles.iconSvg} viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 12.2a4.6 4.6 0 1 0-4.6-4.6 4.6 4.6 0 0 0 4.6 4.6z" fill="currentColor"/>
+                  <path d="M4.2 21c1.7-4 5.2-6.2 7.8-6.2S18.1 17 19.8 21H4.2z" fill="currentColor"/>
+                </svg>
+              </button>
+
+              {menuOpen ? (
+                <div className={styles.menu} role="menu" aria-label="User menu">
+                  <Link className={styles.menuItem} href="/account" role="menuitem" onClick={() => setMenuOpen(false)}>
+                    Account
+                  </Link>
+                  <Link className={styles.menuItem} href="/dashboard" role="menuitem" onClick={() => setMenuOpen(false)}>
+                    Dashboard
+                  </Link>
+
+                  <div className={styles.menuDivider} />
+
+                  {signOutAction ? (
+                    <form action={signOutAction}>
+                      <button type="submit" className={styles.menuItemBtn}>
+                        Log out
+                      </button>
+                    </form>
+                  ) : (
+                    <Link className={styles.menuItem} href="/?mode=login" role="menuitem" onClick={() => setMenuOpen(false)}>
+                      Log out
+                    </Link>
+                  )}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
+
         {children}
       </div>
     </div>

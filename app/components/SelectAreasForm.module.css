@@ -1,0 +1,60 @@
+.leftText {
+  width: 100%;
+  text-align: left;
+  align-self: flex-start;
+  display: block;
+}
+
+.pillsGrid {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.fullRow {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pill {
+  appearance: none;
+  background: transparent;
+  border: 1px solid rgba(90, 82, 83, 0.55);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  color: rgba(90, 82, 83, 0.65);
+  cursor: pointer;
+  user-select: none;
+}
+
+.pill:hover {
+  border-color: rgba(90, 82, 83, 0.75);
+  color: rgba(90, 82, 83, 0.8);
+}
+
+.pillActive {
+  background: rgba(90, 82, 83, 0.10);
+  border-color: rgba(90, 82, 83, 0.75);
+  color: rgba(90, 82, 83, 0.85);
+}
+
+.backRow {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.backLink {
+  text-decoration: none;
+  color: rgb(120, 113, 108);
+  font-size: 14px;
+  font-weight: 400;
+}

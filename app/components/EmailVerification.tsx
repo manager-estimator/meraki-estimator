@@ -36,7 +36,7 @@ export default function EmailVerification({
       <p className={styles.helperText}> Didn’t receive it? Check your spam folder. </p>
 
       <div className={styles.buttonWrapper}>
-        <Link className={styles.continueButton} href="/login" role="button">
+        <Link className={styles.continueButton} href="/?mode=login" role="button">
           Continue
         </Link>
       </div>

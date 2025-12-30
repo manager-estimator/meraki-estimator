@@ -1,0 +1,55 @@
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex: 0 0 auto;
+  position: relative;
+  top: 16px;
+}
+
+.skipRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 26px;
+}
+
+.skipLink {
+  text-decoration: none;
+  color: rgb(120, 113, 108);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.inputGroup {
+  width: 100%;
+  text-align: left;
+  align-self: flex-start;
+  margin-left: 0;
+}
+
+.leftText {
+  width: 100%;
+  text-align: left;
+  align-self: flex-start;
+  display: block;
+}

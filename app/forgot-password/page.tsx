@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import Link from "next/link";
 import AuthLayout from "../components/AuthLayout";
 import styles from "../page.module.css";
 
@@ -10,7 +11,6 @@ export default function ForgotPasswordPage() {
 
   const handleResetPassword = (e: FormEvent) => {
     e.preventDefault();
-    console.log("Password reset requested for:", email);
     setSubmitted(true);
   };
 
@@ -44,24 +44,13 @@ export default function ForgotPasswordPage() {
             </p>
 
             <div className={styles.buttonWrapper}>
-              <a 
-                href="/login" 
-                style={{ 
-                  textDecoration: "none",
-                  width: "216px"
-                }}
+              <Link
+                href="/?mode=login"
+                className={styles.continueButton}
+                style={{ textDecoration: "none", width: "216px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
               >
-                <button 
-                  type="button" 
-                  className={styles.continueButton}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.location.href = "/login";
-                  }}
-                >
-                  Back to Login
-                </button>
-              </a>
+                Back to Login
+              </Link>
             </div>
           </>
         ) : (
@@ -73,7 +62,7 @@ export default function ForgotPasswordPage() {
                 marginBottom: "1rem",
                 lineHeight: "1.6"
               }}>
-                We've sent a password reset link to your email address.
+                We&apos;ve sent a password reset link to your email address.
               </p>
               <p style={{ 
                 color: "var(--Body)",
@@ -98,24 +87,13 @@ export default function ForgotPasswordPage() {
             </div>
 
             <div className={styles.buttonWrapper}>
-              <a 
-                href="/login"
-                style={{ 
-                  textDecoration: "none",
-                  width: "216px"
-                }}
+              <Link
+                href="/?mode=login"
+                className={styles.continueButton}
+                style={{ textDecoration: "none", width: "216px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
               >
-                <button 
-                  type="button" 
-                  className={styles.continueButton}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.location.href = "/login";
-                  }}
-                >
-                  Back to Login
-                </button>
-              </a>
+                Back to Login
+              </Link>
             </div>
           </>
         )}

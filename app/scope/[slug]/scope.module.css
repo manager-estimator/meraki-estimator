@@ -1,0 +1,87 @@
+.wrap{
+  width: 100%;
+  display:flex;
+  justify-content:center;
+  padding: 54px 16px 80px;
+}
+
+.card{
+  width: 100%;
+  max-width: 760px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  padding: 18px 18px 20px;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  gap: 16px;
+  align-items:flex-start;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.kicker{
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.55);
+}
+
+.title{
+  margin: 6px 0 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: rgba(0,0,0,0.85);
+}
+
+.actions{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content:flex-end;
+}
+
+.linkBtn,
+.linkBtnSecondary{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration:none;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid rgba(0,0,0,0.10);
+}
+
+.linkBtn{
+  background: rgba(0,0,0,0.04);
+  color: rgba(0,0,0,0.85);
+}
+
+.linkBtnSecondary{
+  background: transparent;
+  color: rgba(0,0,0,0.75);
+}
+
+.section{
+  padding-top: 16px;
+}
+
+.label{
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(0,0,0,0.75);
+  margin-bottom: 8px;
+}
+
+.scopeText{
+  font-size: 14px;
+  line-height: 20px;
+  color: rgba(0,0,0,0.70);
+  white-space: pre-wrap;
+}

@@ -1,0 +1,519 @@
+.page {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1rem, 3vw, 1.5rem) clamp(1.5rem, 4vw, 3rem);
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.headerLeft {
+  min-width: 0;
+  flex: 1 1 360px;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.logoImg {
+  height: 38px;
+  width: auto;
+  display: block;
+}
+
+
+.title {
+  color: var(--Principal);
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: -0.6px;
+  margin: 0;
+}
+
+.subtitle {
+  color: rgba(90, 82, 83, 0.65);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  margin: 0.5rem 0 0 0;
+}
+
+.pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
+  color: rgba(90, 82, 83, 0.85);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .span2 {
+    grid-column: 1 / -1;
+  }
+}
+
+.card {
+  background: rgba(250, 250, 248, 0.9);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: -6px -6px 12px rgba(255, 255, 255, 0.6),
+    6px 6px 12px rgba(217, 217, 217, 0.18);
+}
+
+.cardTitle {
+  margin: 0 0 12px 0;
+  color: var(--Principal);
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: -0.2px;
+}
+
+.muted {
+  color: rgba(90, 82, 83, 0.65);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  margin: 0;
+}
+
+.kvList {
+  display: grid;
+  gap: 10px;
+}
+
+.kvRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
+}
+
+.kvLabel {
+  color: rgba(90, 82, 83, 0.65);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+}
+
+.kvValue {
+  color: rgba(90, 82, 83, 0.9);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  text-align: right;
+}
+
+.totalBig {
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
+  color: rgba(90, 82, 83, 0.92);
+  font-size: 30px;
+  letter-spacing: -0.6px;
+  margin: 4px 0 10px 0;
+}
+
+.kpiRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px 0;
+}
+
+.kpiPill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  color: rgba(90, 82, 83, 0.85);
+}
+
+.alertBox {
+  display: grid;
+  gap: 8px;
+}
+
+.alertItem {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 236, 236, 0.55);
+  box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  color: rgba(90, 82, 83, 0.9);
+}
+
+.areaBlock {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(90, 82, 83, 0.10);
+}
+
+.areaHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.areaTitle {
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  color: rgba(90, 82, 83, 0.92);
+}
+
+.areaSub {
+  margin-top: 4px;
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  color: rgba(90, 82, 83, 0.65);
+}
+
+.areaTotal {
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  color: rgba(90, 82, 83, 0.9);
+  white-space: nowrap;
+}
+
+.tableWrap {
+  overflow: auto;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
+}
+
+.table {
+    table-layout: fixed;
+width: 100%;
+  border-collapse: collapse;
+  min-width: 0;
+}
+
+
+.th,
+.td {
+  padding: 10px 12px;
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  color: rgba(90, 82, 83, 0.85);
+  border-bottom: 1px solid rgba(90, 82, 83, 0.10);
+}
+
+.th {
+  color: rgba(90, 82, 83, 0.65);
+  font-weight: 600;
+  text-align: left;
+  background: rgba(250, 250, 248, 0.55);
+}
+
+.thRight,
+.tdRight {
+  text-align: right;
+}
+
+.rowWarn td {
+  background: rgba(255, 236, 236, 0.35);
+}
+
+.editLink {
+  text-decoration: none;
+  color: rgba(90, 82, 83, 0.85);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(250, 250, 248, 0.9);
+  box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
+}
+
+.optMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.expandBtn {
+  margin-left: 10px;
+  height: 28px;
+  width: 28px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1;
+  color: rgba(90, 82, 83, 0.85);
+  background: rgba(250, 250, 248, 0.9);
+  box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
+}
+
+.optRowOpen {
+  display: table-row;
+}
+
+.optRowClosed {
+  display: none;
+}
+
+.optCell {
+  padding: 0;
+  border-bottom: 1px solid rgba(90, 82, 83, 0.10);
+}
+
+.optBox {
+  padding: 12px 14px;
+  background: rgba(250, 250, 248, 0.55);
+}
+
+.optTitle {
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  color: rgba(90, 82, 83, 0.85);
+  margin-bottom: 8px;
+}
+
+.optList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.optItem {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.06);
+}
+
+.optLabel {
+  color: rgba(90, 82, 83, 0.85);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+}
+
+.optPrice {
+  color: rgba(90, 82, 83, 0.9);
+  font-family: Arial, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.cardActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  height: 42px;
+  padding: 0 16px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-family: 'PP Neue Montreal', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.primaryBtn {
+  background: var(--Fondo);
+  color: var(--Boton);
+  box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.6),
+    5px 5px 10px rgba(217, 217, 217, 0.15);
+}
+
+.secondaryBtn {
+  background: rgba(250, 250, 248, 0.9);
+  color: rgba(90, 82, 83, 0.85);
+  box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
+}
+
+@media print {
+  .expandBtn {
+    display: none !important;
+  }
+
+  /* Show optionals rows even if collapsed (so the PDF includes full detail) */
+  .optRowClosed {
+    display: table-row !important;
+  }
+
+  .page {
+    padding: 0;
+    max-width: none;
+  }
+
+  .tableWrap {
+    overflow: visible;
+  }
+
+  .card {
+    box-shadow: none;
+    background: #fff;
+    border: 1px solid rgba(90, 82, 83, 0.15);
+  }
+
+  .editLink {
+    display: none !important;
+  }
+}
+
+/* Mobile stacked table (Project Summary) */
+@media (max-width: 640px) {
+  .tableWrap {
+    overflow: visible;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .table {
+    display: block;
+    width: 100%;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tbody {
+    display: grid;
+    gap: 10px;
+  }
+
+  .table tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 10px;
+    padding: 12px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.35);
+    box-shadow: inset 1px 1px 3px rgba(90, 82, 83, 0.08);
+  }
+
+  .table tr.rowWarn {
+    background: rgba(255, 236, 236, 0.55);
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 0;
+    border-bottom: none;
+    font-size: 13px;
+  }
+
+  .table td::before {
+    color: rgba(90, 82, 83, 0.65);
+    font-weight: 600;
+    content: "";
+  }
+
+  /* Labels por orden de columnas: Room | m² | Base | Optionals | Subtotal | Edit */
+  .table td:nth-child(1)::before { content: "Room"; }
+  .table td:nth-child(2)::before { content: "m²"; }
+  .table td:nth-child(3)::before { content: "Base"; }
+  .table td:nth-child(4)::before { content: "Optionals"; }
+  .table td:nth-child(5)::before { content: "Subtotal"; }
+  .table td:nth-child(6)::before { content: ""; }
+
+  /* Room ocupa todo el ancho */
+  .table td:nth-child(1) {
+    grid-column: 1 / -1;
+  }
+
+  /* Edit al final, alineado a la derecha */
+  .table td:nth-child(6) {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+}
+
+/* Safety: if a row is marked hidden, never force it visible (important for mobile stacked table) */
+.table tr[hidden] {
+  display: none !important;
+}
+
+/* BREAKDOWN_TABLE_COLS_BEGIN */
+.table { table-layout: fixed; }
+.colRoom { width: auto; }
+.colM2 { width: 80px; }
+.colMoney { width: 120px; }
+.colEdit { width: 80px; }
+/* BREAKDOWN_TABLE_COLS_END */
+
+/* COLGROUP_WIDTHS_BEGIN */
+.table {
+  table-layout: fixed;
+}
+
+.colRoom { width: 40%; }
+.colM2 { width: 10%; }
+.colBase { width: 14%; }
+.colOptionals { width: 14%; }
+.colSubtotal { width: 14%; }
+.colEdit { width: 8%; }
+
+/* Evita que números / € rompan layout */
+.thRight,
+.tdRight {
+  white-space: nowrap;
+}
+
+/* Permite que nombres largos hagan wrap sin deformar columnas */
+.td {
+  overflow-wrap: anywhere;
+}
+/* COLGROUP_WIDTHS_END */
+
+/* SAFE_TABLE_LAYOUT_BEGIN */
+.table {
+  table-layout: fixed;
+}
+
+/* Room (1ª col) puede partir palabras largas sin empujar columnas */
+.td {
+  overflow-wrap: anywhere;
+}
+
+/* Columnas numéricas: no romper línea */
+.thRight,
+.tdRight {
+  white-space: nowrap;
+}
+/* SAFE_TABLE_LAYOUT_END */
