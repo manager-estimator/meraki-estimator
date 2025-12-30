@@ -297,6 +297,41 @@ function migrateLegacyIfNeeded(): string | null {
   return meta.id;
 }
 
+
+const MRK_COUNTER_KEY = "meraki:estimateCounter";
+
+function nextEstimateNumber(existing: EstimateMeta[]): number {
+  if (typeof window === "undefined") return 1;
+
+  const ls = window.localStorage;
+  const raw = ls.getItem(MRK_COUNTER_KEY);
+  let cur = Number.parseInt(raw || "", 10);
+
+  if (!Number.isFinite(cur) || cur < 0) {
+    // Si no hay contador, lo inferimos del máximo MRKxx existente para evitar duplicados.
+    cur = 0;
+    for (const m of existing || []) {
+      const t = m.title;
+      if (typeof t !== "string") continue;
+      const mt = /MRK\s*0*([0-9]+)/i.exec(t);
+      if (!mt) continue;
+      const v = Number.parseInt(mt[1], 10);
+      if (Number.isFinite(v)) cur = Math.max(cur, v);
+    }
+  }
+
+  const next = cur + 1;
+  ls.setItem(MRK_COUNTER_KEY, String(next));
+  return next;
+}
+
+function buildDefaultEstimateTitle(existing: EstimateMeta[]): string {
+  const dateStr = new Date().toLocaleDateString("es-ES");
+  const n = nextEstimateNumber(existing);
+  const code = `MRK${String(n).padStart(2, "0")}`;
+  return `${code} Estimate (${dateStr})`;
+}
+
 export function createEstimate(opts?: { title?: string }): EstimateMeta {
   if (typeof window === "undefined") {
     // En SSR no creamos nada; devolvemos un placeholder
@@ -306,8 +341,7 @@ export function createEstimate(opts?: { title?: string }): EstimateMeta {
 
   const iso = nowIso();
   const id = genId();
-  const title = opts?.title ?? `New estimate (${new Date().toLocaleDateString()})`;
-
+  const title = opts?.title ?? buildDefaultEstimateTitle(listEstimates());
   const meta: EstimateMeta = {
     id,
     title,
