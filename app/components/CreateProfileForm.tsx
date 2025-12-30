@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 export default function CreateProfileForm() {
   const sp = useSearchParams();
   const err = sp.get("error");
+  const next = sp.get("next") || "";
 
   return (
     <form className={styles.authCard} action={createProfileAction}>
@@ -22,6 +23,8 @@ export default function CreateProfileForm() {
           {err}
         </p>
       ) : null}
+
+      <input type="hidden" name="next" value={next} />
 
       <div className={styles.inputGroup} style={{ marginTop: 28 }}>
         <input
