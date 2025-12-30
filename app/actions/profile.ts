@@ -7,12 +7,22 @@ function asStr(v: FormDataEntryValue | null): string {
   return typeof v === "string" ? v : "";
 }
 
-function safeNext(raw: FormDataEntryValue | null): string {
-  const v = asStr(raw).trim();
-  if (!v) return "/dashboard";
-  if (!v.startsWith("/") || v.startsWith("//")) return "/dashboard";
-  if (v === "/create-profile") return "/dashboard";
-  return v;
+function isSafeRelativePath(v: string): boolean {
+  const s = (v || "").trim();
+  if (!s) return false;
+  if (!s.startsWith("/")) return false;
+  if (s.startsWith("//")) return false;
+  if (s.includes("://")) return false;
+  if (s.includes("\n") || s.includes("\r")) return false;
+  return true;
+}
+
+// Destino POST-profile
+function safeAfterProfile(raw: string): string {
+  const s = (raw || "").trim();
+  if (!isSafeRelativePath(s)) return "/dashboard";
+  if (s === "/create-profile" || s.startsWith("/create-profile?")) return "/dashboard";
+  return s;
 }
 
 export async function createProfileAction(formData: FormData) {
@@ -20,13 +30,23 @@ export async function createProfileAction(formData: FormData) {
   const phone = asStr(formData.get("phone")).trim();
   const city = asStr(formData.get("city")).trim();
   const language = asStr(formData.get("language")).trim();
-  const next = safeNext(formData.get("next"));
+
+  const nextRaw = asStr(formData.get("next")).trim();
+  const next = safeAfterProfile(nextRaw);
+
+  const backQs = (msg: string) => {
+    const qs = new URLSearchParams();
+    qs.set("error", msg);
+    // preserva next si es ruta segura (aunque luego lo normalicemos al usarlo)
+    if (isSafeRelativePath(nextRaw)) qs.set("next", nextRaw);
+    return "/create-profile?" + qs.toString();
+  };
 
   if (!fullName || !city) {
-    redirect("/create-profile?error=" + encodeURIComponent("Missing required fields"));
+    redirect(backQs("Missing required fields"));
   }
   if (language !== "en" && language !== "es") {
-    redirect("/create-profile?error=" + encodeURIComponent("Invalid language"));
+    redirect(backQs("Invalid language"));
   }
 
   const supabase = await createClient();
@@ -50,7 +70,7 @@ export async function createProfileAction(formData: FormData) {
   const { error } = await supabase.from("profiles").upsert(payload, { onConflict: "id" });
 
   if (error) {
-    redirect("/create-profile?error=" + encodeURIComponent(error.message));
+    redirect(backQs(error.message));
   }
 
   redirect(next);

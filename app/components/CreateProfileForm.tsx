@@ -24,6 +24,7 @@ export default function CreateProfileForm() {
         </p>
       ) : null}
 
+      {/* Preserve destination after profile creation */}
       <input type="hidden" name="next" value={next} />
 
       <div className={styles.inputGroup} style={{ marginTop: 28 }}>
