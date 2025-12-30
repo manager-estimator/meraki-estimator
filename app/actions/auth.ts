@@ -1,14 +1,28 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+
+async function getOrigin() {
+  const h = await headers();
+  const proto = h.get("x-forwarded-proto") ?? "https";
+  const host = h.get("x-forwarded-host") ?? h.get("host");
+  const origin = h.get("origin");
+  return origin ?? (host ? `${proto}://${host}` : "");
+}
 
 export async function signUpAction(formData: FormData) {
   const email = String(formData.get("email") || "").trim();
   const password = String(formData.get("password") || "");
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({ email, password });
+  const origin = await getOrigin();
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { emailRedirectTo: `${origin}/auth/callback?next=/create-profile` },
+  });
 
   if (error) {
     redirect("/?mode=signup&error=" + encodeURIComponent(error.message));
@@ -26,7 +40,12 @@ export async function resendVerificationAction(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.resend({ type: "signup", email });
+  const origin = await getOrigin();
+  const { error } = await supabase.auth.resend({
+    type: "signup",
+    email,
+    options: { emailRedirectTo: `${origin}/auth/callback?next=/create-profile` },
+  });
 
   if (error) {
     redirect(

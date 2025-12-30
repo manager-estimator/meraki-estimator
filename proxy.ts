@@ -38,6 +38,7 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   // Rutas públicas (sin login)
   const isPublic =
+    pathname.startsWith("/auth") ||
     pathname === "/" ||
     pathname === "/login" ||
     pathname === "/check-email" ||
