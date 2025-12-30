@@ -58,7 +58,7 @@ const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
   // Reuse pills: todas las rooms excepto la actual
   const reuseTargets: string[] = [];
   for (let i = 1; i <= roomCount; i++) {
-    const hasAny = (rooms[i]?.optionals ?? []).length > 0;
+    const hasAny = (rooms[i - 1]?.optionals ?? []).length > 0;
     if (i !== cur && !hasAny) reuseTargets.push(String(i));
   }
 
@@ -159,7 +159,7 @@ const [reuse, setReuse] = useState<Record<string, boolean>>({});
             </div>
           </div>
 
-          {chosen.length > 0 ? (
+          {chosen.length > 0 && reuseTargets.length > 0 ? (
             <div className={styles.reuse}>
               <div className={styles.reuseTitle}>Reuse this setup?</div>
               <div className={styles.reuseHelp}>Apply to other empty rooms in this category.</div>
