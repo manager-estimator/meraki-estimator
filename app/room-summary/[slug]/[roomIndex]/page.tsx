@@ -1,8 +1,13 @@
 "use client";
 
+import dynamic from "next/dynamic";
+
 import { useParams } from "next/navigation";
-import RoomSummaryForm from "../../../components/RoomSummaryForm";
+
 import AuthLayout from "../../../components/AuthLayout";
+
+const RoomSummaryForm = dynamic(() => import("../../../components/RoomSummaryForm"), { ssr: false });
+
 
 
 export default function RoomSummaryPage() {

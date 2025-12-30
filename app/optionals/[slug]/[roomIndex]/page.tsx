@@ -1,8 +1,11 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import AuthLayout from "../../../components/AuthLayout";
-import OptionalsForm from "../../../components/OptionalsForm";
+
+const OptionalsForm = dynamic(() => import("../../../components/OptionalsForm"), { ssr: false });
+
 
 export default function OptionalsRoomPage() {
   const params = useParams() as { slug?: string; roomIndex?: string } | null;
