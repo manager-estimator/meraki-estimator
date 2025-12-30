@@ -21,7 +21,7 @@ export async function signUpAction(formData: FormData) {
   const { error } = await supabase.auth.signUp({
     email,
     password,
-    options: { emailRedirectTo: `${origin}/auth/callback?next=/create-profile` },
+    options: { emailRedirectTo: `${origin}/auth/callback` },
   });
 
   if (error) {
@@ -44,7 +44,7 @@ export async function resendVerificationAction(formData: FormData) {
   const { error } = await supabase.auth.resend({
     type: "signup",
     email,
-    options: { emailRedirectTo: `${origin}/auth/callback?next=/create-profile` },
+    options: { emailRedirectTo: `${origin}/auth/callback` },
   });
 
   if (error) {
