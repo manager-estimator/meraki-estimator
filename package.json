@@ -26,5 +26,6 @@
     "playwright": "^1.57.0",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "pnpm@9.15.2"
 }
