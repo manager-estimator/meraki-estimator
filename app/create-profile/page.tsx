@@ -41,7 +41,11 @@ export default async function CreateProfilePage({
   const user = userRes?.user;
 
   if (!user) {
-    redirect("/?mode=login");
+    const qs = new URLSearchParams();
+    const raw = (nextRaw || "").trim();
+    if (isSafeRelativePath(raw)) qs.set("next", raw);
+    const returnTo = "/create-profile" + (qs.toString() ? "?" + qs.toString() : "");
+    redirect("/?mode=login&redirectTo=" + encodeURIComponent(returnTo));
   }
 
   // Si ya existe profile, no volvemos a pedirlo.
