@@ -81,7 +81,7 @@ const [reuse, setReuse] = useState<Record<string, boolean>>({});
       return { ...r, optionals: chosen.map((o) => ({ ...o })) };
     });
 
-    setAreaRooms(slug, areaLabel, nextRooms);
+    setAreaRooms(safeSlug, areaLabel, nextRooms);
   }
 
   const handleContinue = () => {
@@ -90,9 +90,7 @@ const [reuse, setReuse] = useState<Record<string, boolean>>({});
       router.push(returnTo);
       return;
     }
-
-applyReuseIfNeeded();
-
+    if (chosen.length > 0) applyReuseIfNeeded();
     if (cur < roomCount) {
       const nextNo = cur + 1;
 
@@ -103,12 +101,12 @@ applyReuseIfNeeded();
 
       router.push(
         nextHasOptionals
-          ? `/room-summary/${encodeURIComponent(slug)}/${nextNo}`
-          : `/optionals/${encodeURIComponent(slug)}/${nextNo}`
+          ? `/room-summary/${encodeURIComponent(safeSlug)}/${nextNo}`
+          : `/optionals/${encodeURIComponent(safeSlug)}/${nextNo}`
       );
       return;
     }
-    const nextArea = getNextSelectedAreaSlug(slug);
+    const nextArea = getNextSelectedAreaSlug(safeSlug);
     if (nextArea) {
       router.push(`/area/${nextArea}`);
       return;
@@ -160,23 +158,25 @@ applyReuseIfNeeded();
             </div>
           </div>
 
-          <div className={styles.reuse}>
-            <div className={styles.reuseTitle}>Reuse this setup?</div>
-            <div className={styles.reuseHelp}>Apply to other empty rooms in this category.</div>
-
-            <div className={styles.pills}>
-              {reuseTargets.map((k) => (
-                <button
-                  key={k}
-                  type="button"
-                  className={`${styles.pill} ${reuse[k] ? styles.pillOn : ""}`}
-                  onClick={() => toggleReuse(k)}
-                >
-                  {areaLabel} {k}
-                </button>
-              ))}
+          {chosen.length > 0 ? (
+            <div className={styles.reuse}>
+              <div className={styles.reuseTitle}>Reuse this setup?</div>
+              <div className={styles.reuseHelp}>Apply to other empty rooms in this category.</div>
+            
+              <div className={styles.pills}>
+                {reuseTargets.map((k) => (
+                  <button
+                    key={k}
+                    type="button"
+                    className={`${styles.pill} ${reuse[k] ? styles.pillOn : ""}`}
+                    onClick={() => toggleReuse(k)}
+                  >
+                    {areaLabel} {k}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
 
@@ -184,7 +184,7 @@ applyReuseIfNeeded();
         <button
           type="button"
           className={styles.backBtn}
-          onClick={() => router.push(`/optionals/${encodeURIComponent(slug)}/${roomIndex}${qs}`)}
+          onClick={() => router.push(`/optionals/${encodeURIComponent(safeSlug)}/${roomIndex}${qs}`)}
         >
           {isEdit ? "Back to Project" : "Back"}
         </button>
