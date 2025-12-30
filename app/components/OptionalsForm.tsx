@@ -94,7 +94,7 @@ if (!nextSelected) {
       return { ...r, optionals: [...withoutThisCategory, nextOpt] };
     });
 
-    setAreaRooms(slug, areaLabel, nextRooms);
+    setAreaRooms(safeSlug, areaLabel, nextRooms);
   }
 
   return (
