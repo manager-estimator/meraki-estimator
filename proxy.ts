@@ -31,8 +31,55 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  // Refresca sesión si existe (sin romper si no hay login)
-  await supabase.auth.getUser();
+  // Evita que Vercel cachee HTML afectado por sesión (muy importante con páginas protegidas)
+  response.headers.set("x-middleware-cache", "no-cache");
+
+  // Refresca sesión si existe
+  const { data: { user } } = await supabase.auth.getUser();
+  // Rutas públicas (sin login)
+  const isPublic =
+    pathname === "/" ||
+    pathname === "/login" ||
+    pathname === "/check-email" ||
+    pathname === "/forgot-password" ||
+    pathname === "/invite" ||
+    pathname === "/create-profile";
+
+  const isProtected = !isPublic;
+
+  // En rutas protegidas, evita caching de HTML
+  if (isProtected) {
+    response.headers.set(
+      "cache-control",
+      "private, no-store, max-age=0, must-revalidate"
+    );
+  }
+  // Si NO hay usuario y la ruta NO es pública -> manda a login
+  if (!user && !isPublic) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    url.searchParams.set("mode", "login");
+    url.searchParams.set("redirectTo", pathname + request.nextUrl.search);
+    const r = NextResponse.redirect(url, { status: 307 });
+    r.headers.set("x-middleware-cache", "no-cache");
+    r.headers.set("cache-control", "private, no-store, max-age=0, must-revalidate");
+    return r;
+  }
+
+  // Si ya hay usuario y está intentando login -> a dashboard
+  const wantsLogin =
+    pathname === "/login" ||
+    (pathname === "/" && request.nextUrl.searchParams.get("mode") === "login");
+
+  if (user && wantsLogin) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
+    url.searchParams.delete("mode");
+    const r = NextResponse.redirect(url, { status: 307 });
+    r.headers.set("x-middleware-cache", "no-cache");
+    r.headers.set("cache-control", "private, no-store, max-age=0, must-revalidate");
+    return r;
+  }
 
   return response;
 }
