@@ -1,17 +1,27 @@
 "use client";
 
-import Link from "next/link";
 import styles from "../page.module.css";
 import cp from "./CreateProfileForm.module.css";
+import { createProfileAction } from "../actions/profile";
+import { useSearchParams } from "next/navigation";
 
 export default function CreateProfileForm() {
+  const sp = useSearchParams();
+  const err = sp.get("error");
+
   return (
-    <form className={styles.authCard}>
+    <form className={styles.authCard} action={createProfileAction}>
       <h1 className={styles.title}>Create profile</h1>
 
       <p className={`${styles.socialText} ${cp.leftText}`} style={{ marginTop: 8 }}>
         This helps us personalize your estimate.
       </p>
+
+      {err ? (
+        <p className={styles.authError} style={{ marginTop: 10 }}>
+          {err}
+        </p>
+      ) : null}
 
       <div className={styles.inputGroup} style={{ marginTop: 28 }}>
         <input
@@ -19,6 +29,7 @@ export default function CreateProfileForm() {
           className={styles.input}
           placeholder="Full name"
           autoComplete="name"
+          required
         />
       </div>
 
@@ -37,6 +48,7 @@ export default function CreateProfileForm() {
           className={styles.input}
           placeholder="City"
           autoComplete="address-level2"
+          required
         />
       </div>
 
@@ -45,6 +57,7 @@ export default function CreateProfileForm() {
           name="language"
           className={`${styles.input} ${cp.select}`}
           defaultValue=""
+          required
         >
           <option value="" disabled>
             Preferred language
@@ -55,22 +68,14 @@ export default function CreateProfileForm() {
       </div>
 
       <label className={cp.checkboxRow}>
-        <input type="checkbox" className={cp.checkbox} />
-        <span className={styles.privacyText}>
-          I agree to the Privacy Policy and Terms.
-        </span>
+        <input type="checkbox" className={cp.checkbox} required />
+        <span className={styles.privacyText}>I agree to the Privacy Policy and Terms.</span>
       </label>
 
       <div className={styles.buttonWrapper} style={{ marginTop: 28 }}>
-        <button type="button" className={styles.continueButton}>
+        <button type="submit" className={styles.continueButton}>
           Continue
         </button>
-      </div>
-
-      <div className={cp.skipRow}>
-        <Link href="#" className={cp.skipLink}>
-          Skip for now
-        </Link>
       </div>
     </form>
   );
