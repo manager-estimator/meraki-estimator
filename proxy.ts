@@ -47,8 +47,7 @@ const requestHeaders = new Headers(request.headers);
     pathname === "/login" ||
     pathname === "/check-email" ||
     pathname === "/forgot-password" ||
-    pathname === "/invite" ||
-    pathname === "/create-profile";
+    pathname === "/invite";
 
   const isProtected = !isPublic;
 
@@ -59,6 +58,19 @@ const requestHeaders = new Headers(request.headers);
       "private, no-store, max-age=0, must-revalidate"
     );
   }
+  // /create-profile NO debe ser accesible sin sesión (solo flujo post-signup verify)
+  // Si alguien pega la URL a mano sin sesión, NO queremos que login lo devuelva aquí.
+  if (!user && pathname === "/create-profile") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    url.searchParams.set("mode", "login");
+    url.searchParams.set("redirectTo", "/dashboard");
+    const r = NextResponse.redirect(url, { status: 307 });
+    r.headers.set("x-middleware-cache", "no-cache");
+    r.headers.set("cache-control", "private, no-store, max-age=0, must-revalidate");
+    return r;
+  }
+
   // Si NO hay usuario y la ruta NO es pública -> manda a login
   if (!user && !isPublic) {
     const url = request.nextUrl.clone();
