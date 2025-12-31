@@ -1,6 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+function withNoStore(r: NextResponse) {
+  r.headers.set("cache-control", "private, no-store, max-age=0, must-revalidate");
+  r.headers.set("x-middleware-cache", "no-cache");
+  return r;
+}
+
 function isSafeRelativePath(v: string | null): v is string {
   if (!v) return false;
   const s = v.trim();
@@ -69,10 +75,10 @@ export async function GET(request: NextRequest) {
       const dest = new URL("/create-profile", url.origin);
       // Guardamos "a dónde ir después de crear profile"
       dest.searchParams.set("next", afterProfile);
-      return NextResponse.redirect(dest);
+      return withNoStore(NextResponse.redirect(dest));
     }
   }
 
   // Si ya tiene profile, respeta el "next" pedido.
-  return NextResponse.redirect(new URL(requestedNext, url.origin));
+  return withNoStore(NextResponse.redirect(new URL(requestedNext, url.origin)));
 }

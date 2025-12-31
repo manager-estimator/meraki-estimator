@@ -38,6 +38,14 @@ const requestHeaders = new Headers(request.headers);
   // Evita que Vercel cachee HTML afectado por sesión (muy importante con páginas protegidas)
   response.headers.set("x-middleware-cache", "no-cache");
 
+  // /auth (ej. /auth/callback) también puede depender de cookies -> no cache
+  if (pathname.startsWith("/auth")) {
+    response.headers.set(
+      "cache-control",
+      "private, no-store, max-age=0, must-revalidate"
+    );
+  }
+
   // Refresca sesión si existe
   const { data: { user } } = await supabase.auth.getUser();
   // Rutas públicas (sin login)
