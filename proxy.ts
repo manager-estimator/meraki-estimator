@@ -60,7 +60,7 @@ export async function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
     url.searchParams.set("mode", "login");
-    url.searchParams.set("redirectTo", pathname + request.nextUrl.search);
+    url.searchParams.set("redirectTo", pathname + new URL(request.url).search);
     const r = NextResponse.redirect(url, { status: 307 });
     r.headers.set("x-middleware-cache", "no-cache");
     r.headers.set("cache-control", "private, no-store, max-age=0, must-revalidate");
