@@ -42,8 +42,17 @@ export default async function CreateProfilePage({
 
   if (!user) {
     const qs = new URLSearchParams();
-    const raw = (nextRaw || "").trim();
-    if (isSafeRelativePath(raw)) qs.set("next", raw);
+
+    // Copiamos TODOS los searchParams al returnTo
+    for (const [k, v] of Object.entries(searchParams ?? {})) {
+      if (typeof v === "string") qs.set(k, v);
+      else if (Array.isArray(v)) for (const vv of v) qs.append(k, vv);
+    }
+
+    // Sanea `next` (evita open-redirects)
+    const rawNext = (qs.get("next") || "").trim();
+    if (rawNext && !isSafeRelativePath(rawNext)) qs.delete("next");
+
     const returnTo = "/create-profile" + (qs.toString() ? "?" + qs.toString() : "");
     redirect("/?mode=login&redirectTo=" + encodeURIComponent(returnTo));
   }
