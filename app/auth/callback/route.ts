@@ -15,7 +15,13 @@ function isSafeRelativePath(v: string | null): v is string {
 // Destino inmediato tras /auth/callback (si ya hay profile)
 function safeRequestedNext(raw: string | null): string {
   if (!isSafeRelativePath(raw)) return "/dashboard";
-  return raw.trim();
+  const s = raw.trim();
+
+  // Nunca aceptamos /create-profile como destino "normal".
+  // /create-profile SOLO se alcanza si el callback detecta que falta profile.
+  if (s === "/create-profile" || s.startsWith("/create-profile?")) return "/dashboard";
+
+  return s;
 }
 
 // Destino POST-profile (si tuvimos que forzar /create-profile)
@@ -49,11 +55,17 @@ export async function GET(request: NextRequest) {
   if (user?.id) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("id")
+      .select("id, full_name, city, language")
       .eq("id", user.id)
       .maybeSingle();
 
-    if (!profile?.id) {
+    const complete =
+      !!profile?.id &&
+      !!profile.full_name &&
+      !!profile.city &&
+      (profile.language === "en" || profile.language === "es");
+
+    if (!complete) {
       const dest = new URL("/create-profile", url.origin);
       // Guardamos "a dónde ir después de crear profile"
       dest.searchParams.set("next", afterProfile);
