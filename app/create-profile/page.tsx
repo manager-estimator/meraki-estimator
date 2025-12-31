@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import AuthLayout from "../components/AuthLayout";
 import CreateProfileForm from "../components/CreateProfileForm";
 import { createClient } from "@/lib/supabase/server";
@@ -40,13 +41,26 @@ export default async function CreateProfilePage({
   const { data: userRes } = await supabase.auth.getUser();
   const user = userRes?.user;
 
-  if (!user) {
+  
+if (!user) {
     const qs = new URLSearchParams();
 
-    // Copiamos TODOS los searchParams al returnTo
+    // 1) Preferimos la URL original que nos pasa el middleware (incluye query real)
+    const h = await headers();
+    const orig = h.get("x-original-url") || "";
+    try {
+      const u = new URL(orig);
+      for (const [k, v] of u.searchParams.entries()) qs.append(k, v);
+    } catch {}
+
+    // 2) Overlay con searchParams de Next (si viene vacío, no pasa nada)
     for (const [k, v] of Object.entries(searchParams ?? {})) {
-      if (typeof v === "string") qs.set(k, v);
-      else if (Array.isArray(v)) for (const vv of v) qs.append(k, vv);
+      if (typeof v === "string") {
+        qs.set(k, v);
+      } else if (Array.isArray(v)) {
+        qs.delete(k);
+        for (const vv of v) qs.append(k, vv);
+      }
     }
 
     // Sanea `next` (evita open-redirects)

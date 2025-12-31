@@ -14,7 +14,11 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const response = NextResponse.next();
+  
+const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-original-url", request.url);
+  const response = NextResponse.next({ request: { headers: requestHeaders } });
+
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -60,18 +64,16 @@ export async function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
     url.searchParams.set("mode", "login");
-    const _sp = request.nextUrl.searchParams.toString();
-    const _s1 = request.nextUrl.search || "";
-    const _s2 = (() => { try { return new URL(request.url).search || ""; } catch { return ""; } })();
-    const _search = _sp ? ("?" + _sp) : (_s1 || _s2 || "");
-    url.searchParams.set("redirectTo", pathname + _search);
+
+    // intenta preservar query de forma robusta
+    const sp = request.nextUrl.searchParams.toString();
+    const s1 = request.nextUrl.search || "";
+    const s2 = (() => { try { return new URL(request.url).search || ""; } catch { return ""; } })();
+    const search = sp ? ("?" + sp) : (s1 || s2 || "");
+
+    url.searchParams.set("redirectTo", pathname + search);
+
     const r = NextResponse.redirect(url, { status: 307 });
-    r.headers.set("x-debug-build", "dbg-20251231-2");
-    r.headers.set("x-debug-pathname", pathname);
-    r.headers.set("x-debug-sp", request.nextUrl.searchParams.toString() || "");
-    r.headers.set("x-debug-next-search", request.nextUrl.search || "");
-    r.headers.set("x-debug-req-search", (() => { try { return new URL(request.url).search || ""; } catch { return ""; } })());
-    r.headers.set("x-debug-req-url", request.url || "");
     r.headers.set("x-middleware-cache", "no-cache");
     r.headers.set("cache-control", "private, no-store, max-age=0, must-revalidate");
     return r;
