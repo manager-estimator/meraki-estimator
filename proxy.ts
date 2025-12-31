@@ -61,10 +61,11 @@ const requestHeaders = new Headers(request.headers);
   // /create-profile NO debe ser accesible sin sesión (solo flujo post-signup verify)
   // Si alguien pega la URL a mano sin sesión, NO queremos que login lo devuelva aquí.
   if (!user && pathname === "/create-profile") {
-    const url = request.nextUrl.clone();
-    url.pathname = "/";
+    // URL limpio (no arrastra query params del request)
+    const url = new URL("/", request.url);
     url.searchParams.set("mode", "login");
     url.searchParams.set("redirectTo", "/dashboard");
+
     const r = NextResponse.redirect(url, { status: 307 });
     r.headers.set("x-middleware-cache", "no-cache");
     r.headers.set("cache-control", "private, no-store, max-age=0, must-revalidate");
