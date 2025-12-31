@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
 import AuthLayout from "../components/AuthLayout";
 import CreateProfileForm from "../components/CreateProfileForm";
 import { createClient } from "@/lib/supabase/server";
@@ -42,47 +41,27 @@ export default async function CreateProfilePage({
   const user = userRes?.user;
 
   
-if (!user) {
-    const qs = new URLSearchParams();
-
-    // 1) Preferimos la URL original que nos pasa el middleware (incluye query real)
-    const h = await headers();
-    const orig = h.get("x-original-url") || "";
-    try {
-      const u = new URL(orig);
-      for (const [k, v] of u.searchParams.entries()) qs.append(k, v);
-    } catch {}
-
-    // 2) Overlay con searchParams de Next (si viene vacío, no pasa nada)
-    for (const [k, v] of Object.entries(searchParams ?? {})) {
-      if (typeof v === "string") {
-        qs.set(k, v);
-      } else if (Array.isArray(v)) {
-        qs.delete(k);
-        for (const vv of v) qs.append(k, vv);
-      }
-    }
-
-    // Sanea `next` (evita open-redirects)
-    const rawNext = (qs.get("next") || "").trim();
-    if (rawNext && !isSafeRelativePath(rawNext)) qs.delete("next");
-
-    const returnTo = "/create-profile" + (qs.toString() ? "?" + qs.toString() : "");
-    redirect("/?mode=login&redirectTo=" + encodeURIComponent(returnTo));
+  if (!user) {
+    // /create-profile no es una entrada pública: si no hay sesión, volvemos a login y luego a dashboard.
+    redirect("/?mode=login&redirectTo=" + encodeURIComponent("/dashboard"));
   }
-
-  // Si ya existe profile, no volvemos a pedirlo.
+// Si ya existe profile, no volvemos a pedirlo.
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id")
+    .select("id, full_name, city, language")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profile?.id) {
+  const complete =
+    !!profile?.id &&
+    !!profile.full_name &&
+    !!profile.city &&
+    (profile.language === "en" || profile.language === "es");
+
+  if (complete) {
     redirect(next);
   }
-
-  return (
+return (
     <AuthLayout>
       <CreateProfileForm />
     </AuthLayout>
