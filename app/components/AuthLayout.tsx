@@ -12,7 +12,7 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   const pathname = usePathname();
-  const hideProfileOn = new Set(["/", "/login", "/check-email", "/forgot-password", "/create-profile", "/invite"]);
+  const hideProfileOn = new Set(["/", "/login", "/check-email", "/forgot-password", "/reset-password", "/create-profile", "/invite"]);
   
 
   const [menuOpen, setMenuOpen] = useState(false);

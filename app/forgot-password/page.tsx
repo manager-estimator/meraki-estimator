@@ -1,34 +1,41 @@
-"use client";
-
-import { useState, FormEvent } from "react";
 import Link from "next/link";
 import AuthLayout from "../components/AuthLayout";
 import styles from "../page.module.css";
+import { requestPasswordResetAction } from "../actions/auth";
 
-export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+type SP = Record<string, string | string[] | undefined>;
 
-  const handleResetPassword = (e: FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
+function pick(sp: SP, key: string): string {
+  const v = sp[key];
+  return Array.isArray(v) ? (v[0] ?? "") : (v ?? "");
+}
+
+export default function ForgotPasswordPage({ searchParams }: { searchParams: SP }) {
+  const email = pick(searchParams, "email");
+  const errorMessage = pick(searchParams, "error");
+  const sent = pick(searchParams, "sent") === "1";
 
   return (
     <AuthLayout>
-      <form className={styles.authCard} onSubmit={handleResetPassword}>
+      <form className={styles.authCard} action={requestPasswordResetAction}>
         <h1 className={styles.title}>Reset Password</h1>
 
-        {!submitted ? (
+        {errorMessage ? (
+          <p style={{ color: "var(--Error)", marginTop: "0.75rem", textAlign: "center" }}>
+            {errorMessage}
+          </p>
+        ) : null}
+
+        {!sent ? (
           <>
             <div className={styles.inputGroup}>
               <input
                 id="email"
+                name="email"
                 type="email"
                 className={styles.input}
                 placeholder="Your Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                defaultValue={email}
                 required
               />
             </div>
@@ -47,7 +54,13 @@ export default function ForgotPasswordPage() {
               <Link
                 href="/?mode=login"
                 className={styles.continueButton}
-                style={{ textDecoration: "none", width: "216px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+                style={{
+                  textDecoration: "none",
+                  width: "216px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 Back to Login
               </Link>
@@ -56,41 +69,48 @@ export default function ForgotPasswordPage() {
         ) : (
           <>
             <div style={{ textAlign: "center", padding: "2rem 0" }}>
-              <p style={{ 
-                color: "var(--Principal)",
-                fontSize: "16px",
-                marginBottom: "1rem",
-                lineHeight: "1.6"
-              }}>
+              <p
+                style={{
+                  color: "var(--Principal)",
+                  fontSize: "16px",
+                  marginBottom: "1rem",
+                  lineHeight: "1.6",
+                }}
+              >
                 We&apos;ve sent a password reset link to your email address.
               </p>
-              <p style={{ 
-                color: "var(--Body)",
-                fontSize: "14px",
-                marginBottom: "2rem"
-              }}>
+              <p style={{ color: "var(--Body)", fontSize: "14px", marginBottom: "2rem" }}>
                 Please check your email and follow the instructions to reset your password.
               </p>
             </div>
 
             <div className={styles.buttonWrapper}>
-              <button 
-                type="button"
+              <Link
+                href={"/forgot-password" + (email ? ("?email=" + encodeURIComponent(email)) : "")}
                 className={styles.continueButton}
-                onClick={() => {
-                  setSubmitted(false);
-                  setEmail("");
+                style={{
+                  textDecoration: "none",
+                  width: "216px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 Send Another Link
-              </button>
+              </Link>
             </div>
 
             <div className={styles.buttonWrapper}>
               <Link
                 href="/?mode=login"
                 className={styles.continueButton}
-                style={{ textDecoration: "none", width: "216px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+                style={{
+                  textDecoration: "none",
+                  width: "216px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 Back to Login
               </Link>
