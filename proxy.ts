@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import type { User } from "@supabase/supabase-js";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -47,7 +48,39 @@ const requestHeaders = new Headers(request.headers);
   }
 
   // Refresca sesión si existe
-  const { data: { user } } = await supabase.auth.getUser();
+  let user: User | null = null;
+
+  try {
+    const { data: userRes, error: userErr } = await supabase.auth.getUser();
+    if (userErr) throw userErr;
+    user = userRes.user ?? null;
+  } catch (e: unknown) {
+    const errObj = (typeof e === "object" && e !== null) ? (e as Record<string, unknown>) : null;
+    const code = errObj && "code" in errObj ? String(errObj["code"] ?? "") : "";
+    const msg = errObj && "message" in errObj ? String(errObj["message"] ?? "") : "";
+
+    // Caso típico en SSR/middleware: refresh token inválido / rotado / cookie vieja
+    if (code === "refresh_token_not_found" || /Refresh Token Not Found/i.test(msg)) {
+      // Limpia cookies de Supabase para cortar el bucle de errores
+      const cookieNames = request.cookies.getAll().map((c) => c.name);
+
+      for (const name of cookieNames) {
+        const isSbAccess = name === "sb-access-token";
+        const isSbRefresh = name === "sb-refresh-token";
+        const isSbAuth = name.startsWith("sb-") && name.endsWith("-auth-token");
+
+        if (isSbAccess || isSbRefresh || isSbAuth) {
+          response.cookies.set(name, "", { maxAge: 0, path: "/" });
+        }
+      }
+
+      user = null;
+    } else {
+      console.error("[proxy] supabase getUser failed", { code, msg });
+      user = null;
+    }
+  }
+
   // Rutas públicas (sin login)
   const isPublic =
     pathname.startsWith("/auth") ||
