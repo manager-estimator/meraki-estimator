@@ -43,6 +43,7 @@ export async function GET(request: NextRequest) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const nextRaw = url.searchParams.get("next");
+  const type = url.searchParams.get("type");
 
   const requestedNext = safeRequestedNext(nextRaw);
   const afterProfile = safeAfterProfile(nextRaw);
@@ -53,6 +54,18 @@ export async function GET(request: NextRequest) {
   if (code) {
     await supabase.auth.exchangeCodeForSession(code);
   }
+
+
+  // Recovery flow: NO obligar create-profile. Debe ir directo a reset-password.
+  const isRecovery = type === "recovery";
+  const wantsReset =
+    requestedNext === "/reset-password" || requestedNext.startsWith("/reset-password?");
+
+  if (isRecovery || wantsReset) {
+    const dest = wantsReset ? requestedNext : "/reset-password";
+    return withNoStore(NextResponse.redirect(new URL(dest, url.origin)));
+  }
+
 
   // Regla: si hay usuario pero NO hay profile -> obligamos create-profile (preservando destino post-profile)
   const { data: userRes } = await supabase.auth.getUser();

@@ -88,6 +88,7 @@ const requestHeaders = new Headers(request.headers);
     pathname === "/login" ||
     pathname === "/check-email" ||
     pathname === "/forgot-password" ||
+    pathname === "/reset-password" ||
     pathname === "/invite";
 
   const isProtected = !isPublic;
