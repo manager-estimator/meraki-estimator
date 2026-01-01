@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import styles from "./EmailVerification.module.css";
 import pageStyles from "../page.module.css";
@@ -16,6 +17,10 @@ export default function EmailVerification({
   email: string;
   initialSent: boolean;
 }) {
+  const searchParams = useSearchParams();
+  const emailFromUrl = searchParams.get("email") ?? "";
+  const effectiveEmail = email || emailFromUrl;
+
   // Si llegamos con ?resent=1, arrancamos ya con 60s
   const [cooldown, setCooldown] = useState<number>(initialSent ? COOLDOWN_SECONDS : 0);
 
@@ -55,13 +60,13 @@ export default function EmailVerification({
     };
   }, []);
 
-  const isDisabled = !email || cooldown > 0;
+  const isDisabled = !effectiveEmail || cooldown > 0;
 
   const buttonText =
     justSent ? "Link sent" : cooldown > 0 ? `Resend in ${cooldown}s` : "Resend link";
 
   function handleSubmit() {
-    if (!email) return;
+    if (!effectiveEmail) return;
 
     // Arranca el cooldown y bloquea ya
     setCooldown(COOLDOWN_SECONDS);
@@ -78,7 +83,7 @@ export default function EmailVerification({
 
       <div className={styles.infoGroup}>
         <p className={styles.infoLabel}> We sent a verification link to: </p>
-        {email ? <p className={styles.infoEmail}>{email}</p> : null}
+        {effectiveEmail ? <p className={styles.infoEmail}>{effectiveEmail}</p> : null}
       </div>
 
       <form
@@ -86,7 +91,7 @@ export default function EmailVerification({
         className={styles.resendForm}
         onSubmit={handleSubmit}
       >
-        <input type="hidden" name="email" value={email} />
+        <input type="hidden" name="email" value={effectiveEmail} />
         <button
           type="submit"
           className={styles.resendButton}
