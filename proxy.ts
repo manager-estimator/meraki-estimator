@@ -39,7 +39,7 @@ const requestHeaders = new Headers(request.headers);
   response.headers.set("x-middleware-cache", "no-cache");
 
   // /auth (ej. /auth/callback) también puede depender de cookies -> no cache
-  if (pathname.startsWith("/auth")) {
+  if (pathname.startsWith("/auth") || pathname === "/check-email") {
     response.headers.set(
       "cache-control",
       "private, no-store, max-age=0, must-revalidate"

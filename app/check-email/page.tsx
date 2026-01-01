@@ -1,6 +1,9 @@
 import AuthLayout from "../components/AuthLayout";
 import EmailVerification from "../components/EmailVerification";
 
+export const dynamic = "force-dynamic";
+
+
 type SearchParams = Record<string, string | string[] | undefined>;
 
 export default function CheckEmailPage({
