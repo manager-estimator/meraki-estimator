@@ -41,10 +41,18 @@ export async function resendVerificationAction(formData: FormData) {
 
   const supabase = await createClient();
   const origin = await getOrigin();
-  const { error } = await supabase.auth.resend({
+  const { data, error } = await supabase.auth.resend({
     type: "signup",
     email,
     options: { emailRedirectTo: `${origin}/auth/callback` },
+  });
+
+  console.log('[resendVerificationAction]', {
+    email,
+    origin,
+    ok: !error,
+    error: error?.message,
+    data,
   });
 
   if (error) {
