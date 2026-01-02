@@ -70,21 +70,6 @@
   line-height: normal;
   color: var(--Body);
 }
-.continueButton:hover {
-  transform: translateY(-2px);
-  box-shadow: -6px -6px 12px 0 rgba(255, 255, 255, 0.65),
-              6px 6px 12px 0 rgba(217, 217, 217, 0.2),
-              12px 12px 24px 0 rgba(139, 138, 138, 0.25),
-              -12px -12px 24px 0 rgb(255, 255, 255);
-}
-
-.continueButton:active {
-  transform: translateY(0);
-}
-
-.continueButton:focus {
-  outline: none;
-}
 
 .altHint {
   margin-top: 10px;
