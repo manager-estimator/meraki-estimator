@@ -125,7 +125,7 @@ export default function DashboardPage() {
 
                 <div className={styles.cardFooter}>
                   <div className={styles.cardHint}>
-                    Drafts are stored per project. New estimate creates a new project ID (so qty won’t reset unexpectedly).
+                    Drafts are stored per project. New estimate creates a new project ID
                   </div>
                 </div>
               </section>
@@ -162,7 +162,7 @@ export default function DashboardPage() {
                 </div>
 
                 <div className={styles.cardFooter}>
-                  <div className={styles.cardHint}>Finalized items must not be editable (UI + permissions).</div>
+                  <div className={styles.cardHint}>Finalized items must not be editable</div>
                 </div>
               </section>
             </div>
