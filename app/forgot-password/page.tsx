@@ -118,7 +118,11 @@ export default function ForgotPasswordPage({ searchParams }: { searchParams: SP 
           </>
         )}
 
-        <p className={styles.privacyText}>By continuing, you agree to our Privacy Policy and Terms</p>
+        <p className={styles.privacyText}>
+        By continuing, you agree to our{" "}
+        <Link href="/privacy">Privacy Policy</Link> and{" "}
+        <Link href="/terms">Terms</Link>
+      </p>
       </form>
     </AuthLayout>
   );
