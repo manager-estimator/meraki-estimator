@@ -422,3 +422,21 @@
 .authStack > :first-child {
   width: 100%;
 }
+
+/* Auth form behavior overrides */
+.inputHint {
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+/* Placeholder/label: keep visible on focus when empty; hide only after typing */
+.input:placeholder-shown::placeholder {
+  opacity: 1;
+}
+.input:not(:placeholder-shown)::placeholder {
+  opacity: 0;
+}
+.input:focus:placeholder-shown::placeholder {
+  opacity: 1;
+}
