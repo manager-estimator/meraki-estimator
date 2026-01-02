@@ -90,6 +90,7 @@ export default function EmailVerification({
 
       <div className={styles.infoGroup}>
         <p className={styles.infoLabel}> We sent a verification link to: </p>
+      <p className={styles.altHint}>If you already have an account, <Link href="/?mode=login">log in</Link> instead.</p>
         {effectiveEmail ? <p className={styles.infoEmail}>{effectiveEmail}</p> : null}
       </div>
 

@@ -120,3 +120,19 @@
 .continueButton:focus {
   outline: none;
 }
+
+.altHint {
+  margin-top: 10px;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.altHint a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.altHint a:hover {
+  text-decoration: none;
+}
