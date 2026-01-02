@@ -385,8 +385,26 @@ export function duplicateEstimate(sourceId: string, opts?: { titleSuffix?: strin
 
   const suffix = (opts?.titleSuffix ?? " (copy)").toString();
 
+  // Duplicate should always open editable Project Summary
+  const resume = "/project-summary";
+
   // Crear un nuevo estimate (draft) y luego sobreescribir su draft con el clon
   const meta = createEstimate({ title: (src.title || "Estimate") + suffix });
+
+  // Asegurar que la copia sea SIEMPRE editable (draft) y limpiar datos de finalizado
+  try {
+    const list = loadIndex();
+    const idx = list.findIndex((x) => x.id === meta.id);
+    if (idx >= 0) {
+      const { finalizedAt: _finalizedAt, total: _total, ...rest } = list[idx];
+      void _finalizedAt;
+      void _total;
+      list[idx] = { ...rest, status: "draft", updatedAt: nowIso(), resumeHref: resume };
+      saveIndex(list);
+    }
+  } catch {
+    // no-op
+  }
 
   // Clonar draft (si existe). Si no existe, usamos draft vacío.
   const srcKey = draftKeyFor(sourceId);
@@ -400,9 +418,6 @@ export function duplicateEstimate(sourceId: string, opts?: { titleSuffix?: strin
       cloned = emptyDraft();
     }
   }
-
-  // Resume: el duplicado debe abrir en Project Summary (editable)
-  const resume = "/project-summary";
 
   // Persistir draft clonado en la nueva key
   try {
