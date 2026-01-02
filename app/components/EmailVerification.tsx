@@ -90,7 +90,7 @@ export default function EmailVerification({
 
       <div className={styles.infoGroup}>
         <p className={styles.infoLabel}> We sent a verification link to: </p>
-      <p className={styles.altHint}>If you already have an account, <Link href="/?mode=login">log in</Link> instead.</p>
+        <p className={styles.altHint}>If you already have an account, <Link href="/login">log in</Link> instead.</p>
         {effectiveEmail ? <p className={styles.infoEmail}>{effectiveEmail}</p> : null}
       </div>
 
@@ -120,7 +120,7 @@ export default function EmailVerification({
       <p className={styles.helperText}> Didn’t receive it? Check your spam folder. </p>
 
       <div className={styles.buttonWrapper}>
-        <Link className={styles.continueButton} href="/?mode=login" role="button">
+        <Link className={styles.continueButton} href="/login" role="button">
           Continue
         </Link>
       </div>
