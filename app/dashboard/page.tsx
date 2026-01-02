@@ -162,7 +162,7 @@ export default function DashboardPage() {
                 </div>
 
                 <div className={styles.cardFooter}>
-                  <div className={styles.cardHint}>Finalized items must not be editable</div>
+                  <div className={styles.cardHint}>Finalized projects are view-only. Duplicate to edit.</div>
                 </div>
               </section>
             </div>
