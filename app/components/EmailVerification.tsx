@@ -17,7 +17,6 @@ function parseWaitSeconds(msg: string): number {
   return Number.isFinite(n) ? n : DEFAULT_RATE_LIMIT_SECONDS;
 }
 
-
 export default function EmailVerification({
   email,
   initialSent,
@@ -116,14 +115,8 @@ export default function EmailVerification({
         </p>
       ) : null}
 
-
       <p className={styles.helperText}> Didn’t receive it? Check your spam folder. </p>
 
-      <div className={styles.buttonWrapper}>
-        <Link className={styles.continueButton} href="/login" role="button">
-          Continue
-        </Link>
-      </div>
-    </div>
+</div>
   );
 }
