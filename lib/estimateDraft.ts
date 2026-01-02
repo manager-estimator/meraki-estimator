@@ -419,7 +419,7 @@ export function duplicateEstimate(sourceId: string, opts?: { titleSuffix?: strin
   setEstimateResumeHref(resume);
 
   emitEstimatesChange();
-  return meta;
+  return { ...meta, resumeHref: resume };
 }
 
 

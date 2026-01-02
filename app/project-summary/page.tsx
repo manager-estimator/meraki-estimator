@@ -9,6 +9,7 @@ import MerakiLogo from "../components/MerakiLogo";
 import {
   ESTIMATES_EVENT,
   finalizeActiveEstimate,
+  duplicateEstimate,
   getActiveDraftSnapshot,
   getActiveEstimateId,
   isActiveEstimateFinalized,
@@ -259,6 +260,15 @@ export default function ProjectSummaryPage() {
     router.push("/dashboard");
   }
 
+  function onDuplicateAndEdit() {
+    const id = snap.meta?.id;
+    if (!id) return;
+    const meta = duplicateEstimate(id);
+    if (!meta) return;
+    router.push("/project-summary?dup=" + encodeURIComponent(meta.id));
+  }
+
+
   function toggleOptionals(key: string) {
     setOpenOpts((m) => ({ ...m, [key]: !m[key] }));
   }
@@ -405,9 +415,13 @@ export default function ProjectSummaryPage() {
 
                               <td className={styles.tdRight}>{euro(r.subtotal)}</td>
                               <td className={styles.tdRight}>
-                                <Link className={styles.editLink} href={r.editHref}>
-                                  Edit
-                                </Link>
+                                {snap.alreadyFinalized ? (
+                                  <span className={styles.muted}>—</span>
+                                ) : (
+                                  <Link className={styles.editLink} href={r.editHref}>
+                                    Edit
+                                  </Link>
+                                )}
                               </td>
                             </tr>
 
@@ -420,7 +434,11 @@ export default function ProjectSummaryPage() {
                                       {r.optionalsList.map((o, i) => (
                                         <li key={i} className={styles.optItem}>
                                           <span className={styles.optLabel}>{o.category} · {o.label}</span>
-                                          <span className={styles.optPrice}>{euro(o.price)}</span>{" "}<Link className={styles.editLink} href={o.editHref}>Edit</Link>
+                                          <span className={styles.optPrice}>{euro(o.price)}</span>{" "}{snap.alreadyFinalized ? (
+                                          <span className={styles.muted}>—</span>
+                                        ) : (
+                                          <Link className={styles.editLink} href={o.editHref}>Edit</Link>
+                                        )}
                                         </li>
                                       ))}
                                     </ul>
@@ -448,9 +466,15 @@ export default function ProjectSummaryPage() {
               Back
             </Link>
 
-            <Link className={styles.secondaryBtn} href="/select-areas">
-              Edit scope
-            </Link>
+            {snap.alreadyFinalized ? (
+              <button type="button" className={styles.secondaryBtn} onClick={onDuplicateAndEdit}>
+                Duplicate to edit
+              </button>
+            ) : (
+              <Link className={styles.secondaryBtn} href="/select-areas">
+                Edit scope
+              </Link>
+            )}
 
             <button type="button" className={styles.secondaryBtn} onClick={onExportPdf} aria-label="Export to PDF (Print)">
               Export to PDF

@@ -4,7 +4,7 @@ import AuthLayout from "../components/AuthLayout";
 import styles from "./dashboard.module.css";
 import { useRouter } from "next/navigation";
 import { useSyncExternalStore } from "react";
-import { createEstimate, listEstimates, setActiveEstimateId, ESTIMATES_EVENT, type EstimateMeta } from "@/lib/estimateDraft";
+import { createEstimate, duplicateEstimate, listEstimates, setActiveEstimateId, ESTIMATES_EVENT, type EstimateMeta } from "@/lib/estimateDraft";
 
 function formatUpdatedAt(iso: string): string {
   const d = new Date(iso);
@@ -82,6 +82,13 @@ export default function DashboardPage() {
     router.push("/project-summary");
   }
 
+  function onDuplicate(e: EstimateMeta) {
+    const meta = duplicateEstimate(e.id);
+    if (!meta) return;
+    router.push("/project-summary?dup=" + encodeURIComponent(meta.id));
+  }
+
+
   return (
     <AuthLayout>
       <div className={styles.shell}>
@@ -153,9 +160,14 @@ export default function DashboardPage() {
                           </div>
                         </div>
 
-                        <button type="button" className={styles.itemBtnSecondary} onClick={() => onView(item)}>
-                          View
-                        </button>
+                        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                          <button type="button" className={styles.itemBtnSecondary} onClick={() => onView(item)}>
+                            View
+                          </button>
+                          <button type="button" className={styles.itemBtn} onClick={() => onDuplicate(item)}>
+                            Duplicate
+                          </button>
+                        </div>
                       </div>
                     ))
                   )}
