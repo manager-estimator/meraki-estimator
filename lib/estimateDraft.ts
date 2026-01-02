@@ -376,6 +376,54 @@ export function deleteEstimate(id: string) {
   }
 }
 
+
+export function duplicateEstimate(sourceId: string, opts?: { titleSuffix?: string }): EstimateMeta | null {
+  if (typeof window === "undefined") return null;
+
+  const src = listEstimates().find((e) => e.id === sourceId) || null;
+  if (!src) return null;
+
+  const suffix = (opts?.titleSuffix ?? " (copy)").toString();
+
+  // Crear un nuevo estimate (draft) y luego sobreescribir su draft con el clon
+  const meta = createEstimate({ title: (src.title || "Estimate") + suffix });
+
+  // Clonar draft (si existe). Si no existe, usamos draft vacío.
+  const srcKey = draftKeyFor(sourceId);
+  const raw = window.localStorage.getItem(srcKey);
+
+  let cloned = emptyDraft();
+  if (raw) {
+    try {
+      cloned = JSON.parse(raw) as EstimateDraft;
+    } catch {
+      cloned = emptyDraft();
+    }
+  }
+
+  // Resume: si el resumeHref apunta a summary, lo mandamos a un flujo editable
+  const resume =
+    src.resumeHref && src.resumeHref !== "/project-summary" ? src.resumeHref : "/select-areas";
+
+  // Persistir draft clonado en la nueva key
+  try {
+    const nextKey = draftKeyFor(meta.id);
+    const safe = JSON.parse(JSON.stringify(cloned)) as EstimateDraft; // deep clone defensivo
+    window.localStorage.setItem(nextKey, JSON.stringify(safe));
+  } catch {
+    // fallback: dejar emptyDraft ya creado por createEstimate
+  }
+
+  // Asegurar que el nuevo meta tenga resumeHref “editable”
+  setActiveEstimateId(meta.id);
+  setEstimateResumeHref(resume);
+
+  emitEstimatesChange();
+  return meta;
+}
+
+
+
 export function setEstimateTitle(id: string, title: string) {
   if (isEstimateFinalized(id)) return;
   const list = loadIndex();
