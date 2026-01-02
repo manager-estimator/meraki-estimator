@@ -401,9 +401,8 @@ export function duplicateEstimate(sourceId: string, opts?: { titleSuffix?: strin
     }
   }
 
-  // Resume: si el resumeHref apunta a summary, lo mandamos a un flujo editable
-  const resume =
-    src.resumeHref && src.resumeHref !== "/project-summary" ? src.resumeHref : "/select-areas";
+  // Resume: el duplicado debe abrir en Project Summary (editable)
+  const resume = "/project-summary";
 
   // Persistir draft clonado en la nueva key
   try {
