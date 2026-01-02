@@ -36,7 +36,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
 
   const signOutAction: FormAction | null = (() => {
     const actions = authActions as Record<string, unknown>;
-    const candidate = actions.signOut ?? actions.logout ?? actions.logOut;
+    const candidate = actions.signOutAction ?? actions.signOut ?? actions.logout ?? actions.logOut;
     return typeof candidate === "function" ? (candidate as FormAction) : null;
   })();
 
