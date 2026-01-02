@@ -110,12 +110,6 @@ const nextUrl = m === "login" ? "/?mode=login" : "/?mode=signup";
           Google
         </button>
       </div>
-
-      <p className={styles.privacyText}>
-        By continuing, you agree to our{" "}
-        <Link href="/privacy">Privacy Policy</Link> and{" "}
-        <Link href="/terms">Terms</Link>
-      </p>
     </form>
   );
 }
