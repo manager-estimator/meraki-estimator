@@ -117,6 +117,6 @@ export default function EmailVerification({
 
       <p className={styles.helperText}> Didn’t receive it? Check your spam folder. </p>
 
-</div>
+    </div>
   );
 }
