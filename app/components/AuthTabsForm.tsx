@@ -1,10 +1,11 @@
 "use client";
 
-import {useMemo, Suspense, type ComponentProps} from "react";
+import { useMemo, useState, useCallback, Suspense, type ComponentProps } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "../page.module.css";
 import { signInAction, signUpAction } from "../actions/auth";
+import { createClient as createSupabaseClient } from "@/lib/supabase/browser";
 
 type Mode = "signup" | "login";
 
@@ -17,8 +18,45 @@ function AuthTabsFormInner({ defaultMode = "signup" }: { defaultMode?: Mode }) {
 
   const errorMsg = sp.get("error");
 
+  const [oauthLoading, setOauthLoading] = useState(false);
+  const [oauthError, setOauthError] = useState<string | null>(null);
+
+  const nextAfterAuth = useMemo(() => {
+    // Respetar redirectTo/next si vienen (p.ej. /?mode=login&redirectTo=%2Fproject-summary)
+    const raw = sp.get("redirectTo") || sp.get("next");
+    if (raw && raw.startsWith("/") && !raw.startsWith("//") && !raw.includes("://")) return raw;
+    return "/dashboard";
+  }, [sp]);
+
+  const handleGoogle = useCallback(async () => {
+    if (oauthLoading) return;
+    setOauthError(null);
+    setOauthLoading(true);
+
+    try {
+      const supabase = createSupabaseClient();
+      const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextAfterAuth)}`;
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo },
+      });
+
+      if (error) {
+        setOauthError(error.message || "Google sign-in failed.");
+        setOauthLoading(false);
+      }
+      // Si no hay error, Supabase redirige el navegador.
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Google sign-in failed.";
+      setOauthError(msg);
+      setOauthLoading(false);
+    }
+  }, [oauthLoading, nextAfterAuth]);
+
+
   const setModeAndUrl = (m: Mode) => {
-const nextUrl = m === "login" ? "/?mode=login" : "/?mode=signup";
+    const nextUrl = m === "login" ? "/?mode=login" : "/?mode=signup";
     router.replace(nextUrl);
   };
 
@@ -50,7 +88,7 @@ const nextUrl = m === "login" ? "/?mode=login" : "/?mode=signup";
 
       <h1 className={`${styles.title} ${styles.srOnly}`}>{title}</h1>
 
-      {errorMsg ? <p className={styles.authError}>{errorMsg}</p> : null}
+      {oauthError || errorMsg ? <p className={styles.authError}>{oauthError || errorMsg}</p> : null}
 
       <div className={styles.inputGroup}>
         <input
@@ -91,7 +129,7 @@ const nextUrl = m === "login" ? "/?mode=login" : "/?mode=signup";
       </p>
 
       <div className={styles.buttonWrapper}>
-        <button type="button" className={styles.googleButton}>
+        <button type="button" className={styles.googleButton} onClick={handleGoogle} disabled={oauthLoading} aria-busy={oauthLoading}>
           <svg
             className={styles.googleIcon}
             width="35"
