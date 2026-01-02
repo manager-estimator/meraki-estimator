@@ -110,7 +110,7 @@ function AuthTabsFormInner({ defaultMode = "signup" }: { defaultMode?: Mode }) {
           placeholder="Password"
           required
         />
-        <div className={styles.inputHint}>8 caracteres mínimos</div>
+        <div className={styles.inputHint}>Minimum 8 characters</div>
       </div>
 
       <div className={styles.buttonWrapper}>
