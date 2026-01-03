@@ -33,9 +33,14 @@ export default function RoomSummaryForm({
 
   const searchParams = useSearchParams();
   const from = searchParams?.get("from");
-  const returnTo = searchParams?.get("returnTo") || "/project-summary";
   const isEdit = from === "edit";
-  const qs = isEdit ? `?from=edit&returnTo=${encodeURIComponent(returnTo)}` : "";
+
+  // En modo edit, SIEMPRE volver a Project Summary (estable durante todo el flujo)
+  const returnTo = isEdit ? "/project-summary" : (searchParams?.get("returnTo") || "/project-summary");
+
+  // Propagar también cat para que el flujo no pierda contexto al avanzar
+  const cat = (searchParams?.get("cat") || "").trim();
+  const qs = isEdit ? `?from=edit&returnTo=${encodeURIComponent(returnTo)}&cat=${encodeURIComponent(cat)}` : "";
 const safeSlug = (slug ?? "").trim().replace(/:$/, "");
 const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
   const areaLabel = getSelectedAreaLabel(safeSlug) ?? fallbackLabel;
@@ -87,10 +92,6 @@ const [reuse, setReuse] = useState<Record<string, boolean>>({});
 
   const handleContinue = () => {
     
-    if (isEdit) {
-      router.push(returnTo);
-      return;
-    }
     if (chosen.length > 0) applyReuseIfNeeded();
     if (cur < roomCount) {
       const nextNo = cur + 1;
@@ -102,14 +103,14 @@ const [reuse, setReuse] = useState<Record<string, boolean>>({});
 
       router.push(
         nextHasOptionals
-          ? `/room-summary/${encodeURIComponent(safeSlug)}/${nextNo}`
-          : `/optionals/${encodeURIComponent(safeSlug)}/${nextNo}`
+          ? `/room-summary/${encodeURIComponent(safeSlug)}/${nextNo}${qs}`
+          : `/optionals/${encodeURIComponent(safeSlug)}/${nextNo}${qs}`
       );
       return;
     }
     const nextArea = getNextSelectedAreaSlug(safeSlug);
     if (nextArea) {
-      router.push(`/area/${nextArea}`);
+      router.push(`/area/${nextArea}${qs}`);
       return;
     }
     router.push(`/project-summary`);
@@ -185,7 +186,7 @@ const [reuse, setReuse] = useState<Record<string, boolean>>({});
         <button
           type="button"
           className={styles.backBtn}
-          onClick={() => router.push(`/optionals/${encodeURIComponent(safeSlug)}/${roomIndex}${qs}`)}
+          onClick={() => router.push(isEdit ? returnTo : `/optionals/${encodeURIComponent(safeSlug)}/${roomIndex}${qs}`)}
         >
           {isEdit ? "Back to Project" : "Back"}
         </button>

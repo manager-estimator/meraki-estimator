@@ -43,9 +43,13 @@ export default function OptionalsForm({
   const catRaw = searchParams?.get("cat") || "floorings";
   const category = (catRaw || "floorings").trim();
 const from = searchParams?.get("from");
-  const returnTo = searchParams?.get("returnTo") || "/project-summary";
   const isEdit = from === "edit";
-  const qs = isEdit ? `?from=edit&returnTo=${encodeURIComponent(returnTo)}` : "";
+
+  // En modo edit, SIEMPRE volver a Project Summary (estable durante todo el flujo)
+  const returnTo = isEdit ? "/project-summary" : (searchParams?.get("returnTo") || "/project-summary");
+
+  // Propagar también cat para que el flujo no pierda contexto al avanzar
+  const qs = isEdit ? `?from=edit&returnTo=${encodeURIComponent(returnTo)}&cat=${encodeURIComponent(category)}` : "";
 const safeSlug = (slug ?? "").trim().replace(/:$/, "");
 const fallbackLabel = useMemo(() => titleFromSlug(slug), [slug]);
   const areaLabel = getSelectedAreaLabel(safeSlug) ?? fallbackLabel;
