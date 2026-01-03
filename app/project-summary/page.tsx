@@ -176,7 +176,7 @@ function buildSnapshot(draft: EstimateDraft): Snapshot {
         subtotal: roomSubtotal,
         optionalsCount: roomOptsCount,
         optionalsList,
-        editHref: `/optionals/${encodeURIComponent(slug)}/${idx + 1}?from=edit&returnTo=%2Fproject-summary`,
+        editHref: `/optionals/${encodeURIComponent(slug)}/${idx + 1}?from=edit&returnTo=%2Fproject-summary&cat=${encodeURIComponent(optionalsList[0]?.category || "floorings")}`,
         isMissingM2,
       });
     });
